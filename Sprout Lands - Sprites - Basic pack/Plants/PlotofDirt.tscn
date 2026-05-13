@@ -1,0 +1,20 @@
+[gd_scene format=3 uid="uid://7r2bkaay8rsy"]
+
+[ext_resource type="Script" uid="uid://d4n3ntj5rat6w" path="res://Sprout Lands - Sprites - Basic pack/Plants/PlotofDirt.gd" id="1_5pjij"]
+[ext_resource type="Texture2D" uid="uid://dbasjptmnelxo" path="res://Sprout Lands - Sprites - Basic pack/Tilesets/Dirt.png" id="2_5pjij"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_6sqar"]
+size = Vector2(16, 16)
+
+[node name="Dirt" type="Area2D" unique_id=1423821957]
+script = ExtResource("1_5pjij")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=530505116]
+shape = SubResource("RectangleShape2D_6sqar")
+
+[node name="Dirt" type="Sprite2D" parent="." unique_id=986165536]
+texture = ExtResource("2_5pjij")
+
+[node name="Seeds" type="Node2D" parent="." unique_id=111111111]
+
+[connection signal="input_event" from="." to="." method="_on_dirt_2_input_event"]

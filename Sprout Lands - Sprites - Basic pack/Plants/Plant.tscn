@@ -3,7 +3,10 @@
 [ext_resource type="Script" uid="uid://cvs4f2q8mx8q6" path="res://Sprout Lands - Sprites - Basic pack/Plants/Plant.gd" id="1_qpv5u"]
 [ext_resource type="Texture2D" uid="uid://caykmodjfwxik" path="res://Sprout Lands - Sprites - Basic pack/Objects/Basic_Plants.png" id="2_a5e32"]
 
-[node name="Plant" type="Node2D" unique_id=1424923702]
+[sub_resource type="CircleShape2D" id="CircleShape2D_a5e32"]
+radius = 8.0
+
+[node name="Plant" type="Area2D" unique_id=1423821957]
 script = ExtResource("1_qpv5u")
 
 [node name="Sprite2D" type="Sprite2D" parent="." unique_id=309043652]
@@ -15,5 +18,8 @@ vframes = 2
 [node name="Timer" type="Timer" parent="." unique_id=515917849]
 wait_time = 3.0
 autostart = true
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=211686471]
+shape = SubResource("CircleShape2D_a5e32")
 
 [connection signal="timeout" from="Timer" to="." method="_on_timer_timeout"]

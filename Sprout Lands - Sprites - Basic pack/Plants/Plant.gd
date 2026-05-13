@@ -1,4 +1,4 @@
-extends Node2D
+extends Area2D
 
 @onready var timer = $Timer
 @onready var plant = $Sprite2D

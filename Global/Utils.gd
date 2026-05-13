@@ -51,5 +51,9 @@ func load_game() -> void:
 		var current_line = JSON.parse_string(line)
 
 		if current_line != null:
-			Game.Plot = current_line["Plot"]
+			var loaded_plot = current_line["Plot"]
+			if loaded_plot is Array:
+				Game.Plot = loaded_plot
+			else:
+				Game.Plot = []
 	save_game.close()
