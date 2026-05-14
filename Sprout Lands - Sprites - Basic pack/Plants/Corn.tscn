@@ -1,22 +1,23 @@
 [gd_scene format=3 uid="uid://baona5byc2lh4"]
 
-[ext_resource type="Script" uid="uid://cvs4f2q8mx8q6" path="res://Sprout Lands - Sprites - Basic pack/Plants/Plant.gd" id="1_qpv5u"]
-[ext_resource type="Texture2D" uid="uid://caykmodjfwxik" path="res://Sprout Lands - Sprites - Basic pack/Objects/Basic_Plants.png" id="2_a5e32"]
+[ext_resource type="Script" uid="uid://cvs4f2q8mx8q6" path="res://Sprout Lands - Sprites - Basic pack/Plants/Corn.gd" id="1_y311j"]
+[ext_resource type="Texture2D" uid="uid://caykmodjfwxik" path="res://Sprout Lands - Sprites - Basic pack/Objects/Basic_Plants.png" id="2_13ril"]
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_a5e32"]
-radius = 8.0
+radius = 9.0
 
-[node name="Plant" type="Area2D" unique_id=1423821957]
-script = ExtResource("1_qpv5u")
+[node name="Corn" type="Area2D" unique_id=1423821957]
+script = ExtResource("1_y311j")
 
 [node name="Sprite2D" type="Sprite2D" parent="." unique_id=309043652]
 texture_filter = 1
-texture = ExtResource("2_a5e32")
+texture = ExtResource("2_13ril")
 hframes = 6
 vframes = 2
+frame = 1
 
 [node name="Timer" type="Timer" parent="." unique_id=515917849]
-wait_time = 3.0
+wait_time = 10.0
 autostart = true
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=211686471]

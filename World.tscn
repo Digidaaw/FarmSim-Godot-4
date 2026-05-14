@@ -6,7 +6,7 @@
 [ext_resource type="Script" uid="uid://bmh17re1x2r2a" path="res://World.gd" id="1_eu7l1"]
 [ext_resource type="Texture2D" uid="uid://6h2r8bftjc33" path="res://Sprout Lands - Sprites - Basic pack/Tilesets/Water.tres" id="1_js7pq"]
 [ext_resource type="PackedScene" uid="uid://qqi0x6pa5clq" path="res://TileMaps/Dirt.tscn" id="4_wygdx"]
-[ext_resource type="PackedScene" uid="uid://baona5byc2lh4" path="res://Sprout Lands - Sprites - Basic pack/Plants/Plant.tscn" id="6_p1v5b"]
+[ext_resource type="Script" uid="uid://cu3f21jejy80p" path="res://DirtContainer.gd" id="5_fv4w7"]
 [ext_resource type="PackedScene" uid="uid://7r2bkaay8rsy" path="res://Sprout Lands - Sprites - Basic pack/Plants/PlotofDirt.tscn" id="8_bah7m"]
 
 [node name="World" type="Node2D" unique_id=198862976]
@@ -25,20 +25,22 @@ tile_map_data = PackedByteArray("AAAHAAIAAQAGAAIAAAAGAAIAAQABAAAAAAAFAAIAAQABAAA
 [node name="Dirt" parent="." unique_id=1667957176 instance=ExtResource("4_wygdx")]
 tile_map_data = PackedByteArray("AAARAA0AAAAAAAAAAAAQAAwAAAAAAAAAAAAPAAwAAAAAAAAAAAAOAAsAAAABAAAAAAANAAoAAAABAAAAAAAMAAkAAAABAAAAAAALAAkAAAABAAAAAAAKAAgAAAAAAAAAAAAPAAkAAAABAAAAAAAOAAoAAAAAAAAAAAANAAsAAAAAAAAAAAAMAAsAAAABAAAAAAALAAwAAAABAAAAAAALAAoAAAAAAAAAAAAKAAsAAAAAAAAAAAALAAsAAAAAAAAAAAAMAAoAAAABAAAAAAAKAAoAAAAAAAAAAAAKAAkAAAABAAAAAAANAAkAAAABAAAAAAAMAAgAAAAAAAAAAAALAAgAAAABAAAAAAA=")
 
-[node name="PlotofDirt" parent="." unique_id=1601881365 instance=ExtResource("8_bah7m")]
-y_sort_enabled = true
-position = Vector2(315, 236)
+[node name="DirtContainer" type="CanvasGroup" parent="." unique_id=941577348]
+script = ExtResource("5_fv4w7")
 
-[node name="Dirt3" parent="." unique_id=1424923702 instance=ExtResource("6_p1v5b")]
+[node name="PlotofDirt" parent="DirtContainer" unique_id=1601881365 instance=ExtResource("8_bah7m")]
 y_sort_enabled = true
-position = Vector2(373, 148)
+position = Vector2(330, 59)
 
-[node name="Plant2" parent="." unique_id=1423821957 instance=ExtResource("6_p1v5b")]
+[node name="PlotofDirt2" parent="DirtContainer" unique_id=1423821957 instance=ExtResource("8_bah7m")]
 y_sort_enabled = true
-position = Vector2(373, 148)
+position = Vector2(346, 59)
+
+[node name="PlotofDirt3" parent="DirtContainer" unique_id=82551772 instance=ExtResource("8_bah7m")]
+y_sort_enabled = true
+position = Vector2(362, 59)
 
 [node name="CharacterBody2D" parent="." unique_id=69392640 instance=ExtResource("1_c6gwx")]
-texture_filter = 1
 position = Vector2(273, 89)
 
 [node name="Camera2D" type="Camera2D" parent="CharacterBody2D" unique_id=460587899]
