@@ -1,5 +1,7 @@
 [gd_scene format=3 uid="uid://b1dtvltj1cy1m"]
 
+[ext_resource type="PackedScene" uid="uid://cd73ff7rhwcam" path="res://UI/Select Seed.tscn" id="1_62njy"]
+
 [sub_resource type="GDScript" id="GDScript_1genj"]
 script/source = "extends Label
 
@@ -22,3 +24,7 @@ horizontal_alignment = 1
 vertical_alignment = 1
 autowrap_mode = 3
 script = SubResource("GDScript_1genj")
+
+[node name="Select Seed" parent="." unique_id=500944632 instance=ExtResource("1_62njy")]
+position = Vector2(81, 175)
+scale = Vector2(0.76, 0.76)

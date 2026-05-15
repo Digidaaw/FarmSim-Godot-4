@@ -40,13 +40,27 @@ position = Vector2(346, 59)
 y_sort_enabled = true
 position = Vector2(362, 59)
 
+[node name="PlotofDirt4" parent="DirtContainer" unique_id=431009389 instance=ExtResource("8_bah7m")]
+y_sort_enabled = true
+position = Vector2(378, 59)
+
+[node name="PlotofDirt5" parent="DirtContainer" unique_id=290998967 instance=ExtResource("8_bah7m")]
+y_sort_enabled = true
+position = Vector2(394, 59)
+
+[node name="PlotofDirt6" parent="DirtContainer" unique_id=422024968 instance=ExtResource("8_bah7m")]
+y_sort_enabled = true
+position = Vector2(410, 59)
+
 [node name="CharacterBody2D" parent="." unique_id=69392640 instance=ExtResource("1_c6gwx")]
 position = Vector2(273, 89)
 
 [node name="Camera2D" type="Camera2D" parent="CharacterBody2D" unique_id=460587899]
 limit_left = 0
 limit_top = -3
-limit_right = 530
-limit_bottom = 320
+limit_right = 960
+limit_bottom = 540
+position_smoothing_enabled = true
+rotation_smoothing_enabled = true
 
 [node name="UI" parent="." unique_id=1412626076 instance=ExtResource("1_bcbcq")]

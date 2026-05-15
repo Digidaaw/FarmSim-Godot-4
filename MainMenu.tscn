@@ -6,10 +6,10 @@
 script = ExtResource("1_i26rj")
 
 [node name="Play" type="Button" parent="." unique_id=491396297]
-offset_left = 239.0
-offset_top = 143.0
-offset_right = 282.64514
-offset_bottom = 176.0
+offset_left = 170.0
+offset_top = 109.0
+offset_right = 213.64514
+offset_bottom = 142.0
 text = "Play
 "
 

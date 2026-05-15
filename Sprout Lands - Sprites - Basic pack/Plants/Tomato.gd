@@ -12,7 +12,7 @@ func _ready():
 	if PlantNum == -1:
 		PlantNum = Game.Plot.size()
 		Game.Plot += [{
-			"Seed": "Corn",
+			"Seed": "Tomato",
 			"TimeLeft": timer.time_left,
 			"Stage" : stage,
 		}]
@@ -22,22 +22,13 @@ func _ready():
 
 func _process(_delta: float):
 	Game.Plot[PlantNum]["TimeLeft"] = timer.time_left
-	match stage:
-		1:
-			plant.frame = stage
-		2:
-			plant.frame = stage
-		3:
-			plant.frame = stage
-		4:
-			plant.frame = stage
-		5:
-			plant.frame = stage
-		6:
-			get_parent().has_seed = false
-			queue_free()
+	if stage <= 5:
+		plant.frame = stage + 6
+	else:
+		get_parent().get_parent().has_seed = false
+		queue_free()
+
 func _on_timer_timeout():
-	if stage < 5:
-		stage += 1
+	stage += 1
 	Game.Plot[PlantNum]["Stage"] = stage
 	Utils.save_game()
