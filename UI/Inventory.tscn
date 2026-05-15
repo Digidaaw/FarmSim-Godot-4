@@ -2,17 +2,8 @@
 
 [ext_resource type="Texture2D" uid="uid://eovnwkmy7h71" path="res://UI/Free Inventory/Inventory_style_02c.png" id="1_dewil"]
 [ext_resource type="Script" uid="uid://d2d55hli5vl1o" path="res://UI/Inventory.gd" id="1_efu02"]
-
-[sub_resource type="GDScript" id="GDScript_efu02"]
-script/source = "extends Label
-
-
-# Called every frame. 'delta' is the elapsed time since the previous frame.
-func _process(delta):
-	for i in Game.Harvest.size():
-		if \"Corn\" in Game.Harvest[i][\"Name\"]:
-			self.text = str(int(Game.Harvest[i][\"Count\"]))
-"
+[ext_resource type="Script" uid="uid://cbybcvs3ie0am" path="res://UI/tomato_label.gd" id="3_2tckp"]
+[ext_resource type="Script" uid="uid://yt1d1jb3kfmg" path="res://UI/corn_label.gd" id="3_f42xq"]
 
 [node name="Inventory" type="Node2D" unique_id=17569182]
 script = ExtResource("1_efu02")
@@ -23,11 +14,16 @@ position = Vector2(448, 240)
 scale = Vector2(2, 2)
 texture = ExtResource("1_dewil")
 
-[node name="Label" type="Label" parent="." unique_id=1960209433]
+[node name="CornLabel" type="Label" parent="." unique_id=1960209433]
 offset_left = 416.0
 offset_top = 200.0
 offset_right = 440.0
 offset_bottom = 223.0
 text = "4"
 horizontal_alignment = 1
-script = SubResource("GDScript_efu02")
+script = ExtResource("3_f42xq")
+
+[node name="TomatoLabel" type="Label" parent="." unique_id=1704228170]
+offset_right = 40.0
+offset_bottom = 23.0
+script = ExtResource("3_2tckp")

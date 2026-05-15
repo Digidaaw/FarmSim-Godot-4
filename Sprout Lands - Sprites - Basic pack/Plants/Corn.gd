@@ -19,6 +19,7 @@ func _ready():
 			"Seed": "Corn",
 			"TimeLeft": timer.time_left,
 			"Stage" : stage,
+			"Harvested" : false,
 		}
 		Utils.save_game()
 	elif time > 0.0:
@@ -58,8 +59,11 @@ func _harvest() -> void:
 	if harvested:
 		return
 	harvested = true
+	
+	Game.Plot[PlantNum]["Harvested"] = true
 	_add_harvest()
-	Game.Plot[PlantNum] = null
+	#Game.Plot[PlantNum] = null
+	
 	get_parent().has_seed = false
 	Utils.save_game()
 	queue_free()

@@ -19,6 +19,7 @@ func _ready():
 			"Seed": "Tomato",
 			"TimeLeft": timer.time_left,
 			"Stage" : stage,
+			"Harvested" : false,
 		}
 		Utils.save_game()
 	elif time > 0.0:
@@ -46,7 +47,7 @@ func _on_body_entered(body: Node2D) -> void:
 		return
 
 	_harvest()
-
+	print(Game.Harvest	)
 func _input_event(_viewport: Viewport, event: InputEvent, _shape_idx: int) -> void:
 	if stage >= MAX_STAGE and event.is_action_pressed("Spawn"):
 		_harvest()
@@ -55,8 +56,10 @@ func _harvest() -> void:
 	if harvested:
 		return
 	harvested = true
+	
+	Game.Plot[PlantNum]["Harvested"] = true
 	_add_harvest()
-	Game.Plot[PlantNum] = null
+	#Game.Plot[PlantNum] = null
 	get_parent().has_seed = false
 	Utils.save_game()
 	queue_free()
