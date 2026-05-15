@@ -24,3 +24,4 @@ autostart = true
 shape = SubResource("CircleShape2D_a5e32")
 
 [connection signal="timeout" from="Timer" to="." method="_on_timer_timeout"]
+[connection signal="body_entered" from="." to="." method="_on_body_entered"]

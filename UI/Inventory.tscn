@@ -1,0 +1,33 @@
+[gd_scene format=3 uid="uid://dg0rh7nf8mk2j"]
+
+[ext_resource type="Texture2D" uid="uid://eovnwkmy7h71" path="res://UI/Free Inventory/Inventory_style_02c.png" id="1_dewil"]
+[ext_resource type="Script" uid="uid://d2d55hli5vl1o" path="res://UI/Inventory.gd" id="1_efu02"]
+
+[sub_resource type="GDScript" id="GDScript_efu02"]
+script/source = "extends Label
+
+
+# Called every frame. 'delta' is the elapsed time since the previous frame.
+func _process(delta):
+	for i in Game.Harvest.size():
+		if \"Corn\" in Game.Harvest[i][\"Name\"]:
+			self.text = str(int(Game.Harvest[i][\"Count\"]))
+"
+
+[node name="Inventory" type="Node2D" unique_id=17569182]
+script = ExtResource("1_efu02")
+
+[node name="BG" type="Sprite2D" parent="." unique_id=862842419]
+texture_filter = 1
+position = Vector2(448, 240)
+scale = Vector2(2, 2)
+texture = ExtResource("1_dewil")
+
+[node name="Label" type="Label" parent="." unique_id=1960209433]
+offset_left = 416.0
+offset_top = 200.0
+offset_right = 440.0
+offset_bottom = 223.0
+text = "4"
+horizontal_alignment = 1
+script = SubResource("GDScript_efu02")

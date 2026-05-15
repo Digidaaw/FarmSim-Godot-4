@@ -60,7 +60,7 @@ limit_left = 0
 limit_top = -3
 limit_right = 960
 limit_bottom = 540
-position_smoothing_enabled = true
-rotation_smoothing_enabled = true
+position_smoothing_speed = 10.0
+rotation_smoothing_speed = 10.0
 
 [node name="UI" parent="." unique_id=1412626076 instance=ExtResource("1_bcbcq")]

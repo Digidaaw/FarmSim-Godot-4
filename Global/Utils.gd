@@ -34,7 +34,8 @@ func save_game() -> void:
 		return
 
 	var data: Dictionary = {
-		"Plot": Game.Plot
+		"Plot": Game.Plot,
+		"Harvest": Game.Harvest,
 	}
 
 	save_game.store_line(JSON.stringify(data))
@@ -51,9 +52,15 @@ func load_game() -> void:
 		var current_line = JSON.parse_string(line)
 
 		if current_line != null:
-			var loaded_plot = current_line["Plot"]
+			var loaded_plot = current_line.get("Plot", [])
 			if loaded_plot is Array:
 				Game.Plot = loaded_plot
 			else:
 				Game.Plot = []
+
+			var loaded_harvest = current_line.get("Harvest", [])
+			if loaded_harvest is Array:
+				Game.Harvest = loaded_harvest
+			else:
+				Game.Harvest = []
 	save_game.close()
