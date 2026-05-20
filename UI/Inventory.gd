@@ -11,3 +11,4 @@ func _input(event):
 			self.hide()
 		else:
 			self.show()
+			get_node("SlotContainer").setInventory()

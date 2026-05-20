@@ -1,0 +1,51 @@
+[gd_scene format=3 uid="uid://c2qda77kgsknn"]
+
+[ext_resource type="Texture2D" uid="uid://dxo4k52hg7f0l" path="res://UI/Free Inventory/Inventory_background.png" id="1_wosx4"]
+[ext_resource type="Script" uid="uid://62l1pbnv30or" path="res://UI/slot.gd" id="2_t3122"]
+[ext_resource type="Texture2D" uid="uid://nnrolclv1olt" path="res://Sprout Lands - Sprites - Basic pack/Objects/Corn.png" id="3_kom10"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_wosx4"]
+bg_color = Color(1, 1, 1, 1)
+corner_radius_top_left = 15
+corner_radius_top_right = 15
+corner_radius_bottom_right = 15
+corner_radius_bottom_left = 15
+
+[node name="Slot" type="TextureButton" unique_id=562726013]
+offset_right = 40.0
+offset_bottom = 40.0
+texture_normal = ExtResource("1_wosx4")
+script = ExtResource("2_t3122")
+
+[node name="Item" type="Sprite2D" parent="." unique_id=263346509]
+position = Vector2(20.5, 20.5)
+scale = Vector2(1.6428572, 1.6428572)
+texture = ExtResource("3_kom10")
+
+[node name="Count" type="Label" parent="." unique_id=290067130]
+layout_mode = 0
+offset_right = 8.0
+offset_bottom = 40.0
+
+[node name="Info" type="Panel" parent="." unique_id=797171602]
+layout_mode = 0
+offset_left = -21.0
+offset_top = -27.0
+offset_right = 66.0
+offset_bottom = -1.0
+theme_override_styles/panel = SubResource("StyleBoxFlat_wosx4")
+
+[node name="Label" type="Label" parent="Info" unique_id=1323381423]
+layout_mode = 0
+offset_left = 10.0
+offset_right = 77.0
+offset_bottom = 36.0
+theme_override_colors/font_color = Color(0, 0, 0, 1)
+theme_override_constants/line_spacing = 0
+theme_override_font_sizes/font_size = 9
+text = "Item: name
+Count: 0
+"
+
+[connection signal="mouse_entered" from="." to="." method="_on_mouse_entered"]
+[connection signal="mouse_exited" from="." to="." method="_on_mouse_exited"]

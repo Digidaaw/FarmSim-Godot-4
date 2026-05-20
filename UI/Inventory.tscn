@@ -2,28 +2,56 @@
 
 [ext_resource type="Texture2D" uid="uid://eovnwkmy7h71" path="res://UI/Free Inventory/Inventory_style_02c.png" id="1_dewil"]
 [ext_resource type="Script" uid="uid://d2d55hli5vl1o" path="res://UI/Inventory.gd" id="1_efu02"]
-[ext_resource type="Script" uid="uid://cbybcvs3ie0am" path="res://UI/tomato_label.gd" id="3_2tckp"]
-[ext_resource type="Script" uid="uid://yt1d1jb3kfmg" path="res://UI/corn_label.gd" id="3_f42xq"]
+[ext_resource type="Script" uid="uid://cgflaiclfqm1w" path="res://UI/slot_container.gd" id="3_f42xq"]
+[ext_resource type="PackedScene" uid="uid://c2qda77kgsknn" path="res://UI/slot.tscn" id="4_f42xq"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_ycce7"]
+bg_color = Color(0.5686275, 0.6392157, 0.3372549, 1)
+corner_radius_top_left = 15
+corner_radius_top_right = 15
+corner_radius_bottom_right = 15
+corner_radius_bottom_left = 15
 
 [node name="Inventory" type="Node2D" unique_id=17569182]
 script = ExtResource("1_efu02")
 
 [node name="BG" type="Sprite2D" parent="." unique_id=862842419]
+visible = false
 texture_filter = 1
 position = Vector2(448, 240)
 scale = Vector2(2, 2)
 texture = ExtResource("1_dewil")
 
-[node name="CornLabel" type="Label" parent="." unique_id=1960209433]
-offset_left = 416.0
-offset_top = 200.0
-offset_right = 440.0
-offset_bottom = 223.0
-text = "4"
-horizontal_alignment = 1
+[node name="Panel" type="Panel" parent="." unique_id=475176768]
+self_modulate = Color(1, 1, 1, 0.6039216)
+offset_left = 400.0
+offset_top = 176.0
+offset_right = 680.0
+offset_bottom = 344.0
+theme_override_styles/panel = SubResource("StyleBoxFlat_ycce7")
+
+[node name="SlotContainer" type="GridContainer" parent="." unique_id=775500926]
+offset_left = 409.0
+offset_top = 192.0
+offset_right = 669.0
+offset_bottom = 232.0
+columns = 6
 script = ExtResource("3_f42xq")
 
-[node name="TomatoLabel" type="Label" parent="." unique_id=1704228170]
-offset_right = 40.0
-offset_bottom = 23.0
-script = ExtResource("3_2tckp")
+[node name="Slot" parent="SlotContainer" unique_id=562726013 instance=ExtResource("4_f42xq")]
+layout_mode = 2
+
+[node name="Slot2" parent="SlotContainer" unique_id=1279355298 instance=ExtResource("4_f42xq")]
+layout_mode = 2
+
+[node name="Slot3" parent="SlotContainer" unique_id=2029471374 instance=ExtResource("4_f42xq")]
+layout_mode = 2
+
+[node name="Slot4" parent="SlotContainer" unique_id=2034392620 instance=ExtResource("4_f42xq")]
+layout_mode = 2
+
+[node name="Slot5" parent="SlotContainer" unique_id=2001630167 instance=ExtResource("4_f42xq")]
+layout_mode = 2
+
+[node name="Slot6" parent="SlotContainer" unique_id=559709463 instance=ExtResource("4_f42xq")]
+layout_mode = 2
