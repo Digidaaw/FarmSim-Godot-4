@@ -19,6 +19,11 @@ func _process(delta) :
 		
 	if has_item == true:
 		get_node("Item").texture = itemIcon
+		match itemName:
+			"Corn":
+				itemIcon = load("res://Sprout Lands - Sprites - Basic pack/Objects/Corn.png")
+			"Tomato":
+				itemIcon = load("res://Sprout Lands - Sprites - Basic pack/Objects/Tomato.png")
 		get_node("Item").show()
 	else:
 		get_node("Item").hide()

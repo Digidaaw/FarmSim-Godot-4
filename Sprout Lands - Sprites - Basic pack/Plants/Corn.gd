@@ -69,9 +69,17 @@ func _harvest() -> void:
 	queue_free()
 
 func _add_harvest() -> void:
+	for i in range(Game.Harvest.size()):
+		if not Game.Harvest[i].has("Name"):
+			Game.Harvest[i]["Name"] = ""
+		if not Game.Harvest[i].has("Count"):
+			Game.Harvest[i]["Count"] = 0
+		if not Game.Harvest[i].has("Consumable"):
+			Game.Harvest[i]["Consumable"] = false
+
 	for item in Game.Harvest:
-		if item["Name"] == "Corn":
-			item["Count"] += 1
+		if item.get("Name", "") == "Corn":
+			item["Count"] = item.get("Count", 0) + 1
 			return
 
 	Game.Harvest.append({

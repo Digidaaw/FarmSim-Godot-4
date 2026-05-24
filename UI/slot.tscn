@@ -24,8 +24,12 @@ texture = ExtResource("3_kom10")
 
 [node name="Count" type="Label" parent="." unique_id=290067130]
 layout_mode = 0
-offset_right = 8.0
-offset_bottom = 40.0
+offset_left = 26.0
+offset_top = 19.0
+offset_right = 33.0
+offset_bottom = 35.0
+theme_override_font_sizes/font_size = 11
+text = "1"
 
 [node name="Info" type="Panel" parent="." unique_id=797171602]
 layout_mode = 0
