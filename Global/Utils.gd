@@ -3,6 +3,16 @@ extends Node
 const SAVE_PATH: String = "user://savegame.btn"
 const SAVE_PASS: String = "password"
 
+const NOTIF_SCENE = preload("res://Global/Notification.tscn")
+
+func notif(text):
+	if get_child_count() == 0:
+		var notif1 = NOTIF_SCENE.instantiate()
+		notif1.get_node("Label").text = str(text)
+		add_child(notif1)
+		await get_tree().create_timer(3).timeout
+		notif1.queue_free()
+
 func get_file(is_write: bool) -> FileAccess:
 	var password: String = SAVE_PASS
 	

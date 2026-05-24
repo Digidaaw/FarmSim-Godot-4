@@ -4,6 +4,8 @@
 [ext_resource type="Texture2D" uid="uid://cta0fvxypymue" path="res://Player/Basic Charakter Spritesheet.png" id="2_tok1r"]
 
 [sub_resource type="CapsuleShape2D" id="CapsuleShape2D_ddoul"]
+radius = 5.0
+height = 18.0
 
 [sub_resource type="Animation" id="Animation_8g4oa"]
 resource_name = "Idle"
@@ -111,7 +113,7 @@ _data = {
 &"Walk Up": SubResource("Animation_0j2ni")
 }
 
-[node name="CharacterBody2D" type="CharacterBody2D" unique_id=69392640]
+[node name="Player" type="CharacterBody2D" unique_id=69392640]
 texture_filter = 1
 script = ExtResource("1_q3lat")
 
