@@ -8,6 +8,7 @@
 [ext_resource type="PackedScene" uid="uid://qqi0x6pa5clq" path="res://TileMaps/Dirt.tscn" id="4_wygdx"]
 [ext_resource type="Script" uid="uid://cu3f21jejy80p" path="res://DirtContainer.gd" id="5_fv4w7"]
 [ext_resource type="PackedScene" uid="uid://7r2bkaay8rsy" path="res://Sprout Lands - Sprites - Basic pack/Plants/PlotofDirt.tscn" id="8_bah7m"]
+[ext_resource type="Texture2D" uid="uid://skyyhseghkll" path="res://Player/moon_light.png" id="8_fv4w7"]
 
 [node name="World" type="Node2D" unique_id=198862976]
 script = ExtResource("1_eu7l1")
@@ -63,4 +64,16 @@ limit_bottom = 540
 position_smoothing_speed = 10.0
 rotation_smoothing_speed = 10.0
 
+[node name="PointLight2D" type="PointLight2D" parent="CharacterBody2D" unique_id=514927398]
+energy = 0.8
+blend_mode = 2
+shadow_enabled = true
+shadow_filter = 1
+shadow_filter_smooth = 10.0
+texture = ExtResource("8_fv4w7")
+texture_scale = 0.14
+
 [node name="UI" parent="." unique_id=1412626076 instance=ExtResource("1_bcbcq")]
+
+[node name="Ambient" type="CanvasModulate" parent="." unique_id=88346885]
+color = Color(0.40784314, 0.39215687, 0.36078432, 1)

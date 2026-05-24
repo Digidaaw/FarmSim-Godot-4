@@ -4,7 +4,7 @@ const Corn = preload("res://Sprout Lands - Sprites - Basic pack/Plants/Corn.tscn
 const Tomato = preload("res://Sprout Lands - Sprites - Basic pack/Plants/Tomato.tscn")
 
 func _ready() -> void:
-	Utils.notif("HI")
+	Utils.notif("Hi!! :D")
 	var curr_plot = Game.Plot
 	print(curr_plot.size())
 	if curr_plot.size() > 0:
