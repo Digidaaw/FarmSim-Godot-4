@@ -19,6 +19,7 @@ config/icon="res://icon.svg"
 
 Game="*uid://g7bv6l78gik1"
 Utils="*uid://i0hrynhr0kwt"
+StageManager="*uid://76akhi12vf6o"
 
 [display]
 

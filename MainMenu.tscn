@@ -5,11 +5,24 @@
 [node name="MainMenu" type="Node2D" unique_id=297997918]
 script = ExtResource("1_i26rj")
 
+[node name="Panel" type="Panel" parent="." unique_id=1413691000]
+offset_right = 962.0
+offset_bottom = 544.0
+
+[node name="Label" type="Label" parent="." unique_id=1551065051]
+offset_left = 24.0
+offset_top = 32.0
+offset_right = 408.0
+offset_bottom = 112.0
+text = "SAYA AKAN LAWAN!!!!"
+horizontal_alignment = 1
+vertical_alignment = 1
+
 [node name="Play" type="Button" parent="." unique_id=491396297]
-offset_left = 170.0
-offset_top = 109.0
-offset_right = 213.64514
-offset_bottom = 142.0
+offset_left = 192.0
+offset_top = 128.0
+offset_right = 235.64514
+offset_bottom = 161.0
 text = "Play
 "
 

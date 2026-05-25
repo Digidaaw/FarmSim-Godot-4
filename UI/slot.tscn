@@ -12,12 +12,14 @@ corner_radius_bottom_right = 15
 corner_radius_bottom_left = 15
 
 [node name="Slot" type="TextureButton" unique_id=562726013]
+texture_filter = 1
 offset_right = 40.0
 offset_bottom = 40.0
 texture_normal = ExtResource("1_wosx4")
 script = ExtResource("2_t3122")
 
 [node name="Item" type="Sprite2D" parent="." unique_id=263346509]
+texture_filter = 1
 position = Vector2(20.5, 20.5)
 scale = Vector2(1.6428572, 1.6428572)
 texture = ExtResource("3_kom10")

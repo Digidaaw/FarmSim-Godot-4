@@ -3,6 +3,8 @@ extends Node2D
 var plottemp = []
 
 func _ready():
+	
+	Utils.save_game()
 	Utils.load_game()
 
 	var size = Game.Plot.size()
@@ -22,4 +24,4 @@ func _ready():
 	Game.Plot = plottemp
 
 func _on_play_pressed() -> void:
-	get_tree().change_scene_to_file("res://World.tscn")
+	StageManager.stage_change(StageManager.MainWorld)

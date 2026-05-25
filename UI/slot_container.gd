@@ -8,18 +8,24 @@ extends GridContainer
 	get_node("Slot4"),
 	get_node("Slot5"),
 	get_node("Slot6"),
+	get_node("Slot7"),
+	get_node("Slot8"),
+	get_node("Slot9"),
+	get_node("Slot10"),
+	get_node("Slot11"),
+	get_node("Slot12"),
 ]
 
 func setInventory():
-	for item in Game.Harvest.size():
-		if SlotButtons.size() >= Game.Harvest.size():
-			if "Corn" in Game.Harvest[item]["Name"]:
-				SlotButtons[item].has_item = true
-				SlotButtons[item].itemIcon = load("res://Sprout Lands - Sprites - Basic pack/Objects/Corn.png")
-				SlotButtons[item].itemName = Game.Harvest[item]["Name"]
-				SlotButtons[item].itemCount = Game.Harvest[item]["Count"]
-			if "Tomato" in Game.Harvest[item]["Name"]:
-				SlotButtons[item].has_item = true
-				SlotButtons[item].itemIcon = load("res://Sprout Lands - Sprites - Basic pack/Objects/Tomato.png")
-				SlotButtons[item].itemName = Game.Harvest[item]["Name"]
-				SlotButtons[item].itemCount = Game.Harvest[item]["Count"]
+	for slot in SlotButtons:
+		slot.clear_item()
+
+	for item in min(Game.Harvest.size(), SlotButtons.size()):
+		var harvest_item = Game.Harvest[item]
+		if not (harvest_item is Dictionary) or not harvest_item.has("Name") or harvest_item.get("Count", 0) <= 0:
+			continue
+
+		if "Corn" in harvest_item["Name"]:
+			SlotButtons[item].set_item(harvest_item["Name"], harvest_item["Count"], load("res://Sprout Lands - Sprites - Basic pack/Objects/Corn.png"))
+		if "Tomato" in harvest_item["Name"]:
+			SlotButtons[item].set_item(harvest_item["Name"], harvest_item["Count"], load("res://Sprout Lands - Sprites - Basic pack/Objects/Tomato.png"))

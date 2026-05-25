@@ -2,16 +2,40 @@ extends Node
 
 const SAVE_PATH: String = "user://savegame.btn"
 const SAVE_PASS: String = "password"
-
 const NOTIF_SCENE = preload("res://Global/Notification.tscn")
 
-func notif(text):
-	if get_child_count() == 0:
-		var notif1 = NOTIF_SCENE.instantiate()
-		notif1.get_node("Label").text = str(text)
-		add_child(notif1)
-		await get_tree().create_timer(3).timeout
-		notif1.queue_free()
+var _persistent_notif: Node = null
+var _timed_notif: Node = null
+var _plot_count: int = 0  # berapa plot yang sedang diinjak player
+
+func _ready() -> void:	
+	# Pre-instantiate sekali agar show_notif tidak perlu instantiate lagi
+	_persistent_notif = NOTIF_SCENE.instantiate()
+	add_child(_persistent_notif)
+	_persistent_notif.hide()
+
+func notif(text) -> void:
+	if _timed_notif == null:
+		_timed_notif = NOTIF_SCENE.instantiate()
+		_timed_notif.get_node("Label").text = str(text)
+		add_child(_timed_notif)
+		await get_tree().create_timer(0.7).timeout
+		if _timed_notif != null:
+			_timed_notif.queue_free()
+			_timed_notif = null
+
+# Dipanggil saat player masuk area plot
+func enter_plot(text: String) -> void:
+	_plot_count += 1
+	if _plot_count == 1:  # baru masuk plot pertama
+		_persistent_notif.get_node("Label").text = text
+		_persistent_notif.show()
+
+# Dipanggil saat player keluar area plot
+func exit_plot() -> void:
+	_plot_count = max(0, _plot_count - 1)
+	if _plot_count == 0:  # tidak ada plot yang diinjak lagi
+		_persistent_notif.hide()
 
 func get_file(is_write: bool) -> FileAccess:
 	var password: String = SAVE_PASS

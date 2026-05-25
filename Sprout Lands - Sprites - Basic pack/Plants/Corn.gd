@@ -65,11 +65,15 @@ func _harvest() -> void:
 	#Game.Plot[PlantNum] = null
 	
 	get_parent().has_seed = false
+	if get_parent().has_method("_update_plant_prompt"):
+		get_parent()._update_plant_prompt()
 	Utils.save_game()
 	queue_free()
 
 func _add_harvest() -> void:
 	for i in range(Game.Harvest.size()):
+		if not (Game.Harvest[i] is Dictionary):
+			continue
 		if not Game.Harvest[i].has("Name"):
 			Game.Harvest[i]["Name"] = ""
 		if not Game.Harvest[i].has("Count"):
@@ -78,12 +82,19 @@ func _add_harvest() -> void:
 			Game.Harvest[i]["Consumable"] = false
 
 	for item in Game.Harvest:
+		if item == null:
+			continue
 		if item.get("Name", "") == "Corn":
 			item["Count"] = item.get("Count", 0) + 1
 			return
 
-	Game.Harvest.append({
+	var new_item = {
 		"Name": "Corn",
 		"Count": 1,
 		"Consumable": true,
-	})
+	}
+	var empty_index = Game.Harvest.find(null)
+	if empty_index == -1:
+		Game.Harvest.append(new_item)
+	else:
+		Game.Harvest[empty_index] = new_item

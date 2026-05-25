@@ -1,0 +1,116 @@
+[gd_scene format=3 uid="uid://76akhi12vf6o"]
+
+[ext_resource type="Script" uid="uid://bnu8rx3c0fne6" path="res://Global/Stage_Manager.gd" id="1_erndk"]
+
+[sub_resource type="Animation" id="Animation_erndk"]
+resource_name = "Fade In"
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("ColorRect:modulate")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 1),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [Color(1, 1, 1, 0), Color(1, 1, 1, 1)]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("Label:modulate")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0.0009999999, 1),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [Color(1, 1, 1, 0), Color(1, 1, 1, 1)]
+}
+
+[sub_resource type="Animation" id="Animation_ekjod"]
+resource_name = "Fade Out"
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("ColorRect:modulate")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.98),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [Color(1, 1, 1, 1), Color(1, 1, 1, 0)]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("Label:modulate")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0, 1),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [Color(1, 1, 1, 1), Color(1, 1, 1, 0)]
+}
+
+[sub_resource type="Animation" id="Animation_nno4y"]
+resource_name = "Loading"
+
+[sub_resource type="Animation" id="Animation_mshi4"]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("ColorRect:modulate")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Color(1, 1, 1, 0)]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("Label:modulate")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Color(1, 1, 1, 0)]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_vdxvl"]
+_data = {
+&"Fade In": SubResource("Animation_erndk"),
+&"Fade Out": SubResource("Animation_ekjod"),
+&"Loading": SubResource("Animation_nno4y"),
+&"RESET": SubResource("Animation_mshi4")
+}
+
+[node name="Stage_Manager" type="CanvasLayer" unique_id=1132765664]
+script = ExtResource("1_erndk")
+
+[node name="ColorRect" type="ColorRect" parent="." unique_id=1768066008]
+visible = false
+modulate = Color(1, 1, 1, 0)
+offset_right = 960.0
+offset_bottom = 528.0
+color = Color(0.0142752165, 0.014275218, 0.014275218, 1)
+
+[node name="anim" type="AnimationPlayer" parent="." unique_id=934266237]
+libraries/ = SubResource("AnimationLibrary_vdxvl")
+
+[node name="Label" type="Label" parent="." unique_id=1359374312]
+modulate = Color(1, 1, 1, 0)
+offset_right = 576.0
+offset_bottom = 304.0
+text = "Loading..."
+horizontal_alignment = 1
+vertical_alignment = 1
