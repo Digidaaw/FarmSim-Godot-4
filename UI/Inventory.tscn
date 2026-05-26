@@ -12,22 +12,34 @@ corner_radius_top_right = 15
 corner_radius_bottom_right = 15
 corner_radius_bottom_left = 15
 
-[node name="Inventory" type="Node2D" unique_id=17569182]
+[node name="Inventory" type="Control" unique_id=17569182]
+layout_mode = 3
+anchors_preset = 0
+offset_right = 280.0
+offset_bottom = 168.0
 script = ExtResource("1_efu02")
 
 [node name="Panel" type="Panel" parent="." unique_id=475176768]
 self_modulate = Color(1, 1, 1, 0.6039216)
-offset_left = 400.0
-offset_top = 176.0
-offset_right = 680.0
-offset_bottom = 344.0
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
 theme_override_styles/panel = SubResource("StyleBoxFlat_ycce7")
 
 [node name="SlotContainer" type="GridContainer" parent="." unique_id=775500926]
-offset_left = 409.0
-offset_top = 192.0
-offset_right = 669.0
-offset_bottom = 232.0
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 9.0
+offset_top = 16.0
+offset_right = -11.0
+offset_bottom = -16.0
+grow_horizontal = 2
+grow_vertical = 2
 columns = 6
 script = ExtResource("3_f42xq")
 
@@ -70,7 +82,7 @@ layout_mode = 2
 [node name="Sprite2D" type="Sprite2D" parent="." unique_id=862842419]
 visible = false
 texture_filter = 1
-position = Vector2(448, 240)
+position = Vector2(140, 84)
 texture = ExtResource("4_ycce7")
 
 [connection signal="gui_input" from="SlotContainer/Slot" to="." method="_on_slot_gui_input" binds= [0]]

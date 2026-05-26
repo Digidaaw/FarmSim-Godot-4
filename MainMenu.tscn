@@ -1,29 +1,57 @@
-[gd_scene format=3 uid="uid://pdktfpkkdxsc"]
+[gd_scene load_steps=4 format=3 uid="uid://pdktfpkkdxsc"]
 
 [ext_resource type="Script" uid="uid://iqinwou1fyl0" path="res://MainMenu.gd" id="1_i26rj"]
+[ext_resource type="FontFile" uid="uid://5d66pgn8xc78" path="res://Sprout Lands - UI Pack - Basic pack/Sprout Lands - UI Pack - Basic pack/fonts/pixelFont-7-8x14-sproutLands.ttf" id="2_font"]
 
-[node name="MainMenu" type="Node2D" unique_id=297997918]
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_panel"]
+bg_color = Color(0.5686275, 0.6392157, 0.3372549, 1)
+
+[node name="MainMenu" type="Control" unique_id=297997918]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
 script = ExtResource("1_i26rj")
 
 [node name="Panel" type="Panel" parent="." unique_id=1413691000]
-offset_right = 962.0
-offset_bottom = 544.0
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_panel")
 
-[node name="Label" type="Label" parent="." unique_id=1551065051]
-offset_left = 24.0
-offset_top = 32.0
-offset_right = 408.0
-offset_bottom = 112.0
-text = "SAYA AKAN LAWAN!!!!"
+[node name="CenterContainer" type="CenterContainer" parent="." unique_id=683027329]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="VBoxContainer" type="VBoxContainer" parent="CenterContainer" unique_id=707460670]
+layout_mode = 2
+theme_override_constants/separation = 24
+alignment = 1
+
+[node name="Label" type="Label" parent="CenterContainer/VBoxContainer" unique_id=1551065051]
+custom_minimum_size = Vector2(384, 80)
+layout_mode = 2
+theme_override_fonts/font = ExtResource("2_font")
+theme_override_font_sizes/font_size = 32
+text = "FARM SIM"
 horizontal_alignment = 1
 vertical_alignment = 1
 
-[node name="Play" type="Button" parent="." unique_id=491396297]
-offset_left = 192.0
-offset_top = 128.0
-offset_right = 235.64514
-offset_bottom = 161.0
-text = "Play
-"
+[node name="Play" type="Button" parent="CenterContainer/VBoxContainer" unique_id=491396297]
+custom_minimum_size = Vector2(192, 48)
+layout_mode = 2
+size_flags_horizontal = 4
+theme_override_fonts/font = ExtResource("2_font")
+theme_override_font_sizes/font_size = 18
+text = "Mulai"
 
-[connection signal="pressed" from="Play" to="." method="_on_play_pressed"]
+[connection signal="pressed" from="CenterContainer/VBoxContainer/Play" to="." method="_on_play_pressed"]

@@ -1,0 +1,46 @@
+[gd_scene format=3 uid="uid://ckng7u2ad5ygi"]
+
+[ext_resource type="Script" uid="uid://gnqfl6tnyvjk" path="res://HomeInterior.gd" id="1_home_interior"]
+[ext_resource type="PackedScene" uid="uid://beq6nvunnomr7" path="res://Player/Player.tscn" id="2_player"]
+[ext_resource type="PackedScene" uid="uid://b1dtvltj1cy1m" path="res://Player/UI.tscn" id="3_ui"]
+[ext_resource type="FontFile" uid="uid://5d66pgn8xc78" path="res://Sprout Lands - UI Pack - Basic pack/Sprout Lands - UI Pack - Basic pack/fonts/pixelFont-7-8x14-sproutLands.ttf" id="4_font"]
+[ext_resource type="PackedScene" uid="uid://di1hdogsargla" path="res://door.tscn" id="5_door"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_room"]
+bg_color = Color(0.33, 0.27, 0.22, 1)
+
+[node name="HomeInterior" type="Node2D" unique_id=458285054]
+script = ExtResource("1_home_interior")
+
+[node name="RoomBackground" type="Panel" parent="." unique_id=1381619403]
+offset_right = 960.0
+offset_bottom = 540.0
+theme_override_styles/panel = SubResource("StyleBoxFlat_room")
+
+[node name="Title" type="Label" parent="." unique_id=387446898]
+offset_left = 368.0
+offset_top = 32.0
+offset_right = 592.0
+offset_bottom = 64.0
+theme_override_fonts/font = ExtResource("4_font")
+theme_override_font_sizes/font_size = 18
+text = "Dalam Rumah"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="Player" parent="." unique_id=1101853021 instance=ExtResource("2_player")]
+position = Vector2(480, 300)
+
+[node name="Camera2D" type="Camera2D" parent="Player" unique_id=294606635]
+limit_left = 0
+limit_top = 0
+limit_right = 960
+limit_bottom = 540
+position_smoothing_speed = 10.0
+rotation_smoothing_speed = 10.0
+
+[node name="ExitDoor" parent="." unique_id=253897436 instance=ExtResource("5_door")]
+position = Vector2(480, 420)
+target_scene_path = "res://World.tscn"
+
+[node name="UI" parent="." unique_id=271659802 instance=ExtResource("3_ui")]

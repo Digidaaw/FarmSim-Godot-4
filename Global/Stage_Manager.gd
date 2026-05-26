@@ -2,6 +2,7 @@ extends CanvasLayer
 
 const MainMenu = "res://MainMenu.tscn"
 const MainWorld = "res://World.tscn"
+const HomeInterior = "res://HomeInterior.tscn"
 
 func stage_change(stage_path):
 	get_node("ColorRect").show()

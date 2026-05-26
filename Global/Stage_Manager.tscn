@@ -100,8 +100,11 @@ script = ExtResource("1_erndk")
 [node name="ColorRect" type="ColorRect" parent="." unique_id=1768066008]
 visible = false
 modulate = Color(1, 1, 1, 0)
-offset_right = 960.0
-offset_bottom = 528.0
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
 color = Color(0.0142752165, 0.014275218, 0.014275218, 1)
 
 [node name="anim" type="AnimationPlayer" parent="." unique_id=934266237]
@@ -109,8 +112,12 @@ libraries/ = SubResource("AnimationLibrary_vdxvl")
 
 [node name="Label" type="Label" parent="." unique_id=1359374312]
 modulate = Color(1, 1, 1, 0)
-offset_right = 576.0
-offset_bottom = 304.0
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_font_sizes/font_size = 24
 text = "Loading..."
 horizontal_alignment = 1
 vertical_alignment = 1

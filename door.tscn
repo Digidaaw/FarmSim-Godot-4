@@ -1,0 +1,105 @@
+[gd_scene format=3 uid="uid://di1hdogsargla"]
+
+[ext_resource type="Script" uid="uid://buhx4tcwa3t23" path="res://Door.gd" id="1_door"]
+[ext_resource type="Texture2D" uid="uid://bq7ru618egmof" path="res://Sprout Lands - Sprites - Basic pack/Tilesets/Wooden House.png" id="2_0phs7"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_v6xrn"]
+size = Vector2(16, 16)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_interact"]
+size = Vector2(40, 40)
+
+[sub_resource type="Animation" id="Animation_0phs7"]
+resource_name = "Close Door"
+length = 2.0
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Sprite2D:frame")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 1.01),
+"transitions": PackedFloat32Array(1, 1),
+"update": 1,
+"values": [2, 1]
+}
+
+[sub_resource type="Animation" id="Animation_50cdl"]
+resource_name = "Open Door"
+length = 2.0
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Sprite2D:frame")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.97),
+"transitions": PackedFloat32Array(1, 1),
+"update": 1,
+"values": [1, 2]
+}
+
+[sub_resource type="Animation" id="Animation_y5njw"]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Sprite2D:frame")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [1]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_4xadh"]
+_data = {
+&"Close Door": SubResource("Animation_0phs7"),
+&"Open Door": SubResource("Animation_50cdl"),
+&"RESET": SubResource("Animation_y5njw")
+}
+
+[node name="Door" type="Node2D" unique_id=153771538]
+script = ExtResource("1_door")
+
+[node name="Sprite2D" type="Sprite2D" parent="." unique_id=1012503598]
+texture_filter = 1
+texture = ExtResource("2_0phs7")
+vframes = 3
+frame = 1
+region_enabled = true
+region_rect = Rect2(48, 0, 15.993, 48.09)
+
+[node name="StaticBody2D" type="StaticBody2D" parent="." unique_id=1178561602]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="StaticBody2D" unique_id=1279407808]
+shape = SubResource("RectangleShape2D_v6xrn")
+
+[node name="InteractionArea" type="Area2D" parent="." unique_id=1523497846]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="InteractionArea" unique_id=1739446105]
+position = Vector2(0, 8)
+shape = SubResource("RectangleShape2D_interact")
+
+[node name="Prompt" type="Label" parent="." unique_id=549837682]
+visible = false
+top_level = true
+z_index = 100
+offset_left = -32.0
+offset_top = -30.0
+offset_right = 32.0
+offset_bottom = -7.0
+theme_override_font_sizes/font_size = 10
+text = "Tekan F"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="." unique_id=1907506934]
+libraries/ = SubResource("AnimationLibrary_4xadh")
+
+[connection signal="body_entered" from="InteractionArea" to="." method="_on_interaction_area_body_entered"]
+[connection signal="body_exited" from="InteractionArea" to="." method="_on_interaction_area_body_exited"]

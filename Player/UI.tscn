@@ -25,20 +25,42 @@ func _process(delta: float) -> void:
 
 [node name="UI" type="CanvasLayer" unique_id=1412626076]
 
-[node name="Date" type="Label" parent="." unique_id=1299051633]
-offset_left = 215.0
-offset_top = -15.0
-offset_right = 560.8334
-offset_bottom = 68.0
+[node name="Root" type="Control" parent="." unique_id=112546990]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="Date" type="Label" parent="Root" unique_id=1299051633]
+layout_mode = 1
+anchors_preset = 5
+anchor_left = 0.5
+anchor_right = 0.5
+offset_left = -160.0
+offset_top = 8.0
+offset_right = 160.0
+offset_bottom = 40.0
+grow_horizontal = 2
+theme_override_font_sizes/font_size = 16
 horizontal_alignment = 1
 vertical_alignment = 1
 autowrap_mode = 3
 script = SubResource("GDScript_1genj")
 
-[node name="Select Seed" parent="." unique_id=500944632 instance=ExtResource("1_62njy")]
-position = Vector2(81, 175)
-scale = Vector2(0.76, 0.76)
+[node name="Select Seed" parent="Root" unique_id=500944632 instance=ExtResource("1_62njy")]
+layout_mode = 0
+offset_left = 64.0
+offset_top = 136.0
+offset_right = 488.0
+offset_bottom = 200.0
+scale = Vector2(0.5, 0.5)
 
-[node name="Inventory" parent="." unique_id=17569182 instance=ExtResource("2_ly0jh")]
-position = Vector2(-39, -45.000004)
-scale = Vector2(0.6, 0.6)
+[node name="Inventory" parent="Root" unique_id=17569182 instance=ExtResource("2_ly0jh")]
+layout_mode = 0
+offset_left = 80.00001
+offset_top = 32.0
+offset_right = 360.0
+offset_bottom = 200.0
+scale = Vector2(0.61107725, 0.61107725)

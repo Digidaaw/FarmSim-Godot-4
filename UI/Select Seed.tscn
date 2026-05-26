@@ -5,7 +5,11 @@
 [ext_resource type="Texture2D" uid="uid://0tr8mjh7dbr0" path="res://Sprout Lands - Sprites - Basic pack/Objects/Basic Plants.png" id="3_65i6k"]
 [ext_resource type="Texture2D" uid="uid://bkgpnj2xob22h" path="res://UI/Free Inventory/Inventory_select.png" id="4_l3snd"]
 
-[node name="Select Seed" type="Node2D" unique_id=500944632]
+[node name="Select Seed" type="Control" unique_id=500944632]
+layout_mode = 3
+anchors_preset = 0
+offset_right = 424.0
+offset_bottom = 64.0
 script = ExtResource("1_b2y4n")
 
 [node name="Seed1" type="Sprite2D" parent="." unique_id=1970936287]

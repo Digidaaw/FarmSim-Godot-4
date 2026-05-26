@@ -1,4 +1,4 @@
-extends Node2D
+extends Control
 
 var dragging = false
 var click_radius = 40
