@@ -1,0 +1,89 @@
+[gd_scene format=3 uid="uid://baqsac3vb3ffd"]
+
+[ext_resource type="Script" uid="uid://cnovmxgwx1flu" path="res://ShippingBin.gd" id="1_ddb7e"]
+[ext_resource type="Texture2D" uid="uid://wo12s21i11l7" path="res://Sprout Lands - Sprites - Basic pack/Objects/Chest.png" id="1_s3nc4"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_s3nc4"]
+size = Vector2(16, 16)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_ddb7e"]
+size = Vector2(45, 37)
+
+[sub_resource type="Animation" id="Animation_s3nc4"]
+resource_name = "Close Bin"
+length = 0.5
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Sprite2D:frame")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.10000001, 0.20000002, 0.3, 0.40000004),
+"transitions": PackedFloat32Array(1, 1, 1, 1, 1),
+"update": 1,
+"values": [4, 3, 2, 1, 0]
+}
+
+[sub_resource type="Animation" id="Animation_ddb7e"]
+resource_name = "Open Bin"
+length = 0.5
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Sprite2D:frame")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.10000001, 0.2, 0.3, 0.40000004),
+"transitions": PackedFloat32Array(1, 1, 1, 1, 1),
+"update": 1,
+"values": [0, 1, 2, 3, 4]
+}
+
+[sub_resource type="Animation" id="Animation_l43e6"]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Sprite2D:frame")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [1]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_htr78"]
+_data = {
+&"Close Bin": SubResource("Animation_s3nc4"),
+&"Open Bin": SubResource("Animation_ddb7e"),
+&"RESET": SubResource("Animation_l43e6")
+}
+
+[node name="ShippingBin" type="Node2D" unique_id=1682744358]
+script = ExtResource("1_ddb7e")
+
+[node name="Sprite2D" type="Sprite2D" parent="." unique_id=585263628]
+texture_filter = 1
+texture = ExtResource("1_s3nc4")
+hframes = 5
+vframes = 2
+frame = 1
+region_rect = Rect2(15.215, 17.595, 17.44, 15.13)
+
+[node name="StaticBody2D" type="StaticBody2D" parent="." unique_id=1633700009]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="StaticBody2D" unique_id=379450052]
+shape = SubResource("RectangleShape2D_s3nc4")
+
+[node name="InteractionArea" type="Area2D" parent="." unique_id=1335090304]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="InteractionArea" unique_id=1923656583]
+position = Vector2(0, 8)
+shape = SubResource("RectangleShape2D_ddb7e")
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="." unique_id=700153364]
+libraries/ = SubResource("AnimationLibrary_htr78")

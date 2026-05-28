@@ -36,6 +36,7 @@ var light_schemes = {
 func _ready() -> void:
 	game_hour = Game.game_hour
 	game_minute = Game.game_minute
+	StageManager.apply_player_spawn($CharacterBody2D, $CharacterBody2D.position)
 
 func _process(delta: float) -> void:
 	time_passed += delta * time_speed

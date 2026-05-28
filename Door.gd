@@ -2,6 +2,8 @@ extends Node2D
 
 @export_file("*.tscn") var target_scene_path: String = "res://HomeInterior.tscn"
 @export var auto_enter_after_open := true
+@export var use_target_spawn_position := false
+@export var target_spawn_position := Vector2.ZERO
 
 @onready var animation_player: AnimationPlayer = $AnimationPlayer
 @onready var prompt: Label = $Prompt
@@ -36,7 +38,10 @@ func _interact() -> void:
 	await open_door()
 
 	if auto_enter_after_open and target_scene_path != "":
-		StageManager.stage_change(target_scene_path)
+		if use_target_spawn_position:
+			StageManager.stage_change(target_scene_path, target_spawn_position)
+		else:
+			StageManager.stage_change(target_scene_path)
 
 func open_door() -> void:
 	if is_open:
