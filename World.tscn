@@ -200,6 +200,7 @@ visible = false
 color = Color(0.40784314, 0.39215687, 0.36078432, 1)
 
 [node name="House" type="CanvasGroup" parent="." unique_id=1561633995]
+position = Vector2(1, 0)
 
 [node name="floor" type="TileMapLayer" parent="House" unique_id=1987063000]
 texture_filter = 1
