@@ -13,6 +13,8 @@
 [ext_resource type="Texture2D" uid="uid://bq7ru618egmof" path="res://Sprout Lands - Sprites - Basic pack/Tilesets/Wooden House.png" id="10_f5c0m"]
 [ext_resource type="Texture2D" uid="uid://clmcv1xpi7qhy" path="res://Sprout Lands - Sprites - Basic pack/Tilesets/Wooden_House_Roof_Tilset.png" id="11_kva58"]
 [ext_resource type="PackedScene" uid="uid://di1hdogsargla" path="res://door.tscn" id="12_door"]
+[ext_resource type="PackedScene" uid="uid://baqsac3vb3ffd" path="res://ShippingBin.tscn" id="13_shipbin"]
+[ext_resource type="PackedScene" path="res://SeedSeller.tscn" id="14_seller"]
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_f5c0m"]
 texture = ExtResource("9_kva58")
@@ -172,6 +174,12 @@ position = Vector2(394, 59)
 [node name="PlotofDirt6" parent="DirtContainer" unique_id=422024968 instance=ExtResource("8_bah7m")]
 y_sort_enabled = true
 position = Vector2(410, 59)
+
+[node name="ShippingBin" parent="." unique_id=70896409 instance=ExtResource("13_shipbin")]
+position = Vector2(282, 63)
+
+[node name="SeedSeller" parent="." unique_id=333430882 instance=ExtResource("14_seller")]
+position = Vector2(528, 272)
 
 [node name="CharacterBody2D" parent="." unique_id=69392640 instance=ExtResource("1_c6gwx")]
 position = Vector2(273, 89)

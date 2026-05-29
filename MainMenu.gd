@@ -3,8 +3,6 @@ extends Control
 var plottemp = []
 
 func _ready():
-	
-	Utils.save_game()
 	Utils.load_game()
 
 	var size = Game.Plot.size()
@@ -22,6 +20,7 @@ func _ready():
 		i += 1
 
 	Game.Plot = plottemp
+	Utils.save_game()
 
 func _on_play_pressed() -> void:
 	StageManager.stage_change(StageManager.MainWorld)

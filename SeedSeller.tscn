@@ -1,0 +1,65 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://SeedSeller.gd" id="1_seller"]
+[ext_resource type="Texture2D" path="res://Player/Basic Charakter Spritesheet.png" id="2_sprite"]
+
+[sub_resource type="CapsuleShape2D" id="CapsuleShape2D_seller"]
+radius = 5.0
+height = 18.0
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_interact"]
+size = Vector2(42, 42)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_prompt"]
+bg_color = Color(1, 1, 1, 0.82)
+corner_radius_top_left = 3
+corner_radius_top_right = 3
+corner_radius_bottom_right = 3
+corner_radius_bottom_left = 3
+
+[node name="SeedSeller" type="Node2D"]
+texture_filter = 1
+script = ExtResource("1_seller")
+
+[node name="Sprite2D" type="Sprite2D" parent="."]
+texture = ExtResource("2_sprite")
+hframes = 4
+vframes = 4
+frame = 4
+
+[node name="StaticBody2D" type="StaticBody2D" parent="."]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="StaticBody2D"]
+shape = SubResource("CapsuleShape2D_seller")
+
+[node name="InteractionArea" type="Area2D" parent="."]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="InteractionArea"]
+shape = SubResource("RectangleShape2D_interact")
+
+[node name="Prompt" type="Label" parent="."]
+visible = false
+top_level = true
+z_index = 100
+offset_left = -10.0
+offset_top = -30.0
+offset_right = 10.0
+offset_bottom = -10.0
+theme_override_colors/font_color = Color(0, 0, 0, 1)
+theme_override_font_sizes/font_size = 12
+text = "F"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="PromptPanel" type="Panel" parent="."]
+visible = false
+top_level = true
+z_index = 99
+offset_left = -10.0
+offset_top = -30.0
+offset_right = 10.0
+offset_bottom = -10.0
+theme_override_styles/panel = SubResource("StyleBoxFlat_prompt")
+
+[connection signal="body_entered" from="InteractionArea" to="." method="_on_interaction_area_body_entered"]
+[connection signal="body_exited" from="InteractionArea" to="." method="_on_interaction_area_body_exited"]

@@ -6,6 +6,13 @@
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_6sqar"]
 size = Vector2(11, 11)
 
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_prompt"]
+bg_color = Color(1, 1, 1, 0.82)
+corner_radius_top_left = 3
+corner_radius_top_right = 3
+corner_radius_bottom_right = 3
+corner_radius_bottom_left = 3
+
 [node name="Dirt" type="Area2D" unique_id=1423821957]
 script = ExtResource("1_5pjij")
 
@@ -16,6 +23,30 @@ shape = SubResource("RectangleShape2D_6sqar")
 texture = ExtResource("2_5pjij")
 
 [node name="Seeds" type="Node2D" parent="." unique_id=111111111]
+
+[node name="Prompt" type="Label" parent="."]
+visible = false
+top_level = true
+z_index = 100
+offset_left = -10.0
+offset_top = -28.0
+offset_right = 10.0
+offset_bottom = -8.0
+theme_override_colors/font_color = Color(0, 0, 0, 1)
+theme_override_font_sizes/font_size = 12
+text = "F"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="PromptPanel" type="Panel" parent="."]
+visible = false
+top_level = true
+z_index = 99
+offset_left = -10.0
+offset_top = -28.0
+offset_right = 10.0
+offset_bottom = -8.0
+theme_override_styles/panel = SubResource("StyleBoxFlat_prompt")
 
 [connection signal="body_entered" from="." to="." method="_on_body_entered"]
 [connection signal="body_exited" from="." to="." method="_on_body_exited"]

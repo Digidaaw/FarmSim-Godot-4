@@ -1,26 +1,25 @@
 [gd_scene format=3 uid="uid://b1dtvltj1cy1m"]
 
-[ext_resource type="PackedScene" uid="uid://cd73ff7rhwcam" path="res://UI/Select Seed.tscn" id="1_62njy"]
 [ext_resource type="PackedScene" uid="uid://dg0rh7nf8mk2j" path="res://UI/Inventory.tscn" id="2_ly0jh"]
+[ext_resource type="PackedScene" uid="uid://cd73ff7rhwcam" path="res://UI/Select Seed.tscn" id="3_selectseed"]
 
 [sub_resource type="GDScript" id="GDScript_1genj"]
-script/source = "#extends Label
-#
-#func _process(delta: float) -> void:
-	#var datetime = Time.get_datetime_dict_from_system()
-#
-	#text = \"Time: %02d:%02d\" % [
-		#datetime.hour,
-		#datetime.minute
-	#]
-
-extends Label
+script/source = "extends Label
 
 func _process(delta: float) -> void:
-	text = \"Time: %02d:%02d\" % [
+	var shown_minute = int(Game.game_minute / 10) * 10
+	text = \"Hari %d  %02d.%02d\" % [
+		Game.game_day,
 		Game.game_hour,
-		Game.game_minute
+		shown_minute
 	]
+"
+
+[sub_resource type="GDScript" id="GDScript_money"]
+script/source = "extends Label
+
+func _process(_delta: float) -> void:
+	text = \"%dG\" % Game.Money
 "
 
 [node name="UI" type="CanvasLayer" unique_id=1412626076]
@@ -43,19 +42,49 @@ offset_top = 8.0
 offset_right = 160.0
 offset_bottom = 40.0
 grow_horizontal = 2
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_colors/font_shadow_color = Color(0, 0, 0, 1)
+theme_override_constants/shadow_offset_x = 1
+theme_override_constants/shadow_offset_y = 1
 theme_override_font_sizes/font_size = 16
 horizontal_alignment = 1
 vertical_alignment = 1
 autowrap_mode = 3
 script = SubResource("GDScript_1genj")
 
-[node name="Select Seed" parent="Root" unique_id=500944632 instance=ExtResource("1_62njy")]
-layout_mode = 0
-offset_left = 64.0
-offset_top = 136.0
-offset_right = 488.0
-offset_bottom = 200.0
-scale = Vector2(0.5, 0.5)
+[node name="Money" type="Label" parent="Root" unique_id=1515606419]
+layout_mode = 1
+anchors_preset = 1
+anchor_left = 1.0
+anchor_right = 1.0
+offset_left = -132.0
+offset_top = 8.0
+offset_right = -16.0
+offset_bottom = 40.0
+grow_horizontal = 0
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_colors/font_shadow_color = Color(0, 0, 0, 1)
+theme_override_constants/shadow_offset_x = 1
+theme_override_constants/shadow_offset_y = 1
+theme_override_font_sizes/font_size = 16
+horizontal_alignment = 2
+vertical_alignment = 1
+script = SubResource("GDScript_money")
+
+[node name="SelectSeed" parent="Root" unique_id=1814040073 instance=ExtResource("3_selectseed")]
+layout_mode = 1
+anchors_preset = 7
+anchor_left = 0.5
+anchor_top = 1.0
+anchor_right = 0.5
+anchor_bottom = 1.0
+offset_left = -88.0
+offset_top = -36.00003
+offset_right = 312.0
+offset_bottom = 28.0
+grow_horizontal = 2
+grow_vertical = 0
+scale = Vector2(0.4399964, 0.4399964)
 
 [node name="Inventory" parent="Root" unique_id=17569182 instance=ExtResource("2_ly0jh")]
 layout_mode = 0

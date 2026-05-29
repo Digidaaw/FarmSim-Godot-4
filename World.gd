@@ -2,10 +2,11 @@ extends Node2D
 
 @onready var darkness = get_node("Ambient")
 @onready var light = get_node("CharacterBody2D/PointLight2D")
+@onready var dirt_container = get_node_or_null("DirtContainer")
 
 var game_hour = 6
 var game_minute = 0
-var time_speed = 60.0
+var time_speed = 1.6
 var time_passed = 0.0
 
 var color_scheme = {
@@ -51,9 +52,15 @@ func _process(delta: float) -> void:
 
 			if game_hour >= 24:
 				game_hour = 0
+				Game.advance_day()
+				# Refresh tanaman di scene tree setelah ganti hari
+				if dirt_container != null and dirt_container.has_method("refresh_all_plants"):
+					dirt_container.refresh_all_plants()
+				Utils.save_game()
 
 	Game.game_hour = game_hour
 	Game.game_minute = game_minute
+	_try_collect_shipping_bin()
 
 	if (game_hour >= 0 && game_hour < 5):
 		darkness.color = color_scheme[0]
@@ -70,3 +77,13 @@ func _process(delta: float) -> void:
 	elif (game_hour >= 20 && game_hour < 24):
 		darkness.color = color_scheme[2]
 		light.energy = light_schemes[2]
+
+func _try_collect_shipping_bin() -> void:
+	if game_hour != 17 or Game.last_shipping_collect_day == Game.game_day:
+		return
+
+	Game.last_shipping_collect_day = Game.game_day
+	var result = Game.collect_shipping_bin()
+	if int(result.get("Total", 0)) > 0:
+		Utils.notif("Shipping +%dG" % int(result["Total"]))
+	Utils.save_game()

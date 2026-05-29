@@ -9,6 +9,13 @@ size = Vector2(16, 16)
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_interact"]
 size = Vector2(40, 40)
 
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_prompt"]
+bg_color = Color(1, 1, 1, 0.82)
+corner_radius_top_left = 3
+corner_radius_top_right = 3
+corner_radius_bottom_right = 3
+corner_radius_bottom_left = 3
+
 [sub_resource type="Animation" id="Animation_0phs7"]
 resource_name = "Close Door"
 length = 2.0
@@ -89,14 +96,25 @@ shape = SubResource("RectangleShape2D_interact")
 visible = false
 top_level = true
 z_index = 100
-offset_left = -32.0
-offset_top = -30.0
-offset_right = 32.0
-offset_bottom = -7.0
-theme_override_font_sizes/font_size = 10
-text = "Tekan F"
+offset_left = -10.0
+offset_top = -34.0
+offset_right = 10.0
+offset_bottom = -14.0
+theme_override_colors/font_color = Color(0, 0, 0, 1)
+theme_override_font_sizes/font_size = 12
+text = "F"
 horizontal_alignment = 1
 vertical_alignment = 1
+
+[node name="PromptPanel" type="Panel" parent="." unique_id=1890507364]
+visible = false
+top_level = true
+z_index = 99
+offset_left = -10.0
+offset_top = -34.0
+offset_right = 10.0
+offset_bottom = -14.0
+theme_override_styles/panel = SubResource("StyleBoxFlat_prompt")
 
 [node name="AnimationPlayer" type="AnimationPlayer" parent="." unique_id=1907506934]
 libraries/ = SubResource("AnimationLibrary_4xadh")

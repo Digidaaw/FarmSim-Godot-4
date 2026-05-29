@@ -6,6 +6,18 @@
 [sub_resource type="CircleShape2D" id="CircleShape2D_a5e32"]
 radius = 9.0
 
+[sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_water"]
+direction = Vector3(0, -1, 0)
+spread = 40.0
+gravity = Vector3(0, 98, 0)
+initial_velocity_min = 30.0
+initial_velocity_max = 60.0
+angular_velocity_min = -180.0
+angular_velocity_max = 180.0
+scale_min = 0.8
+scale_max = 1.8
+color = Color(0.35, 0.7, 1.0, 0.85)
+
 [node name="Tomato" type="Area2D" unique_id=1423821957]
 script = ExtResource("1_7hvur")
 
@@ -22,6 +34,17 @@ autostart = true
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=211686471]
 shape = SubResource("CircleShape2D_a5e32")
+
+[node name="WaterParticles" type="GPUParticles2D" parent="." unique_id=100000002]
+position = Vector2(0, -8)
+emitting = false
+amount = 18
+lifetime = 0.55
+one_shot = true
+explosiveness = 0.9
+randomness = 0.4
+process_material = SubResource("ParticleProcessMaterial_water")
+texture_filter = 1
 
 [connection signal="body_entered" from="." to="." method="_on_body_entered"]
 [connection signal="timeout" from="Timer" to="." method="_on_timer_timeout"]

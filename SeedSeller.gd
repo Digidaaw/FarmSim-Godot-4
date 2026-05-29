@@ -1,13 +1,13 @@
 extends Node2D
 
-@onready var animation_player: AnimationPlayer = $AnimationPlayer
+@export var buy_amount := 1
+
 @onready var prompt: Label = $Prompt
 @onready var prompt_panel: Panel = $PromptPanel
 
 const PROMPT_OFFSET := Vector2(-10, -30)
 
 var player_nearby := false
-var is_open := false
 
 func _ready() -> void:
 	prompt.text = "F"
@@ -17,21 +17,14 @@ func _ready() -> void:
 func _process(_delta: float) -> void:
 	_update_prompt_position()
 	if player_nearby and Input.is_action_just_pressed("Interact"):
-		_ship_harvest()
+		_buy_selected_seed()
 
-func _ship_harvest() -> void:
-	var result = Game.ship_all_harvest()
+func _buy_selected_seed() -> void:
+	var seed_name = Game.get_selected_seed_name()
+	var result = Game.buy_shop_item(seed_name, buy_amount)
 	Utils.notif(str(result.get("Message", "")))
 	if result.get("Success", false):
 		Utils.save_game()
-		_play_bin()
-
-func _play_bin() -> void:
-	if animation_player == null:
-		return
-	animation_player.play("Open Bin")
-	await animation_player.animation_finished
-	animation_player.play("Close Bin")
 
 func _on_interaction_area_body_entered(body: Node2D) -> void:
 	if body is PersistentState:

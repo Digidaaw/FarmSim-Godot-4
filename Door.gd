@@ -7,17 +7,19 @@ extends Node2D
 
 @onready var animation_player: AnimationPlayer = $AnimationPlayer
 @onready var prompt: Label = $Prompt
+@onready var prompt_panel: Panel = $PromptPanel
 @onready var door_collision: CollisionShape2D = $StaticBody2D/CollisionShape2D
 
-const PROMPT_OFFSET := Vector2(-32, -30)
+const PROMPT_OFFSET := Vector2(-10, -34)
 
 var player_nearby := false
 var is_open := false
 var is_transitioning := false
 
 func _ready() -> void:
+	prompt.text = "F"
 	_update_prompt_position()
-	prompt.hide()
+	_set_prompt_visible(false)
 
 func _process(_delta: float) -> void:
 	_update_prompt_position()
@@ -26,6 +28,7 @@ func _process(_delta: float) -> void:
 
 func _update_prompt_position() -> void:
 	prompt.global_position = global_position + PROMPT_OFFSET
+	prompt_panel.global_position = prompt.global_position
 
 func _interact() -> void:
 	if is_transitioning:
@@ -48,7 +51,7 @@ func open_door() -> void:
 		return
 
 	is_transitioning = true
-	prompt.hide()
+	_set_prompt_visible(false)
 	animation_player.play("Open Door")
 	await animation_player.animation_finished
 	is_open = true
@@ -66,15 +69,19 @@ func close_door() -> void:
 	door_collision.disabled = false
 	is_transitioning = false
 	if player_nearby:
-		prompt.show()
+		_set_prompt_visible(true)
 
 func _on_interaction_area_body_entered(body: Node2D) -> void:
 	if body is PersistentState:
 		player_nearby = true
 		if not is_transitioning:
-			prompt.show()
+			_set_prompt_visible(true)
 
 func _on_interaction_area_body_exited(body: Node2D) -> void:
 	if body is PersistentState:
 		player_nearby = false
-		prompt.hide()
+		_set_prompt_visible(false)
+
+func _set_prompt_visible(should_show: bool) -> void:
+	prompt.visible = should_show
+	prompt_panel.visible = should_show
