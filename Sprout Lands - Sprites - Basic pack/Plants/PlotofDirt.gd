@@ -1,4 +1,5 @@
 extends Area2D
+
 const Corn = preload("res://Sprout Lands - Sprites - Basic pack/Plants/Corn.tscn")
 const Tomato = preload("res://Sprout Lands - Sprites - Basic pack/Plants/Tomato.tscn")
 
@@ -8,19 +9,33 @@ const Tomato = preload("res://Sprout Lands - Sprites - Basic pack/Plants/Tomato.
 
 const PROMPT_OFFSET := Vector2(-10, -28)
 
+var plot_index := -1
+var plot_cell := Vector2i.ZERO
+
 var has_seed = false
 var canPlant = false
 var player_in_plot = false
-
-func get_input():
-	if Input.is_action_just_pressed("Interact"):
-		if canPlant == true:
-			interact()
 
 func _ready() -> void:
 	prompt.text = "F"
 	_update_prompt_position()
 	_set_prompt_visible(false)
+
+func setup_plot(new_plot_index: int, new_cell: Vector2i) -> void:
+	plot_index = new_plot_index
+	plot_cell = new_cell
+	
+	if plot_index == -1:
+		plot_index = get_index()
+
+	if plot_index >= 0 and plot_index < Game.Plot.size() and Game.Plot[plot_index] is Dictionary:
+		has_seed = true
+		_load_plant_from_save()
+
+func get_input():
+	if Input.is_action_just_pressed("Interact"):
+		if canPlant == true:
+			interact()
 
 func _physics_process(_delta):
 	_update_prompt_position()
@@ -35,41 +50,81 @@ func interact() -> void:
 	if selected_item.get("Name", "") != "Watering Can":
 		return
 
-	Game.water_plot(get_index())
+	Game.water_plot(plot_index)
+
 	var plant_child = _get_plant_child()
 	if plant_child != null and plant_child.has_method("water"):
 		plant_child.water()
+
 	Utils.save_game()
 
 func spawn():
-	if !has_seed:
-		if Game.get_current_pocket_mode() != "Seed":
-			return
-		var seed_name = Game.get_selected_seed_name()
-		if seed_name == "":
-			return
-		if not Game.spend_seed(seed_name):
-			Utils.notif("Bibit %s habis" % seed_name)
-			return
+	if has_seed:
+		return
 
-		var plant1 = null
-		match seed_name:
-			"Corn":
-				plant1 = Corn.instantiate()
-			"Tomato":
-				plant1 = Tomato.instantiate()
+	if Game.get_current_pocket_mode() != "Seed":
+		return
 
-		if plant1 == null:
-			Utils.notif("Bibit belum punya tanaman")
-			Game.add_seed(seed_name)
-			return
+	var seed_name = Game.get_selected_seed_name()
+	if seed_name == "":
+		return
 
-		self.add_child(plant1)
-		plant1.global_position = global_position
-		has_seed = true
-		_update_plant_prompt()
-		Utils.save_game()
+	if not Game.spend_seed(seed_name):
+		Utils.notif("Bibit %s habis" % seed_name)
+		return
 
+	while Game.Plot.size() <= plot_index:
+		Game.Plot.append(null)
+
+	Game.Plot[plot_index] = {
+		"Seed": seed_name,
+		"Stage": 1,
+		"MaxStage": 5,
+		"PlantedDay": Game.game_day,
+		"LastWateredDay": Game.game_day,
+		"AgeDays": 0,
+		"Harvested": false,
+	}
+
+	var plant1 = _create_plant(seed_name)
+
+	if plant1 == null:
+		Utils.notif("Bibit belum punya tanaman")
+		Game.add_seed(seed_name)
+		Game.Plot[plot_index] = null
+		return
+
+	if "PlantNum" in plant1:
+		plant1.PlantNum = plot_index
+
+	add_child(plant1)
+	plant1.global_position = global_position
+
+	has_seed = true
+	_update_plant_prompt()
+	Utils.save_game()
+
+func _load_plant_from_save() -> void:
+	var data = Game.Plot[plot_index]
+	var seed_name := str(data.get("Seed", ""))
+
+	var plant1 = _create_plant(seed_name)
+	if plant1 == null:
+		return
+
+	if "PlantNum" in plant1:
+		plant1.PlantNum = plot_index
+
+	add_child(plant1)
+	plant1.global_position = global_position
+
+func _create_plant(seed_name: String) -> Node:
+	match seed_name:
+		"Corn":
+			return Corn.instantiate()
+		"Tomato":
+			return Tomato.instantiate()
+	return null
 
 func _on_body_entered(body: Node2D) -> void:
 	if body.name == "CharacterBody2D":
@@ -86,6 +141,7 @@ func _update_plant_prompt() -> void:
 	var can_water = has_seed and selected_item.get("Name", "") == "Watering Can"
 	var can_seed = not has_seed and Game.get_current_pocket_mode() == "Seed"
 	var should_show_prompt = player_in_plot and (can_seed or can_water)
+
 	if should_show_prompt == canPlant:
 		return
 

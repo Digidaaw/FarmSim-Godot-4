@@ -24,7 +24,7 @@ texture = ExtResource("2_5pjij")
 
 [node name="Seeds" type="Node2D" parent="." unique_id=111111111]
 
-[node name="Prompt" type="Label" parent="."]
+[node name="Prompt" type="Label" parent="." unique_id=37829479]
 visible = false
 top_level = true
 z_index = 100
@@ -38,7 +38,7 @@ text = "F"
 horizontal_alignment = 1
 vertical_alignment = 1
 
-[node name="PromptPanel" type="Panel" parent="."]
+[node name="PromptPanel" type="Panel" parent="." unique_id=1812983414]
 visible = false
 top_level = true
 z_index = 99

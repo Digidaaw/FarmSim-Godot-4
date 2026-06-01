@@ -6,6 +6,8 @@ var Plot = [
 
 var Harvest = []
 
+var hoed_plot_cells: Array[String] = []
+
 var Selected = 0
 
 var game_hour = 6

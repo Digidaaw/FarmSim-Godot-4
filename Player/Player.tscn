@@ -2,10 +2,79 @@
 
 [ext_resource type="Script" uid="uid://08rqtwnkyvxl" path="res://Player/Player.gd" id="1_q3lat"]
 [ext_resource type="Texture2D" uid="uid://cta0fvxypymue" path="res://Player/Basic Charakter Spritesheet.png" id="2_tok1r"]
+[ext_resource type="Texture2D" uid="uid://dct2wog850r8b" path="res://Sprout Lands - Sprites - Basic pack/Characters/Basic Charakter Actions.png" id="3_tok1r"]
 
 [sub_resource type="CapsuleShape2D" id="CapsuleShape2D_ddoul"]
 radius = 5.0
 height = 18.0
+
+[sub_resource type="Animation" id="Animation_ddoul"]
+resource_name = "Hoeing Down"
+length = 0.4
+loop_mode = 2
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Sprite2D2:frame")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.23333333),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [0, 1]
+}
+
+[sub_resource type="Animation" id="Animation_v0k0e"]
+resource_name = "Hoeing Left"
+length = 0.4
+loop_mode = 1
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Sprite2D2:frame")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.23333333),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [4, 5]
+}
+
+[sub_resource type="Animation" id="Animation_5wa8t"]
+resource_name = "Hoeing Right"
+length = 0.4
+loop_mode = 1
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Sprite2D2:frame")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.23333333),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [6, 7]
+}
+
+[sub_resource type="Animation" id="Animation_tok1r"]
+resource_name = "Hoeing Up"
+length = 0.4
+loop_mode = 1
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Sprite2D2:frame")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.23333333),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [2, 3]
+}
 
 [sub_resource type="Animation" id="Animation_8g4oa"]
 resource_name = "Idle"
@@ -36,6 +105,18 @@ tracks/0/keys = {
 "times": PackedFloat32Array(0),
 "transitions": PackedFloat32Array(1),
 "update": 1,
+"values": [0]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("Sprite2D2:frame")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
 "values": [0]
 }
 
@@ -105,6 +186,10 @@ tracks/0/keys = {
 
 [sub_resource type="AnimationLibrary" id="AnimationLibrary_v0k0e"]
 _data = {
+&"Hoeing Down": SubResource("Animation_ddoul"),
+&"Hoeing Left": SubResource("Animation_v0k0e"),
+&"Hoeing Right": SubResource("Animation_5wa8t"),
+&"Hoeing Up": SubResource("Animation_tok1r"),
 &"Idle": SubResource("Animation_8g4oa"),
 &"RESET": SubResource("Animation_6ysni"),
 &"Walk Down": SubResource("Animation_vlldt"),
@@ -128,3 +213,9 @@ autoplay = &"Idle"
 texture = ExtResource("2_tok1r")
 hframes = 4
 vframes = 4
+
+[node name="Sprite2D2" type="Sprite2D" parent="." unique_id=781981870]
+texture_filter = 1
+texture = ExtResource("3_tok1r")
+hframes = 2
+vframes = 12
