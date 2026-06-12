@@ -49,7 +49,13 @@ func _sync_slots():
 		var item = pocket_items[i]
 		var icon_path = str(item.get("Icon", ""))
 		if icon_path != "":
-			slot.texture = load(icon_path)
+			# --- Bagian yang Diubah ---
+			var tex = load(icon_path)
+			slot.texture = tex
+			if tex != null:
+				slot.hframes = max(1, int(tex.get_width() / 16))
+				slot.vframes = max(1, int(tex.get_height() / 16))
+			# --------------------------
 		slot.frame = int(item.get("Frame", 0))
 		slot.get_node("Count").text = _format_count(item)
 		if i == Game.PocketSlotIndex:

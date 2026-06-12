@@ -3,24 +3,20 @@ extends Control
 var plottemp = []
 
 func _ready():
+
 	Utils.load_game()
-
-	var size = Game.Plot.size()
-	var i = 0
-
-	while i < size:
+	# 2. Bersihkan tanaman yang sudah dipanen tanpa merusak indeks tanah
+	for i in range(Game.Plot.size()):
 		var data = Game.Plot[i]
+		if data is Dictionary and data.get("Harvested", false) == true:
+			Game.Plot[i] = null
 
-		if data is Dictionary:
-			match data.get("Harvested", false):
-				true:
-					pass
-				false:
-					plottemp.append(data)
-		i += 1
-
-	Game.Plot = plottemp
 	Utils.save_game()
 
 func _on_play_pressed() -> void:
+	StageManager.stage_change(StageManager.MainWorld)
+
+
+func _on_new_game_pressed() -> void:
+	Game.reset_game()
 	StageManager.stage_change(StageManager.MainWorld)

@@ -31,6 +31,12 @@ func setup_plot(new_plot_index: int, new_cell: Vector2i) -> void:
 	if plot_index >= 0 and plot_index < Game.Plot.size() and Game.Plot[plot_index] is Dictionary:
 		has_seed = true
 		_load_plant_from_save()
+	
+	if plot_index >= 0 and plot_index < Game.Plot.size() and Game.Plot[plot_index] is Dictionary:
+		has_seed = true
+		_load_plant_from_save()
+
+	_update_dirt_visual()
 
 func get_input():
 	if Input.is_action_just_pressed("Interact"):
@@ -40,6 +46,7 @@ func get_input():
 func _physics_process(_delta):
 	_update_prompt_position()
 	get_input()
+	_update_dirt_visual()
 
 func interact() -> void:
 	if not has_seed:
@@ -50,7 +57,17 @@ func interact() -> void:
 	if selected_item.get("Name", "") != "Watering Can":
 		return
 
+	var is_already_watered = false
+	if plot_index >= 0 and plot_index < Game.Plot.size() and Game.Plot[plot_index] is Dictionary:
+		var data = Game.Plot[plot_index]
+		is_already_watered = (int(data.get("LastWateredDay", 0)) == Game.game_day)
+	if is_already_watered:
+		Utils.notif("Tanah sudah basah 💧")
+		return
+	
 	Game.water_plot(plot_index)
+	
+	_update_dirt_visual()
 
 	var plant_child = _get_plant_child()
 	if plant_child != null and plant_child.has_method("water"):
@@ -81,7 +98,7 @@ func spawn():
 		"Stage": 1,
 		"MaxStage": 5,
 		"PlantedDay": Game.game_day,
-		"LastWateredDay": Game.game_day,
+		"LastWateredDay": Game.game_day - 1,
 		"AgeDays": 0,
 		"Harvested": false,
 	}
@@ -161,3 +178,21 @@ func _get_plant_child() -> Node:
 		if child is Area2D and child != self:
 			return child
 	return null
+
+func _update_dirt_visual() -> void:
+	var is_watered = false
+	
+	# Cek apakah tanah ini sudah disiram hari ini
+	if plot_index >= 0 and plot_index < Game.Plot.size() and Game.Plot[plot_index] is Dictionary:
+		var data = Game.Plot[plot_index]
+		is_watered = (int(data.get("LastWateredDay", 0)) == Game.game_day)
+
+	# Asumsi node gambar tanah di dalam PlotOfDirt bernama "Sprite2D"
+	if has_node("Dirt"):
+		var sprite = $Dirt
+		if is_watered:
+			# Warna kecoklatan/gelap (tanah basah)
+			sprite.modulate = Color(0.65, 0.55, 0.45, 1.0) 
+		else:
+			# Warna normal (tanah kering)
+			sprite.modulate = Color(1.0, 1.0, 1.0, 1.0)

@@ -1,4 +1,4 @@
-[gd_scene load_steps=4 format=3 uid="uid://pdktfpkkdxsc"]
+[gd_scene format=3 uid="uid://pdktfpkkdxsc"]
 
 [ext_resource type="Script" uid="uid://iqinwou1fyl0" path="res://MainMenu.gd" id="1_i26rj"]
 [ext_resource type="FontFile" uid="uid://5d66pgn8xc78" path="res://Sprout Lands - UI Pack - Basic pack/Sprout Lands - UI Pack - Basic pack/fonts/pixelFont-7-8x14-sproutLands.ttf" id="2_font"]
@@ -34,7 +34,7 @@ grow_vertical = 2
 
 [node name="VBoxContainer" type="VBoxContainer" parent="CenterContainer" unique_id=707460670]
 layout_mode = 2
-theme_override_constants/separation = 24
+theme_override_constants/separation = 18
 alignment = 1
 
 [node name="Label" type="Label" parent="CenterContainer/VBoxContainer" unique_id=1551065051]
@@ -47,11 +47,20 @@ horizontal_alignment = 1
 vertical_alignment = 1
 
 [node name="Play" type="Button" parent="CenterContainer/VBoxContainer" unique_id=491396297]
-custom_minimum_size = Vector2(192, 48)
+custom_minimum_size = Vector2(192, 25)
 layout_mode = 2
 size_flags_horizontal = 4
 theme_override_fonts/font = ExtResource("2_font")
 theme_override_font_sizes/font_size = 18
 text = "Mulai"
 
+[node name="New Game" type="Button" parent="CenterContainer/VBoxContainer" unique_id=1103024238]
+custom_minimum_size = Vector2(192, 25)
+layout_mode = 2
+size_flags_horizontal = 4
+theme_override_fonts/font = ExtResource("2_font")
+theme_override_font_sizes/font_size = 18
+text = "New Game"
+
 [connection signal="pressed" from="CenterContainer/VBoxContainer/Play" to="." method="_on_play_pressed"]
+[connection signal="pressed" from="CenterContainer/VBoxContainer/New Game" to="." method="_on_new_game_pressed"]

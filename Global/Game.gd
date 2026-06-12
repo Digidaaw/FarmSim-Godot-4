@@ -31,9 +31,15 @@ var ToolPocket = [
 	{
 		"Name": "Watering Can",
 		"Type": "Tool",
-		"Icon": "res://Sprout Lands - Sprites - Basic pack/Characters/Tools.png",
-		"Frame": 0,
+		"Icon": "res://Sprout Lands - Sprites - Basic pack/Objects/Basic tools and meterials.png",
+		"Frame": 0, # Frame 0 adalah Watering Can
 	},
+	{
+		"Name": "Axe",
+		"Type": "Tool",
+		"Icon": "res://Sprout Lands - Sprites - Basic pack/Objects/Basic tools and meterials.png",
+		"Frame": 1, # Frame 1 adalah Axe
+	}
 ]
 
 var PocketModes = [
@@ -279,3 +285,27 @@ func water_plot(plot_index: int) -> void:
 	if not (Plot[plot_index] is Dictionary):
 		return
 	Plot[plot_index]["LastWateredDay"] = game_day
+	
+func reset_game() -> void:
+	# 1. Kembalikan semua data ke nilai default awal game
+	game_day = 1
+	game_hour = 6
+	game_minute = 0
+	last_shipping_collect_day = 0
+	Money = 100
+	Plot.clear() # Kosongkan kebun
+	Harvest.clear() # Kosongkan hasil panen di tas
+	
+	# Bibit awal
+	Seeds = {
+		"Corn": 3,
+		"Tomato": 3,
+	}
+	
+	ShippingBinItems.clear()
+	PocketModeIndex = 1
+	PocketSlotIndex = 0
+	Selected = 0
+
+	# 2. Simpan data baru yang kosong ini untuk menimpa save file lama
+	Utils.save_game()

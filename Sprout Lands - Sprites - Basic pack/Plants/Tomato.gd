@@ -22,7 +22,7 @@ func _ready():
 			"Stage" : stage,
 			"MaxStage": MAX_STAGE,
 			"PlantedDay": Game.game_day,
-			"LastWateredDay": Game.game_day,
+			"LastWateredDay": Game.game_day - 1,
 			"AgeDays": 0,
 			"Harvested" : false,
 		}
@@ -60,7 +60,8 @@ func _update_wilt_visual() -> void:
 	else:
 		# Belum disiram: tint kuning pucat (layu ringan)
 		var target_color = Color(1.0, 0.82, 0.45, 1.0)
-		if plant.modulate.distance_to(target_color) > 0.05:
+		# --- Diubah di baris ini ---
+		if plant.modulate.g > 0.85: 
 			var tw = create_tween()
 			tw.tween_property(plant, "modulate", target_color, 0.8)
 
@@ -109,7 +110,7 @@ func _ensure_plot_data() -> void:
 	data["Stage"] = int(data.get("Stage", stage))
 	data["MaxStage"] = MAX_STAGE
 	data["PlantedDay"] = int(data.get("PlantedDay", Game.game_day))
-	data["LastWateredDay"] = int(data.get("LastWateredDay", data["PlantedDay"]))
+	data["LastWateredDay"] = int(data.get("LastWateredDay", data["PlantedDay"] - 1))
 	data["AgeDays"] = int(data.get("AgeDays", 0))
 	data["Harvested"] = bool(data.get("Harvested", false))
 	Game.Plot[PlantNum] = data
