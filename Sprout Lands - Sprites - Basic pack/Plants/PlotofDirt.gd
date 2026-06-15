@@ -12,6 +12,8 @@ const PROMPT_OFFSET := Vector2(-10, -28)
 var plot_index := -1
 var plot_cell := Vector2i.ZERO
 
+var player_node: Node2D = null
+
 var has_seed = false
 var canPlant = false
 var player_in_plot = false
@@ -45,6 +47,7 @@ func get_input():
 
 func _physics_process(_delta):
 	_update_prompt_position()
+	_update_plant_prompt()
 	get_input()
 	_update_dirt_visual()
 
@@ -68,6 +71,9 @@ func interact() -> void:
 	Game.water_plot(plot_index)
 	
 	_update_dirt_visual()
+	
+	if player_node != null and player_node.has_method("water_animate"):
+		player_node.water_animate()
 
 	var plant_child = _get_plant_child()
 	if plant_child != null and plant_child.has_method("water"):
@@ -144,13 +150,14 @@ func _create_plant(seed_name: String) -> Node:
 	return null
 
 func _on_body_entered(body: Node2D) -> void:
-	if body.name == "CharacterBody2D":
+	if body.name == "CharacterBody2D" or body.name == "Player":
 		player_in_plot = true
+		player_node = body # <-- Simpan node player
 		_update_plant_prompt()
-
 func _on_body_exited(body: Node2D) -> void:
-	if body.name == "CharacterBody2D":
+	if body.name == "CharacterBody2D" or body.name == "Player":
 		player_in_plot = false
+		player_node = null # <-- Hapus node player
 		_update_plant_prompt()
 
 func _update_plant_prompt() -> void:

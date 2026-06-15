@@ -4,6 +4,7 @@ class_name PersistentState
 
 var state
 var state_manager
+var is_watering := false
 
 var speed = 100
 var last_direction: String = "down"
@@ -22,6 +23,14 @@ const HOE_ANIMATIONS := {
 }
 const HOE_DURATION := 3.0
 
+const WATER_ANIMATIONS := {
+	"down": "Watering Down",
+	"up": "Watering Up",
+	"left": "Watering Left",
+	"right": "Watering Right",
+}	
+const WATER_DURATION := 1.5
+
 func _ready():
 	state_manager = StateManager.new()
 	change_state("idle")
@@ -32,7 +41,7 @@ func _ready():
 func get_input():
 	velocity = Vector2.ZERO
 
-	if is_hoeing:
+	if is_hoeing or is_watering:
 		return
 
 	if Input.is_action_just_pressed(HOE_INPUT):
@@ -109,3 +118,30 @@ func change_state(new_state_name):
 	state.setup(Callable(self, "change_state"), animation_player, self)
 	state.name = str(new_state_name)
 	add_child(state)
+	
+func water_animate():
+	is_watering = true
+	velocity = Vector2.ZERO
+	# Matikan input state mesin
+	if state != null:
+		state.set_process(false)
+		state.set_physics_process(false)
+	# Sembunyikan sprite jalan, nyalakan sprite aksi ($Sprite2D2)
+	walk_sprite.visible = false
+	hoe_sprite.visible = true
+	hoe_sprite.frame = 0
+	# Ambil nama animasi menyiram sesuai arah hadap terakhir
+	var water_animation = WATER_ANIMATIONS.get(last_direction, "Watering Down")
+	animation_player.stop()
+	animation_player.play(water_animation)
+	# Tunggu sampai durasi menyiram selesai
+	await get_tree().create_timer(WATER_DURATION).timeout
+	is_watering = false
+	# Hidupkan kembali input state mesin
+	if state != null:
+		state.set_process(true)
+		state.set_physics_process(true)
+	# Sembunyikan sprite aksi, kembalikan ke sprite jalan
+	hoe_sprite.visible = false
+	walk_sprite.visible = true
+	change_state("idle")
