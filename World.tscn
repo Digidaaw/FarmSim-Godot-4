@@ -208,7 +208,6 @@ texture_scale = 0.14
 [node name="UI" parent="." unique_id=1412626076 instance=ExtResource("1_bcbcq")]
 
 [node name="Ambient" type="CanvasModulate" parent="." unique_id=88346885]
-visible = false
 color = Color(0.40784314, 0.39215687, 0.36078432, 1)
 
 [node name="House" type="CanvasGroup" parent="." unique_id=1561633995]

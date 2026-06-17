@@ -1,0 +1,74 @@
+[gd_scene format=3 uid="uid://bays2iyqs2771"]
+
+[ext_resource type="Script" uid="uid://wuxkpnvd6q0s" path="res://dialogue_box.gd" id="1_0nste"]
+[ext_resource type="Texture2D" uid="uid://cutyyc1qbak68" path="res://Sprout Lands - Sprites - Basic pack/Characters/Sprite_NPC_Girl.png" id="1_n23yb"]
+[ext_resource type="FontFile" uid="uid://5d66pgn8xc78" path="res://Sprout Lands - UI Pack - Basic pack/Sprout Lands - UI Pack - Basic pack/fonts/pixelFont-7-8x14-sproutLands.ttf" id="2_0nste"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_if77y"]
+bg_color = Color(0.78431374, 0.6117647, 0.72156864, 1)
+border_width_left = 3
+border_width_top = 3
+border_width_right = 3
+border_width_bottom = 3
+border_color = Color(0.5803922, 0.39215687, 0.28627452, 1)
+corner_radius_top_left = 10
+corner_radius_top_right = 10
+corner_radius_bottom_right = 10
+corner_radius_bottom_left = 10
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_351bv"]
+bg_color = Color(0.78431374, 0.6117647, 0.72156864, 1)
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+border_color = Color(0.5803922, 0.39215687, 0.28627452, 1)
+corner_radius_top_left = 7
+corner_radius_top_right = 7
+corner_radius_bottom_right = 7
+corner_radius_bottom_left = 7
+
+[node name="DialogueBox" type="Node2D" unique_id=1370758683]
+
+[node name="CanvasLayer" type="CanvasLayer" parent="." unique_id=344379496]
+script = ExtResource("1_0nste")
+
+[node name="TextureRect" type="TextureRect" parent="CanvasLayer" unique_id=1153800296]
+offset_left = 132.0
+offset_top = 264.0
+offset_right = 301.0
+offset_bottom = 399.0
+texture = ExtResource("1_n23yb")
+expand_mode = 1
+stretch_mode = 4
+
+[node name="BackgroundPanel" type="Panel" parent="CanvasLayer" unique_id=435621589]
+offset_left = 156.0
+offset_top = 398.0
+offset_right = 468.0
+offset_bottom = 482.0
+theme_override_styles/panel = SubResource("StyleBoxFlat_if77y")
+
+[node name="NamePanel" type="Panel" parent="CanvasLayer" unique_id=1839161880]
+offset_left = 280.0
+offset_top = 376.0
+offset_right = 332.0
+offset_bottom = 393.0
+theme_override_styles/panel = SubResource("StyleBoxFlat_351bv")
+
+[node name="RichTextLabel" type="RichTextLabel" parent="CanvasLayer" unique_id=1910241997]
+offset_left = 167.0
+offset_top = 408.0
+offset_right = 457.0
+offset_bottom = 473.0
+theme_override_fonts/normal_font = ExtResource("2_0nste")
+
+[node name="Label" type="Label" parent="CanvasLayer" unique_id=93965825]
+offset_left = 291.0
+offset_top = 380.0
+offset_right = 324.0
+offset_bottom = 403.0
+theme_override_fonts/font = ExtResource("2_0nste")
+theme_override_font_sizes/font_size = 11
+text = "Pinku
+"
