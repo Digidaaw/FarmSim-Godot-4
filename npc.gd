@@ -139,38 +139,62 @@ func _play_animation(anim_prefix: String) -> void:
 const DIALOGUE_BOX_SCENE = preload("res://dialogue_box.tscn")
 
 func chat() -> void:
-	# Cegah double trigger jika dialog box sudah ada di dalam scene tree
-	if get_tree().root.has_node("DialogueBox"):
+	print("=== DEBUG NPC: INTERAKSI TOMBOL F ===")
+	# Cegah double trigger jika dialog box sudah ada di dalam scene utama
+	if get_tree().current_scene.has_node("DialogueBox"):
+		print("Debug NPC: DialogueBox terdeteksi masih ada di scene utama, batalkan pembukaan baru.")
 		return
 		
+	print("Debug NPC: Menyiapkan kumpulan dialog...")
 	var dialogue_pool = []
 	var hour = Game.game_hour
+	print("Debug NPC: Jam game saat ini -> ", hour)
 	
 	# Pilih kelompok dialog berdasarkan jam in-game saat ini
 	if hour >= 6 and hour < 12:
 		dialogue_pool = DIALOGUE_MORNING
+		print("Debug NPC: Menggunakan kumpulan dialog Pagi.")
 	elif hour >= 12 and hour < 19:
 		dialogue_pool = DIALOGUE_AFTERNOON
+		print("Debug NPC: Menggunakan kumpulan dialog Siang/Sore.")
 	else:
 		dialogue_pool = DIALOGUE_NIGHT
+		print("Debug NPC: Menggunakan kumpulan dialog Malam.")
 		
 	# Ambil baris teks acak dari kelompok dialog terpilih
 	var random_line = dialogue_pool[randi() % dialogue_pool.size()]
+	print("Debug NPC: Kalimat terpilih -> ", random_line)
 	
 	# Instantiate dialogue box
+	print("Debug NPC: Melakukan instantiate pada dialogue_box.tscn...")
 	var db = DIALOGUE_BOX_SCENE.instantiate()
-	get_tree().root.add_child(db)
+	get_tree().current_scene.add_child(db)
+	print("Debug NPC: Instansiasi ditambahkan ke scene utama. Nama node: ", db.name)
 	
 	# Load portrait Pinku jika ada
-	var portrait_tex = load("res://Sprout Lands - Sprites - Basic pack/Characters/Sprite_NPC_Girl.png")
+	var portrait_path = "res://Sprout Lands - Sprites - Basic pack/Characters/Sprite_NPC_Girl.png"
+	print("Debug NPC: Mencoba memuat file portrait -> ", portrait_path)
+	var portrait_tex = load(portrait_path)
+	if portrait_tex != null:
+		print("Debug NPC: Portrait berhasil dimuat.")
+	else:
+		print("Debug NPC WARNING: Gagal memuat portrait!")
 	
-	# Mulai dialog (menggunakan nama CanvasLayer lengkap)
-	db.get_node("CanvasLayer").start_dialogue("Pinku", [random_line], portrait_tex)
-	
-	# Hapus node dialog dari memori jika sudah selesai
-	db.get_node("CanvasLayer").dialogue_finished.connect(func():
-		db.queue_free()
-	)
+	# Hubungi node CanvasLayer
+	if db.has_node("CanvasLayer"):
+		print("Debug NPC: Menghubungi node 'CanvasLayer'...")
+		var cl = db.get_node("CanvasLayer")
+		cl.start_dialogue("Pinku", [random_line], portrait_tex)
+		
+		# Hubungkan sinyal untuk membebaskan memori saat selesai
+		cl.dialogue_finished.connect(func():
+			print("Debug NPC: DialogueBox selesai dibaca, membebaskan memori (queue_free).")
+			db.queue_free()
+		)
+	else:
+		print("Debug NPC ERROR: Node 'CanvasLayer' tidak ditemukan di root DialogueBox!")
+
+
 
 # --- DETEKSI AREA PLAYER ---
 

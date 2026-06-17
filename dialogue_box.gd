@@ -4,15 +4,14 @@ signal dialogue_finished
 
 @export var typing_speed: float = 0.03 # Waktu jeda antar karakter (detik)
 
-# Jalur langsung ke nama node (karena script nempel di CanvasLayer)
+# Jalur langsung ke nama node di editor
 @onready var portrait: TextureRect = $TextureRect
 @onready var background_panel: Panel = $BackgroundPanel
 @onready var name_panel: Panel = $NamePanel
 @onready var dialogue_text: RichTextLabel = $RichTextLabel
-@onready var continue_label: Label = $Label
+@onready var name_label: Label = $Label
 
-# Mencari Label nama di dalam NamePanel secara dinamis
-var name_label: Label = null
+var continue_label: Label = null
 var dialog_lines: Array = []
 var current_line_index: int = 0
 var is_typing: bool = false
@@ -23,18 +22,41 @@ func _ready() -> void:
 	# Atur agar CanvasLayer memproses input bahkan saat game di-pause
 	process_mode = Node.PROCESS_MODE_ALWAYS
 	
-	# Cari NameLabel di dalam NamePanel
+	# Pastikan CanvasLayer berada di layer terdepan
+	layer = 100
+	
+	# Ambil content scale factor (stretch scale) dari viewport (misal 3.1)
+	var stretch_scale = get_viewport().content_scale_factor
+	
+	# Kita gunakan skala target 2.0x terhadap resolusi fisik (bukan 1.0x kecil dan bukan 3.1x raksasa)
+	var target_scale = 2.0
+	scale = Vector2(target_scale / stretch_scale, target_scale / stretch_scale)
+	
+	# Ukuran layar dalam koordinat CanvasLayer yang sudah di-scale
+	var screen_size = get_viewport().get_visible_rect().size / scale
+	
+	# Ambil ukuran dialogue box
+	var bp_width = background_panel.size.x
+	var bp_height = background_panel.size.y
+	
+	# Posisikan dialogue box di tengah bawah logical screen
+	var target_x = (screen_size.x - bp_width) / 2
+	var target_y = screen_size.y - bp_height - 10 # 10 pixel padding dari bawah
+	
+	# Hitung offset pergeseran dari posisi editor
+	var offset = Vector2(target_x, target_y) - background_panel.position
+	
+	# Geser semua node anak dengan offset yang sama agar tata letak relatif terjaga
+	background_panel.position += offset
+	
+	if portrait != null:
+		portrait.position += offset
 	if name_panel != null:
-		if name_panel.has_node("NameLabel"):
-			name_label = name_panel.get_node("NameLabel")
-		elif name_panel.has_node("Label"):
-			name_label = name_panel.get_node("Label")
-		else:
-			# Cari anak bertipe Label pertama di NamePanel
-			for child in name_panel.get_children():
-				if child is Label:
-					name_label = child
-					break
+		name_panel.position += offset
+	if dialogue_text != null:
+		dialogue_text.position += offset
+	if name_label != null:
+		name_label.position += offset
 
 func start_dialogue(char_name: String, lines: Array, portrait_tex: Texture2D = null) -> void:
 	dialog_lines = lines
@@ -43,23 +65,21 @@ func start_dialogue(char_name: String, lines: Array, portrait_tex: Texture2D = n
 	# Tampilkan nama karakter
 	if name_label != null:
 		name_label.text = char_name
-	name_panel.visible = (char_name != "")
+	if name_panel != null:
+		name_panel.visible = (char_name != "")
 	
-	# Atur portrait karakter
-	if portrait_tex != null:
-		portrait.texture = portrait_tex
-		portrait.show() # TextureRect punya show() karena turunan Control
-		# Geser batas kiri RichTextLabel ke kanan agar tidak menabrak wajah
-		dialogue_text.offset_left = 320.0
-	else:
-		portrait.hide()
-		# Kembalikan batas kiri RichTextLabel ke kiri agar teks memanfaatkan seluruh ruang
-		dialogue_text.offset_left = 40.0
+	# Atur portrait karakter (gunakan gambar jika ada)
+	if portrait != null:
+		if portrait_tex != null:
+			portrait.texture = portrait_tex
+			portrait.show()
+		else:
+			portrait.hide()
 		
 	# Pause game agar player tidak bisa bergerak saat dialog berlangsung
 	get_tree().paused = true
 	
-	# PERBAIKAN: Gunakan properti visible untuk CanvasLayer, bukan show()
+	# Tampilkan CanvasLayer menggunakan properti visible (tanpa mengubah posisi di editor)
 	visible = true
 	
 	# Mulai baris teks pertama
@@ -71,11 +91,16 @@ func _show_line() -> void:
 		return
 		
 	current_text = dialog_lines[current_line_index]
-	dialogue_text.text = current_text
-	dialogue_text.visible_characters = 0
+	
+	if dialogue_text != null:
+		dialogue_text.text = current_text
+		dialogue_text.visible_characters = 0
+		
 	is_typing = true
 	visible_characters_count = 0.0
-	continue_label.hide()
+	
+	if continue_label != null:
+		continue_label.hide()
 
 func _physics_process(delta: float) -> void:
 	if not visible:
@@ -83,13 +108,15 @@ func _physics_process(delta: float) -> void:
 		
 	if is_typing:
 		visible_characters_count += delta / typing_speed
-		dialogue_text.visible_characters = int(visible_characters_count)
-		
-		# Jika sudah selesai mengetik seluruh baris
-		if dialogue_text.visible_characters >= current_text.length():
-			dialogue_text.visible_characters = -1
+		if dialogue_text != null:
+			dialogue_text.visible_characters = int(visible_characters_count)
+			if dialogue_text.visible_characters >= current_text.length():
+				dialogue_text.visible_characters = -1
+				is_typing = false
+				if continue_label != null:
+					continue_label.show()
+		else:
 			is_typing = false
-			continue_label.show()
 
 func _input(event: InputEvent) -> void:
 	if not visible:
@@ -109,9 +136,11 @@ func _input(event: InputEvent) -> void:
 func _on_input_pressed() -> void:
 	if is_typing:
 		# Lewati efek ketik (langsung tampilkan semua teks)
-		dialogue_text.visible_characters = -1
+		if dialogue_text != null:
+			dialogue_text.visible_characters = -1
 		is_typing = false
-		continue_label.show()
+		if continue_label != null:
+			continue_label.show()
 	else:
 		# Lanjut ke baris berikutnya
 		current_line_index += 1
@@ -119,6 +148,5 @@ func _on_input_pressed() -> void:
 
 func _end_dialogue() -> void:
 	get_tree().paused = false
-	# PERBAIKAN: Gunakan properti visible untuk CanvasLayer, bukan hide()
 	visible = false
 	dialogue_finished.emit()
