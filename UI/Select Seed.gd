@@ -10,11 +10,22 @@ func _ready():
 	_sync_slots()
 
 func _input(event):
-	# 1. Ganti mode tas dengan tombol Q
-	if event is InputEventKey and event.pressed and not event.echo and event.physical_keycode == KEY_Q:
-		Game.cycle_pocket_mode()
-		_sync_slots()
-		return
+	# 1. Ganti mode tas dengan tombol Q atau keyboard navigasi < >
+	if event is InputEventKey and event.pressed and not event.echo:
+		if event.physical_keycode == KEY_Q:
+			Game.cycle_pocket_mode()
+			_sync_slots()
+			return
+		elif event.physical_keycode == KEY_COMMA or event.physical_keycode == KEY_LESS:
+			Game.move_pocket_selection(-1)
+			_sync_slots()
+			get_viewport().set_input_as_handled()
+			return
+		elif event.physical_keycode == KEY_PERIOD or event.physical_keycode == KEY_GREATER:
+			Game.move_pocket_selection(1)
+			_sync_slots()
+			get_viewport().set_input_as_handled()
+			return
 
 	# 2. Deteksi Scroll Mouse dan Klik Kiri Mouse
 	if event is InputEventMouseButton and event.pressed:
