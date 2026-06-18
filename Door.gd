@@ -90,3 +90,7 @@ func _on_interaction_area_body_exited(body: Node2D) -> void:
 func _set_prompt_visible(should_show: bool) -> void:
 	prompt.visible = should_show
 	prompt_panel.visible = should_show
+	if should_show:
+		Game.register_interactable(self, "door")
+	else:
+		Game.unregister_interactable(self)

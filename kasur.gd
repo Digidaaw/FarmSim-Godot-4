@@ -15,8 +15,7 @@ func _ready() -> void:
 		Utils.keybinds_changed.connect(_update_prompt_text)
 	
 	# Matikan tulisan dan kotak saat pertama kali game dimulai
-	if prompt != null:
-		prompt.visible = false
+	_set_prompt_visible(false)
 
 func _update_prompt_text() -> void:
 	if prompt != null:
@@ -33,21 +32,18 @@ func _on_body_entered(body: Node2D) -> void:
 		player_in_range = true
 		player_node = body # Simpan referensi player
 		# Tampilkan kotak dan tulisan secara bersamaan
-		if prompt != null:
-			prompt.visible = true
+		_set_prompt_visible(true)
 
 func _on_body_exited(body: Node2D) -> void:
 	if body.name == "Player":
 		player_in_range = false
 		player_node = null # Hapus referensi player
 		# Sembunyikan kotak dan tulisan saat player pergi
-		if prompt != null:
-			prompt.visible = false
+		_set_prompt_visible(false)
 
 func sleep() -> void:
 	player_in_range = false
-	if prompt != null:
-		prompt.visible = false
+	_set_prompt_visible(false)
 		
 	# Kunci pergerakan player agar diam di tempat selama tidur
 	if player_node != null:
@@ -99,7 +95,7 @@ func sleep() -> void:
 				dirt_container.refresh_all_plants()
 		
 		# Simpan data terbaru
-		#Utils.save_game()
+		Utils.save_game()
 		Utils.notif("Selamat Pagi! Hari %d dimulai 🌅" % Game.game_day)
 	)
 	
@@ -115,3 +111,11 @@ func sleep() -> void:
 		if player_node != null:
 			player_node.set_physics_process(true)
 	)
+
+func _set_prompt_visible(should_show: bool) -> void:
+	if prompt != null:
+		prompt.visible = should_show
+	if should_show:
+		Game.register_interactable(self, "bed")
+	else:
+		Game.unregister_interactable(self)

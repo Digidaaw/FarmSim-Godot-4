@@ -227,3 +227,7 @@ func _set_prompt_visible(should_show: bool) -> void:
 		prompt.visible = should_show
 	if prompt_panel != null:
 		prompt_panel.visible = should_show
+	if should_show:
+		Game.register_interactable(self, "npc")
+	else:
+		Game.unregister_interactable(self)

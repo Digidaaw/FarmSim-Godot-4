@@ -198,7 +198,7 @@ rotation_smoothing_speed = 10.0
 
 [node name="PointLight2D" type="PointLight2D" parent="CharacterBody2D" unique_id=514927398]
 energy = 0.8
-blend_mode = 2
+blend_mode = 0
 shadow_enabled = true
 shadow_filter = 1
 shadow_filter_smooth = 10.0

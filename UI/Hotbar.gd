@@ -176,7 +176,7 @@ func _sync() -> void:
 			var tex = load(icon_path)
 			if tex is AtlasTexture or tex is Texture2D:
 				# Jika spritesheet, bungkus dengan AtlasTexture untuk frame tertentu
-				if tex is Texture2D and item.has("Frame") and int(item.get("Frame", 0)) > 0:
+				if tex is Texture2D and item.has("Frame") and int(item.get("Frame", -1)) >= 0:
 					icon_rect.texture = _get_frame_texture(tex, item)
 				else:
 					icon_rect.texture = tex

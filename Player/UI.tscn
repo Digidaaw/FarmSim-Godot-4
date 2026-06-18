@@ -1,9 +1,11 @@
-[gd_scene load_steps=5 format=3 uid="uid://b1dtvltj1cy1m"]
+[gd_scene format=3 uid="uid://b1dtvltj1cy1m"]
 
-[ext_resource type="Script" path="res://Player/UI.gd" id="1_ui_gd"]
+[ext_resource type="Script" uid="uid://lgrt803o26sg" path="res://Player/UI.gd" id="1_ui_gd"]
 [ext_resource type="PackedScene" uid="uid://dg0rh7nf8mk2j" path="res://UI/Inventory.tscn" id="2_ly0jh"]
 [ext_resource type="PackedScene" uid="uid://cd73ff7rhwcam" path="res://UI/Select Seed.tscn" id="3_selectseed"]
 [ext_resource type="PackedScene" path="res://UI/PauseMenu.tscn" id="4_pausemenu"]
+[ext_resource type="Script" uid="uid://0ddx1la2q3dj" path="res://UI/SystemPrompts.gd" id="5_prompts_script"]
+[ext_resource type="FontFile" uid="uid://5d66pgn8xc78" path="res://Sprout Lands - UI Pack - Basic pack/Sprout Lands - UI Pack - Basic pack/fonts/pixelFont-7-8x14-sproutLands.ttf" id="6_pixel_font"]
 
 [sub_resource type="GDScript" id="GDScript_1genj"]
 script/source = "extends Label
@@ -23,6 +25,22 @@ script/source = "extends Label
 func _process(_delta: float) -> void:
 	text = \"%dG\" % Game.Money
 "
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_key"]
+content_margin_left = 6.0
+content_margin_top = 2.0
+content_margin_right = 6.0
+content_margin_bottom = 2.0
+bg_color = Color(0.24, 0.2, 0.16, 0.9)
+border_width_left = 1
+border_width_top = 1
+border_width_right = 1
+border_width_bottom = 1
+border_color = Color(0.5686275, 0.6392157, 0.3372549, 1)
+corner_radius_top_left = 4
+corner_radius_top_right = 4
+corner_radius_bottom_right = 4
+corner_radius_bottom_left = 4
 
 [node name="UI" type="CanvasLayer" unique_id=1412626076]
 script = ExtResource("1_ui_gd")
@@ -97,11 +115,104 @@ offset_right = 360.0
 offset_bottom = 200.0
 scale = Vector2(0.61107725, 0.61107725)
 
+[node name="SystemPrompts" type="VBoxContainer" parent="Root" unique_id=1997546111]
+layout_mode = 1
+anchors_preset = 4
+anchor_top = 0.5
+anchor_bottom = 0.5
+offset_left = 9.845
+offset_top = -18.929993
+offset_right = 209.845
+offset_bottom = 101.07001
+grow_vertical = 2
+scale = Vector2(0.8, 0.8)
+theme_override_constants/separation = 8
+script = ExtResource("5_prompts_script")
+
+[node name="Row1" type="HBoxContainer" parent="Root/SystemPrompts" unique_id=447053574]
+layout_mode = 2
+theme_override_constants/separation = 8
+
+[node name="KeyPanel" type="PanelContainer" parent="Root/SystemPrompts/Row1" unique_id=477622563]
+layout_mode = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_key")
+
+[node name="Label" type="Label" parent="Root/SystemPrompts/Row1/KeyPanel" unique_id=2083099349]
+layout_mode = 2
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_fonts/font = ExtResource("6_pixel_font")
+theme_override_font_sizes/font_size = 10
+text = "F"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="ActionLabel" type="Label" parent="Root/SystemPrompts/Row1" unique_id=522011841]
+layout_mode = 2
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_colors/font_shadow_color = Color(0, 0, 0, 1)
+theme_override_constants/shadow_offset_x = 1
+theme_override_constants/shadow_offset_y = 1
+theme_override_fonts/font = ExtResource("6_pixel_font")
+theme_override_font_sizes/font_size = 10
+text = "Interact"
+vertical_alignment = 1
+
+[node name="Row2" type="HBoxContainer" parent="Root/SystemPrompts" unique_id=913019470]
+layout_mode = 2
+theme_override_constants/separation = 8
+
+[node name="KeyPanel" type="PanelContainer" parent="Root/SystemPrompts/Row2" unique_id=1239239101]
+layout_mode = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_key")
+
+[node name="Label" type="Label" parent="Root/SystemPrompts/Row2/KeyPanel" unique_id=687035150]
+layout_mode = 2
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_fonts/font = ExtResource("6_pixel_font")
+theme_override_font_sizes/font_size = 10
+text = "Q"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="ActionLabel" type="Label" parent="Root/SystemPrompts/Row2" unique_id=932916545]
+layout_mode = 2
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_colors/font_shadow_color = Color(0, 0, 0, 1)
+theme_override_constants/shadow_offset_x = 1
+theme_override_constants/shadow_offset_y = 1
+theme_override_fonts/font = ExtResource("6_pixel_font")
+theme_override_font_sizes/font_size = 10
+text = "Cycle Tools"
+vertical_alignment = 1
+
+[node name="Row3" type="HBoxContainer" parent="Root/SystemPrompts" unique_id=560538865]
+layout_mode = 2
+theme_override_constants/separation = 8
+
+[node name="KeyPanel" type="PanelContainer" parent="Root/SystemPrompts/Row3" unique_id=405316279]
+layout_mode = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_key")
+
+[node name="Label" type="Label" parent="Root/SystemPrompts/Row3/KeyPanel" unique_id=266457252]
+layout_mode = 2
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_fonts/font = ExtResource("6_pixel_font")
+theme_override_font_sizes/font_size = 10
+text = "E"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="ActionLabel" type="Label" parent="Root/SystemPrompts/Row3" unique_id=1648689541]
+layout_mode = 2
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_colors/font_shadow_color = Color(0, 0, 0, 1)
+theme_override_constants/shadow_offset_x = 1
+theme_override_constants/shadow_offset_y = 1
+theme_override_fonts/font = ExtResource("6_pixel_font")
+theme_override_font_sizes/font_size = 10
+text = "Open Bag"
+vertical_alignment = 1
+
 [node name="PauseMenu" parent="Root" unique_id=987654321 instance=ExtResource("4_pausemenu")]
 visible = false
 layout_mode = 1
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
-grow_horizontal = 2
-grow_vertical = 2

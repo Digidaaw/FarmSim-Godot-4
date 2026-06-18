@@ -21,6 +21,7 @@ var default_controls := {
 var _persistent_notif: Node = null
 var _timed_notif: Node = null
 var _prompt_count: int = 0
+var show_system_prompts: bool = true
 
 func _ready() -> void:	
 	# Pre-instantiate sekali agar show_notif tidak perlu instantiate lagi
@@ -34,11 +35,13 @@ func _ready() -> void:
 func save_settings() -> void:
 	var config = ConfigFile.new()
 	
-	var window_size = DisplayServer.window_get_size()
-	var is_fullscreen = DisplayServer.window_get_mode() == DisplayServer.WINDOW_MODE_FULLSCREEN
+	var window = get_window()
+	var window_size = window.size
+	var is_fullscreen = window.mode == Window.MODE_FULLSCREEN or window.mode == Window.MODE_EXCLUSIVE_FULLSCREEN
 	config.set_value("video", "width", window_size.x)
 	config.set_value("video", "height", window_size.y)
 	config.set_value("video", "fullscreen", is_fullscreen)
+	config.set_value("gameplay", "show_system_prompts", show_system_prompts)
 	
 	for action in default_controls.keys():
 		var events = InputMap.action_get_events(action)
@@ -59,6 +62,11 @@ func load_settings() -> void:
 	var config = ConfigFile.new()
 	var err = config.load(SETTINGS_PATH)
 	
+	if err == OK:
+		show_system_prompts = config.get_value("gameplay", "show_system_prompts", true)
+	else:
+		show_system_prompts = true
+	
 	# Ensure all actions exist in InputMap
 	for action in default_controls.keys():
 		if not InputMap.has_action(action):
@@ -66,22 +74,6 @@ func load_settings() -> void:
 			
 	if err == OK:
 		print("Settings loaded successfully from: ", SETTINGS_PATH)
-		var width = config.get_value("video", "width", 960)
-		var height = config.get_value("video", "height", 540)
-		var fullscreen = config.get_value("video", "fullscreen", false)
-		
-		if fullscreen:
-			DisplayServer.window_set_mode(DisplayServer.WINDOW_MODE_FULLSCREEN)
-		else:
-			DisplayServer.window_set_mode(DisplayServer.WINDOW_MODE_WINDOWED)
-			DisplayServer.window_set_size(Vector2i(width, height))
-			
-			# Center window
-			var screen = DisplayServer.window_get_current_screen()
-			var screen_size = DisplayServer.screen_get_size(screen)
-			var window_size = DisplayServer.window_get_size()
-			DisplayServer.window_set_position(screen_size / 2 - window_size / 2)
-			
 		for action in default_controls.keys():
 			var default_key = default_controls[action]
 			var key = config.get_value("controls", action, default_key)
@@ -101,12 +93,31 @@ func load_settings() -> void:
 			new_event.physical_keycode = default_key
 			new_event.keycode = default_key
 			InputMap.action_add_event(action, new_event)
+
+	# Defer window properties until the engine has fully initialized the window viewport
+	await get_tree().process_frame
+	
+	var window = get_window()
+	if err == OK:
+		var width = config.get_value("video", "width", 960)
+		var height = config.get_value("video", "height", 540)
+		var fullscreen = config.get_value("video", "fullscreen", false)
+		
+		if fullscreen:
+			window.mode = Window.MODE_FULLSCREEN
+		else:
+			window.mode = Window.MODE_WINDOWED
+			window.size = Vector2i(width, height)
 			
+			# Center window
+			var screen = window.current_screen
+			var screen_size = DisplayServer.screen_get_size(screen)
+			window.position = screen_size / 2 - window.size / 2
+	else:
 		# Center window on first run
-		var screen = DisplayServer.window_get_current_screen()
+		var screen = window.current_screen
 		var screen_size = DisplayServer.screen_get_size(screen)
-		var window_size = DisplayServer.window_get_size()
-		DisplayServer.window_set_position(screen_size / 2 - window_size / 2)
+		window.position = screen_size / 2 - window.size / 2
 
 func get_key_label_for_action(action_name: String) -> String:
 	var events = InputMap.action_get_events(action_name)
@@ -122,7 +133,7 @@ func notif(text, is_error: bool = false) -> void:
 		_timed_notif.get_node("Panel/Label").text = str(text)
 		_timed_notif.get_node("Panel").set_meta("is_error", is_error)
 		add_child(_timed_notif)
-		var duration = 2.0 if is_error else 0.7
+		var duration = 4.0 if is_error else 2
 		await get_tree().create_timer(duration).timeout
 		if _timed_notif != null:
 			_timed_notif.queue_free()
@@ -176,6 +187,15 @@ func save_game() -> void:
 	if save_game == null:
 		return
 
+	if get_tree() != null and get_tree().current_scene != null:
+		var current_scene_path = get_tree().current_scene.scene_file_path
+		var player = get_tree().current_scene.get_node_or_null("Player")
+		if player == null:
+			player = get_tree().current_scene.get_node_or_null("CharacterBody2D")
+		if player != null:
+			Game.saved_scene_path = current_scene_path
+			Game.saved_player_position = player.global_position
+
 	var data: Dictionary = {
 		"Plot": Game.Plot,
 		"Harvest": Game.Harvest,
@@ -186,6 +206,9 @@ func save_game() -> void:
 		"GameHour": Game.game_hour,
 		"GameMinute": Game.game_minute,
 		"LastShippingCollectDay": Game.last_shipping_collect_day,
+		"SavedScenePath": Game.saved_scene_path,
+		"SavedPlayerPosX": Game.saved_player_position.x,
+		"SavedPlayerPosY": Game.saved_player_position.y,
 	}
 
 	save_game.store_line(JSON.stringify(data))
@@ -232,4 +255,13 @@ func load_game() -> void:
 			Game.game_hour = int(current_line.get("GameHour", Game.game_hour))
 			Game.game_minute = int(current_line.get("GameMinute", Game.game_minute))
 			Game.last_shipping_collect_day = int(current_line.get("LastShippingCollectDay", Game.last_shipping_collect_day))
+			
+			Game.saved_scene_path = str(current_line.get("SavedScenePath", ""))
+			if "SavedPlayerPosX" in current_line and "SavedPlayerPosY" in current_line:
+				Game.saved_player_position = Vector2(
+					float(current_line["SavedPlayerPosX"]),
+					float(current_line["SavedPlayerPosY"])
+				)
+			else:
+				Game.saved_player_position = Vector2.ZERO
 	save_game.close()

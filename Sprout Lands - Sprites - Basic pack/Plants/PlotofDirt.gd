@@ -184,6 +184,10 @@ func _update_prompt_position() -> void:
 func _set_prompt_visible(should_show: bool) -> void:
 	prompt.visible = should_show
 	prompt_panel.visible = should_show
+	if should_show:
+		Game.register_interactable(self, "plot_dirt")
+	else:
+		Game.unregister_interactable(self)
 
 func _get_plant_child() -> Node:
 	for child in get_children():

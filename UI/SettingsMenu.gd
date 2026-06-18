@@ -5,6 +5,7 @@ extends Control
 @onready var keybinds_list: VBoxContainer = $Window/VBox/Scroll/List/KeybindsList
 @onready var reset_btn: Button = $Window/VBox/Buttons/ResetBtn
 @onready var close_btn: Button = $Window/VBox/Buttons/CloseBtn
+@onready var prompts_btn: CheckButton = $Window/VBox/Scroll/List/PromptsRow/CheckButton
 
 const PIXEL_FONT = preload("res://Sprout Lands - UI Pack - Basic pack/Sprout Lands - UI Pack - Basic pack/fonts/pixelFont-7-8x14-sproutLands.ttf")
 
@@ -48,9 +49,13 @@ func _ready() -> void:
 	var current_mode = DisplayServer.window_get_mode()
 	fullscreen_btn.button_pressed = (current_mode == DisplayServer.WINDOW_MODE_FULLSCREEN)
 	
+	# Prompts state
+	prompts_btn.button_pressed = Utils.show_system_prompts
+	
 	# Connect video signals
 	resolution_btn.item_selected.connect(_on_resolution_selected)
 	fullscreen_btn.toggled.connect(_on_fullscreen_toggled)
+	prompts_btn.toggled.connect(_on_prompts_toggled)
 	
 	# Connect buttons
 	reset_btn.pressed.connect(_on_reset_pressed)
@@ -141,29 +146,32 @@ func _input(event: InputEvent) -> void:
 
 func _on_resolution_selected(index: int) -> void:
 	var target_res = resolutions[index]
-	DisplayServer.window_set_mode(DisplayServer.WINDOW_MODE_WINDOWED)
-	DisplayServer.window_set_size(target_res)
+	var window = get_window()
+	window.mode = Window.MODE_WINDOWED
+	window.size = target_res
 	fullscreen_btn.button_pressed = false
 	
 	# Center window
-	var screen = DisplayServer.window_get_current_screen()
+	var screen = window.current_screen
 	var screen_size = DisplayServer.screen_get_size(screen)
-	var window_size = DisplayServer.window_get_size()
-	DisplayServer.window_set_position(screen_size / 2 - window_size / 2)
+	window.position = screen_size / 2 - window.size / 2
 
 func _on_fullscreen_toggled(toggled_on: bool) -> void:
+	var window = get_window()
 	if toggled_on:
-		DisplayServer.window_set_mode(DisplayServer.WINDOW_MODE_FULLSCREEN)
+		window.mode = Window.MODE_FULLSCREEN
 	else:
-		DisplayServer.window_set_mode(DisplayServer.WINDOW_MODE_WINDOWED)
+		window.mode = Window.MODE_WINDOWED
 		var target_res = resolutions[resolution_btn.selected]
-		DisplayServer.window_set_size(target_res)
+		window.size = target_res
 		
 		# Center window
-		var screen = DisplayServer.window_get_current_screen()
+		var screen = window.current_screen
 		var screen_size = DisplayServer.screen_get_size(screen)
-		var window_size = DisplayServer.window_get_size()
-		DisplayServer.window_set_position(screen_size / 2 - window_size / 2)
+		window.position = screen_size / 2 - window.size / 2
+
+func _on_prompts_toggled(toggled_on: bool) -> void:
+	Utils.show_system_prompts = toggled_on
 
 func _on_reset_pressed() -> void:
 	for action in Utils.default_controls.keys():
@@ -174,6 +182,10 @@ func _on_reset_pressed() -> void:
 		InputMap.action_add_event(action, new_event)
 	Utils.emit_signal("keybinds_changed")
 	_build_keybind_list()
+	
+	# Reset prompts toggle to default (true)
+	Utils.show_system_prompts = true
+	prompts_btn.button_pressed = true
 
 func _on_close_pressed() -> void:
 	Utils.save_settings()
