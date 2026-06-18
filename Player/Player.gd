@@ -48,8 +48,6 @@ func get_input():
 		hoe()
 		return
 
-	Utils.save_game()
-
 	if Input.is_action_pressed("ui_left"):
 		move_left()
 	elif Input.is_action_pressed("ui_right"):

@@ -3,6 +3,14 @@ extends Control
 @onready var seed_slots = [
 	$Seed1,
 	$Seed2,
+	$Seed3,
+	$Seed4,
+	$Seed5,
+	$Seed6,
+	$Seed7,
+	$Seed8,
+	$Seed9,
+	$Seed10,
 ]
 @onready var mode_label: Label = $ModeLabel
 

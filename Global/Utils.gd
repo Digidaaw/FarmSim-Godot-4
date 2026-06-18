@@ -3,30 +3,145 @@ extends Node
 const SAVE_PATH: String = "user://savegame.btn"
 const SAVE_PASS: String = "password"
 const NOTIF_SCENE = preload("res://Global/Notification.tscn")
+const SETTINGS_PATH = "user://settings.cfg"
+
+signal keybinds_changed
+
+var default_controls := {
+	"ui_up": KEY_W,
+	"ui_down": KEY_S,
+	"ui_left": KEY_A,
+	"ui_right": KEY_D,
+	"Interact": KEY_F,
+	"Hoe": KEY_P,
+	"Inventory": KEY_E,
+	"CyclePocket": KEY_Q
+}
 
 var _persistent_notif: Node = null
 var _timed_notif: Node = null
 var _prompt_count: int = 0
+var show_system_prompts: bool = true
 
 func _ready() -> void:	
 	# Pre-instantiate sekali agar show_notif tidak perlu instantiate lagi
 	_persistent_notif = NOTIF_SCENE.instantiate()
 	add_child(_persistent_notif)
 	_persistent_notif.hide()
+	
+	# Initialize dynamic inputs and load settings
+	load_settings()
 
-func notif(text) -> void:
+func save_settings() -> void:
+	var config = ConfigFile.new()
+	
+	var window = get_window()
+	var window_size = window.size
+	var is_fullscreen = window.mode == Window.MODE_FULLSCREEN or window.mode == Window.MODE_EXCLUSIVE_FULLSCREEN
+	config.set_value("video", "width", window_size.x)
+	config.set_value("video", "height", window_size.y)
+	config.set_value("video", "fullscreen", is_fullscreen)
+	config.set_value("gameplay", "show_system_prompts", show_system_prompts)
+	
+	for action in default_controls.keys():
+		var events = InputMap.action_get_events(action)
+		var keycode = default_controls[action]
+		for event in events:
+			if event is InputEventKey:
+				keycode = event.physical_keycode if event.physical_keycode != 0 else event.keycode
+				break
+		config.set_value("controls", action, keycode)
+		
+	var err = config.save(SETTINGS_PATH)
+	if err == OK:
+		print("Settings saved successfully to: ", SETTINGS_PATH)
+	else:
+		print("Error saving settings to: ", SETTINGS_PATH, " Code: ", err)
+
+func load_settings() -> void:
+	var config = ConfigFile.new()
+	var err = config.load(SETTINGS_PATH)
+	
+	if err == OK:
+		show_system_prompts = config.get_value("gameplay", "show_system_prompts", true)
+	else:
+		show_system_prompts = true
+	
+	# Ensure all actions exist in InputMap
+	for action in default_controls.keys():
+		if not InputMap.has_action(action):
+			InputMap.add_action(action)
+			
+	if err == OK:
+		print("Settings loaded successfully from: ", SETTINGS_PATH)
+		for action in default_controls.keys():
+			var default_key = default_controls[action]
+			var key = config.get_value("controls", action, default_key)
+			
+			InputMap.action_erase_events(action)
+			var new_event = InputEventKey.new()
+			new_event.physical_keycode = key
+			new_event.keycode = key
+			InputMap.action_add_event(action, new_event)
+	else:
+		print("No settings file found or error loading settings (", err, "). Applying defaults.")
+		# Apply default keybinds if no config exists
+		for action in default_controls.keys():
+			var default_key = default_controls[action]
+			InputMap.action_erase_events(action)
+			var new_event = InputEventKey.new()
+			new_event.physical_keycode = default_key
+			new_event.keycode = default_key
+			InputMap.action_add_event(action, new_event)
+
+	# Defer window properties until the engine has fully initialized the window viewport
+	await get_tree().process_frame
+	
+	var window = get_window()
+	if err == OK:
+		var width = config.get_value("video", "width", 960)
+		var height = config.get_value("video", "height", 540)
+		var fullscreen = config.get_value("video", "fullscreen", false)
+		
+		if fullscreen:
+			window.mode = Window.MODE_FULLSCREEN
+		else:
+			window.mode = Window.MODE_WINDOWED
+			window.size = Vector2i(width, height)
+			
+			# Center window
+			var screen = window.current_screen
+			var screen_size = DisplayServer.screen_get_size(screen)
+			window.position = screen_size / 2 - window.size / 2
+	else:
+		# Center window on first run
+		var screen = window.current_screen
+		var screen_size = DisplayServer.screen_get_size(screen)
+		window.position = screen_size / 2 - window.size / 2
+
+func get_key_label_for_action(action_name: String) -> String:
+	var events = InputMap.action_get_events(action_name)
+	for event in events:
+		if event is InputEventKey:
+			var keycode = event.physical_keycode if event.physical_keycode != 0 else event.keycode
+			return OS.get_keycode_string(keycode)
+	return ""
+
+func notif(text, is_error: bool = false) -> void:
 	if _timed_notif == null:
 		_timed_notif = NOTIF_SCENE.instantiate()
-		_timed_notif.get_node("Label").text = str(text)
+		_timed_notif.get_node("Panel/Label").text = str(text)
+		_timed_notif.get_node("Panel").set_meta("is_error", is_error)
 		add_child(_timed_notif)
-		await get_tree().create_timer(0.7).timeout
+		var duration = 4.0 if is_error else 2
+		await get_tree().create_timer(duration).timeout
 		if _timed_notif != null:
 			_timed_notif.queue_free()
 			_timed_notif = null
 
 func show_interaction_prompt(text: String = "F") -> void:
 	_prompt_count += 1
-	_persistent_notif.get_node("Label").text = text
+	_persistent_notif.get_node("Panel/Label").text = text
 	if _prompt_count == 1:
 		_persistent_notif.show()
 
@@ -72,6 +187,15 @@ func save_game() -> void:
 	if save_game == null:
 		return
 
+	if get_tree() != null and get_tree().current_scene != null:
+		var current_scene_path = get_tree().current_scene.scene_file_path
+		var player = get_tree().current_scene.get_node_or_null("Player")
+		if player == null:
+			player = get_tree().current_scene.get_node_or_null("CharacterBody2D")
+		if player != null:
+			Game.saved_scene_path = current_scene_path
+			Game.saved_player_position = player.global_position
+
 	var data: Dictionary = {
 		"Plot": Game.Plot,
 		"Harvest": Game.Harvest,
@@ -82,6 +206,9 @@ func save_game() -> void:
 		"GameHour": Game.game_hour,
 		"GameMinute": Game.game_minute,
 		"LastShippingCollectDay": Game.last_shipping_collect_day,
+		"SavedScenePath": Game.saved_scene_path,
+		"SavedPlayerPosX": Game.saved_player_position.x,
+		"SavedPlayerPosY": Game.saved_player_position.y,
 	}
 
 	save_game.store_line(JSON.stringify(data))
@@ -95,6 +222,8 @@ func load_game() -> void:
 
 	while not save_game.eof_reached():
 		var line: String = save_game.get_line()
+		if line.strip_edges() == "":
+			continue
 		var current_line = JSON.parse_string(line)
 
 		if current_line != null:
@@ -126,4 +255,13 @@ func load_game() -> void:
 			Game.game_hour = int(current_line.get("GameHour", Game.game_hour))
 			Game.game_minute = int(current_line.get("GameMinute", Game.game_minute))
 			Game.last_shipping_collect_day = int(current_line.get("LastShippingCollectDay", Game.last_shipping_collect_day))
+			
+			Game.saved_scene_path = str(current_line.get("SavedScenePath", ""))
+			if "SavedPlayerPosX" in current_line and "SavedPlayerPosY" in current_line:
+				Game.saved_player_position = Vector2(
+					float(current_line["SavedPlayerPosX"]),
+					float(current_line["SavedPlayerPosY"])
+				)
+			else:
+				Game.saved_player_position = Vector2.ZERO
 	save_game.close()

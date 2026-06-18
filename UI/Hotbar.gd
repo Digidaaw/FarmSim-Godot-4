@@ -103,11 +103,10 @@ func _make_slot(index: int) -> Control:
 	return container
 
 func _input(event: InputEvent) -> void:
-	# Q: cycle mode (Tool → Seed → Item)
-	if event is InputEventKey and event.pressed and not event.echo:
-		if event.physical_keycode == KEY_Q:
-			Game.cycle_pocket_mode()
-			_sync()
+	# Cycle mode (Tool → Seed → Item)
+	if event.is_action_pressed("CyclePocket"):
+		Game.cycle_pocket_mode()
+		_sync()
 
 	# Scroll mouse: navigate slot
 	if event is InputEventMouseButton and event.pressed:
@@ -153,7 +152,7 @@ func _sync() -> void:
 
 	# Update mode label
 	var mode_icon = {"Tool": "🔧", "Seed": "🌱", "Item": "🎒"}
-	mode_label.text = "%s %s  [Q]" % [mode_icon.get(mode, ""), mode]
+	mode_label.text = "%s %s  [%s]" % [mode_icon.get(mode, ""), mode, Utils.get_key_label_for_action("CyclePocket")]
 
 	for i in range(_slot_nodes.size()):
 		var slot = _slot_nodes[i]
@@ -177,7 +176,7 @@ func _sync() -> void:
 			var tex = load(icon_path)
 			if tex is AtlasTexture or tex is Texture2D:
 				# Jika spritesheet, bungkus dengan AtlasTexture untuk frame tertentu
-				if tex is Texture2D and item.has("Frame") and int(item.get("Frame", 0)) > 0:
+				if tex is Texture2D and item.has("Frame") and int(item.get("Frame", -1)) >= 0:
 					icon_rect.texture = _get_frame_texture(tex, item)
 				else:
 					icon_rect.texture = tex

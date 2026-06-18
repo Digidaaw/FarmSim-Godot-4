@@ -17,9 +17,14 @@ var is_open := false
 var is_transitioning := false
 
 func _ready() -> void:
-	prompt.text = "F"
+	_update_prompt_text()
 	_update_prompt_position()
 	_set_prompt_visible(false)
+	if Utils.has_signal("keybinds_changed"):
+		Utils.keybinds_changed.connect(_update_prompt_text)
+
+func _update_prompt_text() -> void:
+	prompt.text = Utils.get_key_label_for_action("Interact")
 
 func _process(_delta: float) -> void:
 	_update_prompt_position()
@@ -85,3 +90,7 @@ func _on_interaction_area_body_exited(body: Node2D) -> void:
 func _set_prompt_visible(should_show: bool) -> void:
 	prompt.visible = should_show
 	prompt_panel.visible = should_show
+	if should_show:
+		Game.register_interactable(self, "door")
+	else:
+		Game.unregister_interactable(self)

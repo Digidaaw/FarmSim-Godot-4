@@ -5,6 +5,8 @@ extends TileMapLayer
 
 var hoed_cells := {}
 var scene_path := ""
+var hoe_prompt_panel: PanelContainer
+var hoe_prompt: Label
 
 func _ready() -> void:
 	if owner:
@@ -17,14 +19,83 @@ func _ready() -> void:
 	print("Data Cangkulan di Game: ", Game.hoed_plot_cells)
 	
 	register_existing_plots()
+	setup_hoe_prompt()
 	
 	# Panggil load_hoed_plots secara deferred (tunda 1 frame) agar sistem 
 	# koordinat global TileMapLayer sudah siap dihitung oleh Godot.
 	load_hoed_plots.call_deferred()
 
+func setup_hoe_prompt() -> void:
+	hoe_prompt_panel = PanelContainer.new()
+	hoe_prompt_panel.name = "HoePromptPanel"
+	
+	var style = StyleBoxFlat.new()
+	style.bg_color = Color(0.18, 0.12, 0.08, 0.85) # Cozy dark-brown flat panel
+	style.set_corner_radius_all(3)
+	style.set_border_width_all(1)
+	style.border_color = Color(0.35, 0.23, 0.15, 0.95)
+	
+	style.content_margin_left = 5
+	style.content_margin_right = 5
+	style.content_margin_top = 2
+	style.content_margin_bottom = 2
+	
+	hoe_prompt_panel.add_theme_stylebox_override("panel", style)
+	
+	hoe_prompt = Label.new()
+	hoe_prompt.name = "HoePrompt"
+	hoe_prompt.add_theme_font_size_override("font_size", 8)
+	hoe_prompt.add_theme_color_override("font_color", Color(1.0, 1.0, 1.0, 1.0))
+	hoe_prompt.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	hoe_prompt.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
+	
+	hoe_prompt_panel.add_child(hoe_prompt)
+	get_parent().add_child.call_deferred(hoe_prompt_panel)
+	hoe_prompt_panel.hide()
+	
+	if Utils.has_signal("keybinds_changed"):
+		Utils.keybinds_changed.connect(_update_hoe_prompt_text)
+	_update_hoe_prompt_text()
+
+func _update_hoe_prompt_text() -> void:
+	if hoe_prompt != null:
+		hoe_prompt.text = Utils.get_key_label_for_action("Hoe")
+
 func _physics_process(_delta: float) -> void:
 	if Input.is_action_just_pressed("Hoe"):
 		hoe_tile()
+	_update_hoe_prompt_visibility()
+
+func _update_hoe_prompt_visibility() -> void:
+	if hoe_prompt_panel == null:
+		return
+		
+	if player == null:
+		if hoe_prompt_panel.visible:
+			hoe_prompt_panel.hide()
+			Game.unregister_interactable(self)
+		return
+		
+	var is_holding_hoe = Game.get_current_pocket_mode() == "Tool" and Game.get_selected_pocket_item().get("Name", "") == "Hoe"
+	var cell := get_target_cell()
+	var is_tillable = is_holding_hoe and get_cell_source_id(cell) != -1 and not hoed_cells.has(cell)
+	
+	if is_tillable:
+		var cell_global_pos = to_global(map_to_local(cell))
+		var size_needed = hoe_prompt_panel.get_combined_minimum_size()
+		# Center horizontally over the 16x16 tile, offset vertically
+		hoe_prompt_panel.global_position = cell_global_pos + Vector2(-size_needed.x / 2.0, -18)
+		if not hoe_prompt_panel.visible:
+			hoe_prompt_panel.show()
+			Game.register_interactable(self, "tillable_grass")
+	else:
+		if hoe_prompt_panel.visible:
+			hoe_prompt_panel.hide()
+			Game.unregister_interactable(self)
+
+func _exit_tree() -> void:
+	if hoe_prompt_panel != null and hoe_prompt_panel.visible:
+		Game.unregister_interactable(self)
 
 func hoe_tile() -> void:
 	if player == null:

@@ -78,6 +78,230 @@ theme_override_font_sizes/font_size = 14
 text = "0"
 horizontal_alignment = 1
 
+[node name="Seed3" type="Sprite2D" parent="."]
+visible = false
+texture_filter = 1
+position = Vector2(107, 32)
+scale = Vector2(2, 2)
+texture = ExtResource("3_65i6k")
+hframes = 6
+vframes = 2
+
+[node name="Select" type="Sprite2D" parent="Seed3"]
+visible = false
+texture_filter = 1
+texture = ExtResource("4_l3snd")
+
+[node name="Count" type="Label" parent="Seed3"]
+offset_left = -10.0
+offset_top = 8.0
+offset_right = 10.0
+offset_bottom = 24.0
+scale = Vector2(0.5, 0.5)
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_colors/font_shadow_color = Color(0, 0, 0, 1)
+theme_override_constants/shadow_offset_x = 1
+theme_override_constants/shadow_offset_y = 1
+theme_override_font_sizes/font_size = 14
+text = "0"
+horizontal_alignment = 1
+
+[node name="Seed4" type="Sprite2D" parent="."]
+visible = false
+texture_filter = 1
+position = Vector2(147, 32)
+scale = Vector2(2, 2)
+texture = ExtResource("3_65i6k")
+hframes = 6
+vframes = 2
+
+[node name="Select" type="Sprite2D" parent="Seed4"]
+visible = false
+texture_filter = 1
+texture = ExtResource("4_l3snd")
+
+[node name="Count" type="Label" parent="Seed4"]
+offset_left = -10.0
+offset_top = 8.0
+offset_right = 10.0
+offset_bottom = 24.0
+scale = Vector2(0.5, 0.5)
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_colors/font_shadow_color = Color(0, 0, 0, 1)
+theme_override_constants/shadow_offset_x = 1
+theme_override_constants/shadow_offset_y = 1
+theme_override_font_sizes/font_size = 14
+text = "0"
+horizontal_alignment = 1
+
+[node name="Seed5" type="Sprite2D" parent="."]
+visible = false
+texture_filter = 1
+position = Vector2(187, 32)
+scale = Vector2(2, 2)
+texture = ExtResource("3_65i6k")
+hframes = 6
+vframes = 2
+
+[node name="Select" type="Sprite2D" parent="Seed5"]
+visible = false
+texture_filter = 1
+texture = ExtResource("4_l3snd")
+
+[node name="Count" type="Label" parent="Seed5"]
+offset_left = -10.0
+offset_top = 8.0
+offset_right = 10.0
+offset_bottom = 24.0
+scale = Vector2(0.5, 0.5)
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_colors/font_shadow_color = Color(0, 0, 0, 1)
+theme_override_constants/shadow_offset_x = 1
+theme_override_constants/shadow_offset_y = 1
+theme_override_font_sizes/font_size = 14
+text = "0"
+horizontal_alignment = 1
+
+[node name="Seed6" type="Sprite2D" parent="."]
+visible = false
+texture_filter = 1
+position = Vector2(227, 32)
+scale = Vector2(2, 2)
+texture = ExtResource("3_65i6k")
+hframes = 6
+vframes = 2
+
+[node name="Select" type="Sprite2D" parent="Seed6"]
+visible = false
+texture_filter = 1
+texture = ExtResource("4_l3snd")
+
+[node name="Count" type="Label" parent="Seed6"]
+offset_left = -10.0
+offset_top = 8.0
+offset_right = 10.0
+offset_bottom = 24.0
+scale = Vector2(0.5, 0.5)
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_colors/font_shadow_color = Color(0, 0, 0, 1)
+theme_override_constants/shadow_offset_x = 1
+theme_override_constants/shadow_offset_y = 1
+theme_override_font_sizes/font_size = 14
+text = "0"
+horizontal_alignment = 1
+
+[node name="Seed7" type="Sprite2D" parent="."]
+visible = false
+texture_filter = 1
+position = Vector2(267, 32)
+scale = Vector2(2, 2)
+texture = ExtResource("3_65i6k")
+hframes = 6
+vframes = 2
+
+[node name="Select" type="Sprite2D" parent="Seed7"]
+visible = false
+texture_filter = 1
+texture = ExtResource("4_l3snd")
+
+[node name="Count" type="Label" parent="Seed7"]
+offset_left = -10.0
+offset_top = 8.0
+offset_right = 10.0
+offset_bottom = 24.0
+scale = Vector2(0.5, 0.5)
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_colors/font_shadow_color = Color(0, 0, 0, 1)
+theme_override_constants/shadow_offset_x = 1
+theme_override_constants/shadow_offset_y = 1
+theme_override_font_sizes/font_size = 14
+text = "0"
+horizontal_alignment = 1
+
+[node name="Seed8" type="Sprite2D" parent="."]
+visible = false
+texture_filter = 1
+position = Vector2(307, 32)
+scale = Vector2(2, 2)
+texture = ExtResource("3_65i6k")
+hframes = 6
+vframes = 2
+
+[node name="Select" type="Sprite2D" parent="Seed8"]
+visible = false
+texture_filter = 1
+texture = ExtResource("4_l3snd")
+
+[node name="Count" type="Label" parent="Seed8"]
+offset_left = -10.0
+offset_top = 8.0
+offset_right = 10.0
+offset_bottom = 24.0
+scale = Vector2(0.5, 0.5)
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_colors/font_shadow_color = Color(0, 0, 0, 1)
+theme_override_constants/shadow_offset_x = 1
+theme_override_constants/shadow_offset_y = 1
+theme_override_font_sizes/font_size = 14
+text = "0"
+horizontal_alignment = 1
+
+[node name="Seed9" type="Sprite2D" parent="."]
+visible = false
+texture_filter = 1
+position = Vector2(347, 32)
+scale = Vector2(2, 2)
+texture = ExtResource("3_65i6k")
+hframes = 6
+vframes = 2
+
+[node name="Select" type="Sprite2D" parent="Seed9"]
+visible = false
+texture_filter = 1
+texture = ExtResource("4_l3snd")
+
+[node name="Count" type="Label" parent="Seed9"]
+offset_left = -10.0
+offset_top = 8.0
+offset_right = 10.0
+offset_bottom = 24.0
+scale = Vector2(0.5, 0.5)
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_colors/font_shadow_color = Color(0, 0, 0, 1)
+theme_override_constants/shadow_offset_x = 1
+theme_override_constants/shadow_offset_y = 1
+theme_override_font_sizes/font_size = 14
+text = "0"
+horizontal_alignment = 1
+
+[node name="Seed10" type="Sprite2D" parent="."]
+visible = false
+texture_filter = 1
+position = Vector2(387, 32)
+scale = Vector2(2, 2)
+texture = ExtResource("3_65i6k")
+hframes = 6
+vframes = 2
+
+[node name="Select" type="Sprite2D" parent="Seed10"]
+visible = false
+texture_filter = 1
+texture = ExtResource("4_l3snd")
+
+[node name="Count" type="Label" parent="Seed10"]
+offset_left = -10.0
+offset_top = 8.0
+offset_right = 10.0
+offset_bottom = 24.0
+scale = Vector2(0.5, 0.5)
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_colors/font_shadow_color = Color(0, 0, 0, 1)
+theme_override_constants/shadow_offset_x = 1
+theme_override_constants/shadow_offset_y = 1
+theme_override_font_sizes/font_size = 14
+text = "0"
+horizontal_alignment = 1
+
 [node name="InventoryBar" type="Sprite2D" parent="." unique_id=700445438]
 show_behind_parent = true
 texture_filter = 1

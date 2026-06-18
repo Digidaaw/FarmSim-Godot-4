@@ -19,9 +19,14 @@ var canPlant = false
 var player_in_plot = false
 
 func _ready() -> void:
-	prompt.text = "F"
+	_update_prompt_text()
 	_update_prompt_position()
 	_set_prompt_visible(false)
+	if Utils.has_signal("keybinds_changed"):
+		Utils.keybinds_changed.connect(_update_prompt_text)
+
+func _update_prompt_text() -> void:
+	prompt.text = Utils.get_key_label_for_action("Interact")
 
 func setup_plot(new_plot_index: int, new_cell: Vector2i) -> void:
 	plot_index = new_plot_index
@@ -179,6 +184,10 @@ func _update_prompt_position() -> void:
 func _set_prompt_visible(should_show: bool) -> void:
 	prompt.visible = should_show
 	prompt_panel.visible = should_show
+	if should_show:
+		Game.register_interactable(self, "plot_dirt")
+	else:
+		Game.unregister_interactable(self)
 
 func _get_plant_child() -> Node:
 	for child in get_children():

@@ -6,33 +6,8 @@ extends Node2D
 
 var game_hour = 6
 var game_minute = 0
-var time_speed = 1.6
+var time_speed = 288.0
 var time_passed = 0.0
-
-var color_scheme = {
-	0: Color8(40, 40, 40),
-	1: Color8(60, 60, 60),
-	2: Color8(80, 80, 80),
-	3: Color8(100, 100, 100),
-	4: Color8(120, 120, 120),
-	5: Color8(140, 140, 140),
-	6: Color8(160, 160, 160),
-	7: Color8(180, 180, 180),
-	8: Color8(200, 200, 200),
-	9: Color8(220, 220, 220),
-	10: Color8(240, 240, 240),
-}
-var light_schemes = {
-	0: 0.8,
-	1: 0.7,
-	2: 0.6,
-	3: 0.5,
-	4: 0.4,
-	5: 0.3,
-	6: 0.2,
-	7: 0.1,
-	8: 0,
-}
 
 func _ready() -> void:
 	game_hour = Game.game_hour
@@ -62,21 +37,53 @@ func _process(delta: float) -> void:
 	Game.game_minute = game_minute
 	_try_collect_shipping_bin()
 
-	if (game_hour >= 0 && game_hour < 5):
-		darkness.color = color_scheme[0]
-		light.energy = light_schemes[0]
-
-	elif (game_hour >= 11 && game_hour < 15):
-		darkness.color = color_scheme[4]
-		light.energy = light_schemes[4]
-
-	elif (game_hour >= 15 && game_hour < 20):
-		darkness.color = color_scheme[4]
-		light.energy = light_schemes[0]
-
-	elif (game_hour >= 20 && game_hour < 24):
-		darkness.color = color_scheme[2]
-		light.energy = light_schemes[2]
+	# Update ambient darkness color based on time
+	var total_minutes = game_hour * 60 + game_minute
+	var target_color: Color
+	
+	var dawn_start = 5 * 60      # 5:00 AM (300 minutes)
+	var sunrise_end = 7 * 60     # 7:00 AM (420 minutes)
+	var sunset_start = 17 * 60   # 5:00 PM (1020 minutes)
+	var night_start = 18 * 60    # 6:00 PM (1080 minutes)
+	
+	var dark_color = Color8(40, 40, 40)
+	var bright_color = Color8(240, 240, 240)
+	
+	if total_minutes < dawn_start:
+		# Midnight to 5:00 AM (fully dark)
+		target_color = dark_color
+	elif total_minutes < sunrise_end:
+		# 5:00 AM to 7:00 AM (dawn transition)
+		var t = float(total_minutes - dawn_start) / float(sunrise_end - dawn_start)
+		target_color = dark_color.lerp(bright_color, t)
+	elif total_minutes < sunset_start:
+		# 7:00 AM to 5:00 PM (fully bright day)
+		target_color = bright_color
+	elif total_minutes < night_start:
+		# 5:00 PM to 6:00 PM (sunset transition)
+		var t = float(total_minutes - sunset_start) / float(night_start - sunset_start)
+		target_color = bright_color.lerp(dark_color, t)
+	else:
+		# 6:00 PM to Midnight (fully dark)
+		target_color = dark_color
+		
+	darkness.color = target_color
+	
+	# Flashlight energy depends directly on ambient darkness level.
+	# Red component of target_color (ranges from 0.157 at night to 0.941 at day).
+	# We turn the light off when it's bright (>= 0.5) and fully on when it's dark (<= 0.157).
+	var v = target_color.r
+	var target_energy: float
+	if v <= 0.157:
+		target_energy = 0.8
+	elif v >= 0.5:
+		target_energy = 0.0
+	else:
+		var t = (v - 0.157) / (0.5 - 0.157)
+		target_energy = lerp(0.8, 0.0, t)
+		
+	light.energy = target_energy
+	light.enabled = target_energy > 0.0
 
 func _try_collect_shipping_bin() -> void:
 	if game_hour != 17 or Game.last_shipping_collect_day == Game.game_day:

@@ -4422,6 +4422,7 @@ text = "Tidur (F)"
 metadata/_edit_use_anchors_ = true
 
 [node name="NPC" type="CharacterBody2D" parent="." unique_id=2020287252]
+texture_filter = 1
 script = ExtResource("18_82tly")
 
 [node name="Sprite2D" type="Sprite2D" parent="NPC" unique_id=1600299446]

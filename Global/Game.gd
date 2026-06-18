@@ -1,5 +1,46 @@
 extends Node
 
+signal interactables_changed
+
+var saved_scene_path: String = ""
+var saved_player_position: Vector2 = Vector2.ZERO
+
+var active_interactables : Array = []
+
+func register_interactable(node: Node, type: String, custom_text: String = "") -> void:
+	# Clean up any dead nodes first
+	var cleaned = []
+	for item in active_interactables:
+		if is_instance_valid(item.node):
+			cleaned.append(item)
+	active_interactables = cleaned
+	
+	# Add or update
+	var found = false
+	for item in active_interactables:
+		if item.node == node:
+			item.type = type
+			item.custom_text = custom_text
+			found = true
+			break
+	if not found:
+		active_interactables.append({"node": node, "type": type, "custom_text": custom_text})
+	
+	interactables_changed.emit()
+
+func unregister_interactable(node: Node) -> void:
+	var cleaned = []
+	var changed = false
+	for item in active_interactables:
+		if is_instance_valid(item.node):
+			if item.node == node:
+				changed = true
+			else:
+				cleaned.append(item)
+	active_interactables = cleaned
+	if changed:
+		interactables_changed.emit()
+
 var Plot = [
 
 ]
@@ -39,6 +80,12 @@ var ToolPocket = [
 		"Type": "Tool",
 		"Icon": "res://Sprout Lands - Sprites - Basic pack/Objects/Basic tools and meterials.png",
 		"Frame": 1, # Frame 1 adalah Axe
+	},
+	{
+		"Name": "Hoe",
+		"Type": "Tool",
+		"Icon": "res://Sprout Lands - Sprites - Basic pack/Objects/Basic tools and meterials.png",
+		"Frame": 2, # Frame 2 adalah Hoe
 	}
 ]
 
@@ -306,6 +353,8 @@ func reset_game() -> void:
 	PocketModeIndex = 1
 	PocketSlotIndex = 0
 	Selected = 0
+	saved_scene_path = ""
+	saved_player_position = Vector2.ZERO
 
 	# 2. Simpan data baru yang kosong ini untuk menimpa save file lama
 	Utils.save_game()
