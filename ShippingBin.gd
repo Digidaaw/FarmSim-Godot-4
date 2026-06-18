@@ -10,9 +10,14 @@ var player_nearby := false
 var is_open := false
 
 func _ready() -> void:
-	prompt.text = "F"
+	_update_prompt_text()
 	_update_prompt_position()
 	_set_prompt_visible(false)
+	if Utils.has_signal("keybinds_changed"):
+		Utils.keybinds_changed.connect(_update_prompt_text)
+
+func _update_prompt_text() -> void:
+	prompt.text = Utils.get_key_label_for_action("Interact")
 
 func _process(_delta: float) -> void:
 	_update_prompt_position()

@@ -49,8 +49,16 @@ func _ready() -> void:
 		$AreaInteraksi.body_entered.connect(_on_area_body_entered)
 		$AreaInteraksi.body_exited.connect(_on_area_body_exited)
 		
+	_update_prompt_text()
+	if Utils.has_signal("keybinds_changed"):
+		Utils.keybinds_changed.connect(_update_prompt_text)
+		
 	# Sembunyikan prompt F di awal
 	_set_prompt_visible(false)
+
+func _update_prompt_text() -> void:
+	if prompt != null:
+		prompt.text = Utils.get_key_label_for_action("Interact")
 
 func _physics_process(delta: float) -> void:
 	# 1. Jika player berada di jangkauan dekat, NPC berhenti & hadap player

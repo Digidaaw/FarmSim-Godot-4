@@ -3,6 +3,20 @@ extends Node
 const SAVE_PATH: String = "user://savegame.btn"
 const SAVE_PASS: String = "password"
 const NOTIF_SCENE = preload("res://Global/Notification.tscn")
+const SETTINGS_PATH = "user://settings.cfg"
+
+signal keybinds_changed
+
+var default_controls := {
+	"ui_up": KEY_W,
+	"ui_down": KEY_S,
+	"ui_left": KEY_A,
+	"ui_right": KEY_D,
+	"Interact": KEY_F,
+	"Hoe": KEY_P,
+	"Inventory": KEY_E,
+	"CyclePocket": KEY_Q
+}
 
 var _persistent_notif: Node = null
 var _timed_notif: Node = null
@@ -13,20 +27,110 @@ func _ready() -> void:
 	_persistent_notif = NOTIF_SCENE.instantiate()
 	add_child(_persistent_notif)
 	_persistent_notif.hide()
+	
+	# Initialize dynamic inputs and load settings
+	load_settings()
 
-func notif(text) -> void:
+func save_settings() -> void:
+	var config = ConfigFile.new()
+	
+	var window_size = DisplayServer.window_get_size()
+	var is_fullscreen = DisplayServer.window_get_mode() == DisplayServer.WINDOW_MODE_FULLSCREEN
+	config.set_value("video", "width", window_size.x)
+	config.set_value("video", "height", window_size.y)
+	config.set_value("video", "fullscreen", is_fullscreen)
+	
+	for action in default_controls.keys():
+		var events = InputMap.action_get_events(action)
+		var keycode = default_controls[action]
+		for event in events:
+			if event is InputEventKey:
+				keycode = event.physical_keycode if event.physical_keycode != 0 else event.keycode
+				break
+		config.set_value("controls", action, keycode)
+		
+	var err = config.save(SETTINGS_PATH)
+	if err == OK:
+		print("Settings saved successfully to: ", SETTINGS_PATH)
+	else:
+		print("Error saving settings to: ", SETTINGS_PATH, " Code: ", err)
+
+func load_settings() -> void:
+	var config = ConfigFile.new()
+	var err = config.load(SETTINGS_PATH)
+	
+	# Ensure all actions exist in InputMap
+	for action in default_controls.keys():
+		if not InputMap.has_action(action):
+			InputMap.add_action(action)
+			
+	if err == OK:
+		print("Settings loaded successfully from: ", SETTINGS_PATH)
+		var width = config.get_value("video", "width", 960)
+		var height = config.get_value("video", "height", 540)
+		var fullscreen = config.get_value("video", "fullscreen", false)
+		
+		if fullscreen:
+			DisplayServer.window_set_mode(DisplayServer.WINDOW_MODE_FULLSCREEN)
+		else:
+			DisplayServer.window_set_mode(DisplayServer.WINDOW_MODE_WINDOWED)
+			DisplayServer.window_set_size(Vector2i(width, height))
+			
+			# Center window
+			var screen = DisplayServer.window_get_current_screen()
+			var screen_size = DisplayServer.screen_get_size(screen)
+			var window_size = DisplayServer.window_get_size()
+			DisplayServer.window_set_position(screen_size / 2 - window_size / 2)
+			
+		for action in default_controls.keys():
+			var default_key = default_controls[action]
+			var key = config.get_value("controls", action, default_key)
+			
+			InputMap.action_erase_events(action)
+			var new_event = InputEventKey.new()
+			new_event.physical_keycode = key
+			new_event.keycode = key
+			InputMap.action_add_event(action, new_event)
+	else:
+		print("No settings file found or error loading settings (", err, "). Applying defaults.")
+		# Apply default keybinds if no config exists
+		for action in default_controls.keys():
+			var default_key = default_controls[action]
+			InputMap.action_erase_events(action)
+			var new_event = InputEventKey.new()
+			new_event.physical_keycode = default_key
+			new_event.keycode = default_key
+			InputMap.action_add_event(action, new_event)
+			
+		# Center window on first run
+		var screen = DisplayServer.window_get_current_screen()
+		var screen_size = DisplayServer.screen_get_size(screen)
+		var window_size = DisplayServer.window_get_size()
+		DisplayServer.window_set_position(screen_size / 2 - window_size / 2)
+
+func get_key_label_for_action(action_name: String) -> String:
+	var events = InputMap.action_get_events(action_name)
+	for event in events:
+		if event is InputEventKey:
+			var keycode = event.physical_keycode if event.physical_keycode != 0 else event.keycode
+			return OS.get_keycode_string(keycode)
+	return ""
+
+func notif(text, is_error: bool = false) -> void:
 	if _timed_notif == null:
 		_timed_notif = NOTIF_SCENE.instantiate()
-		_timed_notif.get_node("Label").text = str(text)
+		_timed_notif.get_node("Panel/Label").text = str(text)
+		_timed_notif.get_node("Panel").set_meta("is_error", is_error)
 		add_child(_timed_notif)
-		await get_tree().create_timer(0.7).timeout
+		var duration = 2.0 if is_error else 0.7
+		await get_tree().create_timer(duration).timeout
 		if _timed_notif != null:
 			_timed_notif.queue_free()
 			_timed_notif = null
 
 func show_interaction_prompt(text: String = "F") -> void:
 	_prompt_count += 1
-	_persistent_notif.get_node("Label").text = text
+	_persistent_notif.get_node("Panel/Label").text = text
 	if _prompt_count == 1:
 		_persistent_notif.show()
 
@@ -95,6 +199,8 @@ func load_game() -> void:
 
 	while not save_game.eof_reached():
 		var line: String = save_game.get_line()
+		if line.strip_edges() == "":
+			continue
 		var current_line = JSON.parse_string(line)
 
 		if current_line != null:

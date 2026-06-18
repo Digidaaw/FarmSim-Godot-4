@@ -10,9 +10,19 @@ func _ready() -> void:
 	body_entered.connect(_on_body_entered)
 	body_exited.connect(_on_body_exited)
 	
+	_update_prompt_text()
+	if Utils.has_signal("keybinds_changed"):
+		Utils.keybinds_changed.connect(_update_prompt_text)
+	
 	# Matikan tulisan dan kotak saat pertama kali game dimulai
 	if prompt != null:
 		prompt.visible = false
+
+func _update_prompt_text() -> void:
+	if prompt != null:
+		var label = prompt.get_node_or_null("Prompt")
+		if label != null:
+			label.text = "Tidur (" + Utils.get_key_label_for_action("Interact") + ")"
 
 func _process(_delta: float) -> void:
 	if player_in_range and Input.is_action_just_pressed("Interact"):

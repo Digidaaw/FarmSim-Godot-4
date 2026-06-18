@@ -20,3 +20,9 @@ func _on_play_pressed() -> void:
 func _on_new_game_pressed() -> void:
 	Game.reset_game()
 	StageManager.stage_change(StageManager.MainWorld)
+
+const SETTINGS_MENU_SCENE = preload("res://UI/SettingsMenu.tscn")
+
+func _on_settings_pressed() -> void:
+	var sm = SETTINGS_MENU_SCENE.instantiate()
+	add_child(sm)

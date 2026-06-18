@@ -1,50 +1,42 @@
-[gd_scene format=3 uid="uid://fhplseegasia"]
+[gd_scene load_steps=5 format=3 uid="uid://fhplseegasia"]
 
-[ext_resource type="Script" uid="uid://ch47dim70ny2k" path="res://Global/panel.gd" id="1_0jpc5"]
+[ext_resource type="Script" path="res://Global/panel.gd" id="1_0jpc5"]
+[ext_resource type="FontFile" uid="uid://5d66pgn8xc78" path="res://Sprout Lands - UI Pack - Basic pack/Sprout Lands - UI Pack - Basic pack/fonts/pixelFont-7-8x14-sproutLands.ttf" id="2_font"]
 
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_56c4d"]
-bg_color = Color(1, 1, 1, 1)
-corner_radius_top_left = 15
-corner_radius_top_right = 15
-corner_radius_bottom_right = 15
-corner_radius_bottom_left = 15
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_notif"]
+bg_color = Color(0.24, 0.2, 0.16, 0.95)
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+border_color = Color(0.5686275, 0.6392157, 0.3372549, 1)
+corner_radius_top_left = 6
+corner_radius_top_right = 6
+corner_radius_bottom_right = 6
+corner_radius_bottom_left = 6
 
-[node name="CanvasLayer" type="CanvasLayer" unique_id=67270758]
+[node name="CanvasLayer" type="CanvasLayer"]
 
-[node name="Panel" type="Panel" parent="." unique_id=87637951]
-modulate = Color(1, 1, 1, 0.6862745)
-anchors_preset = -1
-anchor_left = 0.47800002
-anchor_top = 0.3
-anchor_right = 0.47800002
-anchor_bottom = 0.3
-offset_left = -48.880005
-offset_top = 58.0
-offset_right = 116.119995
-offset_bottom = 145.5
+[node name="Panel" type="Panel" parent="."]
+custom_minimum_size = Vector2(80, 24)
+anchors_preset = 5
+anchor_left = 0.5
+anchor_right = 0.5
+offset_left = -100.0
+offset_top = 32.0
+offset_right = 100.0
+offset_bottom = 62.0
 grow_horizontal = 2
-grow_vertical = 2
-scale = Vector2(0.64, 0.64)
-theme_override_styles/panel = SubResource("StyleBoxFlat_56c4d")
+pivot_offset = Vector2(100, 15)
+theme_override_styles/panel = SubResource("StyleBoxFlat_notif")
 script = ExtResource("1_0jpc5")
 
-[node name="Label" type="Label" parent="." unique_id=1636325679]
-modulate = Color(1, 1, 1, 0.6862745)
-anchors_preset = -1
-anchor_left = 0.47800002
-anchor_top = 0.30200002
-anchor_right = 0.47800002
-anchor_bottom = 0.30200002
-offset_left = -41.880005
-offset_top = 62.92
-offset_right = 94.02496
-offset_bottom = 128.15437
-grow_horizontal = 2
-grow_vertical = 2
-scale = Vector2(0.64, 0.64)
-theme_override_colors/font_color = Color(0, 0, 0, 1)
-theme_override_font_sizes/font_size = 14
-text = "asdadasdsaasdsdddasdasdasdadas"
+[node name="Label" type="Label" parent="Panel"]
+layout_mode = 0
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_fonts/font = ExtResource("2_font")
+theme_override_font_sizes/font_size = 11
+text = "Notification Text"
 horizontal_alignment = 1
 vertical_alignment = 1
 autowrap_mode = 3
