@@ -1,0 +1,39 @@
+[gd_scene format=3 uid="uid://dldqlomplm5wm"]
+
+[ext_resource type="Texture2D" uid="uid://bkpeytqsvd4im" path="res://UI/Free Inventory/Tool_Inventory.png" id="1_hu5i5"]
+[ext_resource type="Script" uid="uid://ci74fqmay1f6y" path="res://UI/inventory_box.gd" id="1_ya4as"]
+[ext_resource type="Texture2D" uid="uid://bkgpnj2xob22h" path="res://UI/Free Inventory/Inventory_select.png" id="3_20h57"]
+
+[node name="InventoryBox" type="Control" unique_id=2061277572]
+layout_mode = 3
+anchor_right = 0.123
+anchor_bottom = 0.185
+offset_right = 0.55999756
+offset_bottom = -0.19999695
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_ya4as")
+
+[node name="Label" type="Label" parent="." unique_id=342181223]
+layout_mode = 0
+offset_left = 35.0
+offset_top = -18.0
+offset_right = 124.0
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_colors/font_shadow_color = Color(0, 0, 0, 1)
+theme_override_constants/shadow_offset_x = 1
+theme_override_constants/shadow_offset_y = 1
+theme_override_font_sizes/font_size = 13
+text = "Inventory Box"
+
+[node name="Box" type="Sprite2D" parent="." unique_id=622609548]
+texture_filter = 1
+position = Vector2(79, 67.00001)
+scale = Vector2(0.3, 0.3)
+texture = ExtResource("1_hu5i5")
+
+[node name="Selection" type="Sprite2D" parent="." unique_id=988948199]
+texture_filter = 1
+position = Vector2(20, 20)
+scale = Vector2(1.2, 1.2)
+texture = ExtResource("3_20h57")

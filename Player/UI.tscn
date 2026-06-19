@@ -6,6 +6,7 @@
 [ext_resource type="PackedScene" path="res://UI/PauseMenu.tscn" id="4_pausemenu"]
 [ext_resource type="Script" uid="uid://0ddx1la2q3dj" path="res://UI/SystemPrompts.gd" id="5_prompts_script"]
 [ext_resource type="FontFile" uid="uid://5d66pgn8xc78" path="res://Sprout Lands - UI Pack - Basic pack/Sprout Lands - UI Pack - Basic pack/fonts/pixelFont-7-8x14-sproutLands.ttf" id="6_pixel_font"]
+[ext_resource type="PackedScene" uid="uid://dldqlomplm5wm" path="res://UI/inventory_box.tscn" id="7_fs3wl"]
 
 [sub_resource type="GDScript" id="GDScript_1genj"]
 script/source = "extends Label
@@ -216,3 +217,10 @@ vertical_alignment = 1
 [node name="PauseMenu" parent="Root" unique_id=987654321 instance=ExtResource("4_pausemenu")]
 visible = false
 layout_mode = 1
+
+[node name="InventoryBox" parent="Root" unique_id=2061277572 instance=ExtResource("7_fs3wl")]
+layout_mode = 1
+offset_left = 281.0
+offset_top = 14.0
+offset_right = 281.56
+offset_bottom = 13.800003

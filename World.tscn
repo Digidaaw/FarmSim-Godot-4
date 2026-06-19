@@ -16,6 +16,13 @@
 [ext_resource type="PackedScene" uid="uid://di1hdogsargla" path="res://door.tscn" id="12_door"]
 [ext_resource type="PackedScene" uid="uid://baqsac3vb3ffd" path="res://ShippingBin.tscn" id="13_shipbin"]
 [ext_resource type="PackedScene" path="res://SeedSeller.tscn" id="14_seller"]
+[ext_resource type="Script" uid="uid://4t1lra1qnc3y" path="res://bgm_manager.gd" id="17_1fphk"]
+[ext_resource type="AudioStream" uid="uid://islc6qa865dy" path="res://audio/bgm/Morning_1.mp3" id="18_jyqkj"]
+[ext_resource type="AudioStream" uid="uid://bjfkleljqj1ud" path="res://audio/bgm/Morning_2.mp3" id="19_ydbc3"]
+[ext_resource type="AudioStream" uid="uid://b2nj1f5dksfmr" path="res://audio/bgm/Afternoon_1.mp3" id="20_aj1ai"]
+[ext_resource type="AudioStream" uid="uid://dg1tjm6b4x4co" path="res://audio/bgm/Afternoon_2.mp3" id="21_d7dfr"]
+[ext_resource type="AudioStream" uid="uid://v517ebecispq" path="res://audio/bgm/Night_1.mp3" id="22_c2gv2"]
+[ext_resource type="AudioStream" uid="uid://en1l16xc6maw" path="res://audio/bgm/Night_2.mp3" id="23_rp4qs"]
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_f5c0m"]
 texture = ExtResource("9_kva58")
@@ -198,7 +205,6 @@ rotation_smoothing_speed = 10.0
 
 [node name="PointLight2D" type="PointLight2D" parent="CharacterBody2D" unique_id=514927398]
 energy = 0.8
-blend_mode = 0
 shadow_enabled = true
 shadow_filter = 1
 shadow_filter_smooth = 10.0
@@ -232,3 +238,11 @@ target_spawn_position = Vector2(488, 395)
 texture_filter = 1
 tile_map_data = PackedByteArray("AAAiAAgAAAAEAAMAAAAhAAgAAAAEAAMAAAAgAAgAAAAEAAMAAAAfAAgAAAAEAAMAAAAfAAoAAAABAAMAAAAgAAoAAAABAAMAAAAhAAoAAAABAAMAAAAiAAoAAAABAAMAAAAjAAoAAAABAAMAAAAkAAoAAAABAAMAAAAkAAkAAAABAAMAAAAhAAkAAAABAAMAAAAgAAkAAAABAAMAAAAfAAkAAAABAAMAAAAgAAsAAAABAAQAAAAhAAsAAAABAAQAAAAiAAsAAAABAAQAAAAjAAsAAAABAAQAAAAkAAsAAAABAAQAAAAfAAsAAAABAAQAAAAeAAoAAAAAAAMAAAAeAAkAAAAAAAMAAAAeAAsAAAAAAAQAAAAeAAgAAAAAAAIAAAAkAAgAAAAEAAMAAAAjAAgAAAAFAAAAAAAjAAkAAAABAAMAAAAiAAkAAAABAAMAAAAlAAoAAAACAAMAAAAlAAkAAAACAAMAAAAlAAcAAAACAAMAAAAlAAYAAAACAAMAAAAlAAgAAAACAAIAAAAfAAcAAAABAAEAAAAgAAcAAAABAAEAAAAhAAcAAAABAAEAAAAiAAcAAAABAAEAAAAjAAcAAAABAAEAAAAkAAcAAAABAAEAAAAkAAYAAAABAAEAAAAjAAYAAAABAAEAAAAiAAYAAAABAAEAAAAhAAYAAAABAAEAAAAgAAYAAAABAAEAAAAfAAYAAAABAAEAAAAfAAUAAAABAAAAAAAgAAUAAAABAAAAAAAhAAUAAAABAAAAAAAiAAUAAAABAAAAAAAjAAUAAAABAAAAAAAkAAUAAAABAAAAAAAeAAcAAAAAAAEAAAAeAAYAAAAAAAEAAAAeAAUAAAAAAAAAAAAlAAUAAAACAAAAAAAlAAsAAAACAAQAAAA=")
 tile_set = SubResource("TileSet_gn8l5")
+
+[node name="BGMManager" type="Node" parent="." unique_id=1351741418]
+script = ExtResource("17_1fphk")
+morning_playlist = Array[AudioStream]([ExtResource("18_jyqkj"), ExtResource("19_ydbc3")])
+afternoon_playlist = Array[AudioStream]([ExtResource("20_aj1ai"), ExtResource("21_d7dfr")])
+night_playlist = Array[AudioStream]([ExtResource("22_c2gv2"), ExtResource("23_rp4qs")])
+
+[node name="AudioStreamPlayer" type="AudioStreamPlayer" parent="BGMManager" unique_id=2020930084]

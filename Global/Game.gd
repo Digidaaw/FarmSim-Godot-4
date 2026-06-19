@@ -68,6 +68,8 @@ var Seeds = {
 	"Tomato": 3,
 }
 
+var inventory_boxes := {}
+
 var ToolPocket = [
 	{
 		"Name": "Watering Can",

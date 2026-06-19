@@ -1,7 +1,9 @@
 [gd_scene format=3 uid="uid://beq6nvunnomr7"]
 
 [ext_resource type="Script" uid="uid://08rqtwnkyvxl" path="res://Player/Player.gd" id="1_q3lat"]
+[ext_resource type="AudioStream" uid="uid://dsgav8jm21xva" path="res://audio/se/hoeing.mp3" id="2_8g4oa"]
 [ext_resource type="Texture2D" uid="uid://cta0fvxypymue" path="res://Player/Basic Charakter Spritesheet.png" id="2_tok1r"]
+[ext_resource type="AudioStream" uid="uid://dmqabgfsw05b2" path="res://audio/se/Watering.MP3" id="3_6ysni"]
 [ext_resource type="Texture2D" uid="uid://dct2wog850r8b" path="res://Sprout Lands - Sprites - Basic pack/Characters/Basic Charakter Actions.png" id="3_tok1r"]
 
 [sub_resource type="CapsuleShape2D" id="CapsuleShape2D_ddoul"]
@@ -273,6 +275,8 @@ _data = {
 [node name="Player" type="CharacterBody2D" unique_id=69392640]
 texture_filter = 1
 script = ExtResource("1_q3lat")
+hoe_sfx = ExtResource("2_8g4oa")
+watering_sfx = ExtResource("3_6ysni")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=751555626]
 shape = SubResource("CapsuleShape2D_ddoul")
@@ -291,3 +295,5 @@ texture_filter = 1
 texture = ExtResource("3_tok1r")
 hframes = 2
 vframes = 12
+
+[node name="SFXPlayer" type="AudioStreamPlayer" parent="." unique_id=496468773]

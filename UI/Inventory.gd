@@ -4,6 +4,9 @@ var dragging = false
 var click_radius = 40
 var posClicked
 
+var default_open_position: Vector2
+var is_sliding := false
+
 var ButtonInfo = {
 	"Name": "Corn",
 	"Count": 0,
@@ -25,24 +28,83 @@ var inventory_snapshot = ""
 	get_node("SlotContainer/Slot10"),
 	get_node("SlotContainer/Slot11"),
 	get_node("SlotContainer/Slot12"),
-	
 ]
 
 func _ready() -> void:
+	# Simpan posisi awal desain dari editor
+	default_open_position = position
+	position = default_open_position + Vector2(0, size.y + 20)
 	self.hide()
+
 
 func _process(_delta: float) -> void:
 	if visible and not dragging:
 		_refresh_inventory()
 
-# Called when the node enters the scene tree for the first time.
+
 func _input(event):
-	if event.is_action_pressed("Inventory"):
-		if self.visible == true:
-			self.hide()
+	if event.is_action_pressed("Inventory") and not is_sliding:
+		var ui_node = get_tree().root.find_child("UI", true, false)
+		if ui_node != null:
+			var box_inventory = ui_node.find_child("InventoryBox", true, false)
+			if box_inventory != null and box_inventory.is_open:
+				box_inventory.close_box()
+				return
+		
+		if self.visible:
+			close_inventory()
 		else:
-			self.show()
-			_refresh_inventory(true)
+			open_inventory()
+
+
+func open_inventory() -> void:
+	is_sliding = true
+	self.show()
+	_refresh_inventory(true)
+	position = default_open_position + Vector2(0, size.y + 20) # Mulai dari bawah
+	
+	var tween = create_tween()
+	tween.tween_property(self, "position", default_open_position, 0.25)\
+		.set_trans(Tween.TRANS_QUAD)\
+		.set_ease(Tween.EASE_OUT)
+	await tween.finished
+	is_sliding = false
+
+
+func close_inventory() -> void:
+	is_sliding = true
+	var tween = create_tween()
+	tween.tween_property(self, "position", default_open_position + Vector2(0, size.y + 20), 0.2)\
+		.set_trans(Tween.TRANS_QUAD)\
+		.set_ease(Tween.EASE_IN)
+	await tween.finished
+	self.hide()
+	is_sliding = false
+
+
+func open_inventory_from_box(target_pos: Vector2, hidden_pos: Vector2) -> void:
+	is_sliding = true
+	self.show()
+	_refresh_inventory(true)
+	position = hidden_pos
+	
+	var tween = create_tween()
+	tween.tween_property(self, "position", target_pos, 0.25)\
+		.set_trans(Tween.TRANS_QUAD)\
+		.set_ease(Tween.EASE_OUT)
+	await tween.finished
+	is_sliding = false
+
+
+func close_inventory_from_box(hidden_pos: Vector2) -> void:
+	is_sliding = true
+	var tween = create_tween()
+	tween.tween_property(self, "position", hidden_pos, 0.2)\
+		.set_trans(Tween.TRANS_QUAD)\
+		.set_ease(Tween.EASE_IN)
+	await tween.finished
+	self.hide()
+	is_sliding = false
 
 
 func _on_slot_gui_input(event: InputEvent, extra_arg_0: int) -> void:
@@ -80,6 +142,7 @@ func _on_slot_gui_input(event: InputEvent, extra_arg_0: int) -> void:
 		get_node("Sprite2D").texture = slotContainer.get_child(extra_arg_0).get_node("Item").texture
 		get_node("Sprite2D").global_position = get_viewport().get_mouse_position()
 
+
 func _move_harvest_item(source_index: int, target_index: int) -> void:
 	_ensure_harvest_slots(max(source_index, target_index) + 1)
 
@@ -100,13 +163,16 @@ func _move_harvest_item(source_index: int, target_index: int) -> void:
 	_refresh_inventory(true)
 	Utils.save_game()
 
+
 func _ensure_harvest_slots(size: int) -> void:
 	while Game.Harvest.size() < size:
 		Game.Harvest.append(null)
 
+
 func _trim_empty_harvest_slots() -> void:
 	while Game.Harvest.size() > 0 and Game.Harvest[Game.Harvest.size() - 1] == null:
 		Game.Harvest.pop_back()
+
 
 func _refresh_inventory(force: bool = false) -> void:
 	var current_snapshot = JSON.stringify(Game.Harvest)
