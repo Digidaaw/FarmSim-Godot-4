@@ -28,7 +28,15 @@ func _on_new_game_pressed() -> void:
 	StageManager.stage_change(StageManager.MainWorld)
 
 const SETTINGS_MENU_SCENE = preload("res://UI/SettingsMenu.tscn")
+const EXIT_CONFIRMATION_SCENE = preload("res://UI/ExitConfirmation.tscn")
 
 func _on_settings_pressed() -> void:
 	var sm = SETTINGS_MENU_SCENE.instantiate()
 	add_child(sm)
+
+func _on_exit_pressed() -> void:
+	var confirm = EXIT_CONFIRMATION_SCENE.instantiate()
+	add_child(confirm)
+	confirm.confirmed.connect(func():
+		get_tree().quit()
+	)

@@ -43,6 +43,9 @@ func _interact() -> void:
 		close_door()
 		return
 
+	if auto_enter_after_open and target_scene_path != "":
+		StageManager.fade_out_bgm(2.0)
+
 	await open_door()
 
 	if auto_enter_after_open and target_scene_path != "":
