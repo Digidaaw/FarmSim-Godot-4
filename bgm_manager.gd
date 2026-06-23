@@ -12,6 +12,7 @@ var music_queue: Array[AudioStream] = []
 
 
 func _ready() -> void:
+	process_mode = Node.PROCESS_MODE_ALWAYS
 	randomize()
 
 	music_player.finished.connect(_on_music_finished)

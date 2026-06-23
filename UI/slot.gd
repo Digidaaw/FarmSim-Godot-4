@@ -30,11 +30,12 @@ func _process(delta) :
 		get_node("Count").text = str(int(itemCount))
 		
 	if has_item == true:
-		match itemName:
-			"Corn":
-				itemIcon = load("res://Sprout Lands - Sprites - Basic pack/Objects/Corn.png")
-			"Tomato":
-				itemIcon = load("res://Sprout Lands - Sprites - Basic pack/Objects/Tomato.png")
+		if itemIcon == null:
+			match itemName:
+				"Corn":
+					itemIcon = load("res://Sprout Lands - Sprites - Basic pack/Objects/Corn.png")
+				"Tomato":
+					itemIcon = load("res://Sprout Lands - Sprites - Basic pack/Objects/Tomato.png")
 		get_node("Item").texture = itemIcon
 		get_node("Item").show()
 	else:

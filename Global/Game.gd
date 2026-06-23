@@ -238,6 +238,128 @@ func buy_shop_item(item_name: String, amount: int = 1) -> Dictionary:
 		"Message": "Beli %s -%dG" % [str(item.get("DisplayName", item_name)), price],
 	}
 
+func get_unified_inventory() -> Array:
+	var list = []
+	
+	# 1. Tools
+	for tool in ToolPocket:
+		list.append({
+			"Name": tool["Name"],
+			"Type": "Tool",
+			"Count": 1,
+			"Icon": tool["Icon"],
+			"Frame": tool.get("Frame", 0)
+		})
+		
+	# 2. Seeds
+	for seed_name in SeedOrder:
+		var count = get_seed_count(seed_name)
+		if count > 0:
+			list.append({
+				"Name": seed_name,
+				"Type": "Seed",
+				"Count": count,
+				"Icon": "res://Sprout Lands - Sprites - Basic pack/Objects/Basic Plants.png",
+				"Frame": _get_seed_frame(seed_name)
+			})
+			
+	# 3. Crops
+	for item in Harvest:
+		if item is Dictionary and int(item.get("Count", 0)) > 0:
+			list.append({
+				"Name": item["Name"],
+				"Type": "Item",
+				"Count": item["Count"],
+				"Icon": _get_item_icon(item["Name"]),
+				"Frame": -1
+			})
+			
+	# Fill rest with null up to 12 slots
+	while list.size() < 12:
+		list.append(null)
+		
+	return list
+
+func get_item_texture(item: Dictionary) -> Texture2D:
+	var icon_path = item.get("Icon", "")
+	if icon_path == "":
+		return null
+	var tex = load(icon_path)
+	if tex == null:
+		return null
+	if item.has("Frame") and int(item.get("Frame", -1)) >= 0:
+		var frame_idx = int(item.get("Frame", 0))
+		var frame_w = 16
+		var frame_h = 16
+		var h_count = int(tex.get_width() / frame_w)
+		if h_count == 0: h_count = 1
+		var col = frame_idx % h_count
+		var row = frame_idx / h_count
+		var atlas = AtlasTexture.new()
+		atlas.region = Rect2(col * frame_w, row * frame_h, frame_w, frame_h)
+		atlas.atlas = tex
+		return atlas
+	return tex
+
+func add_player_item(item: Dictionary) -> void:
+	var type = item.get("Type", "")
+	var name = item.get("Name", "")
+	var count = int(item.get("Count", 1))
+	
+	if type == "Tool":
+		var has_tool = false
+		for t in ToolPocket:
+			if t["Name"] == name:
+				has_tool = true
+				break
+		if not has_tool:
+			ToolPocket.append({
+				"Name": name,
+				"Type": "Tool",
+				"Icon": item.get("Icon", ""),
+				"Frame": item.get("Frame", 0)
+			})
+	elif type == "Seed":
+		add_seed(name, count)
+	else:
+		add_harvest_item(name, count)
+	Utils.save_game()
+
+func remove_player_item(item: Dictionary, amount: int = -1) -> void:
+	var type = item.get("Type", "")
+	var name = item.get("Name", "")
+	var count = int(item.get("Count", 1))
+	if amount < 0:
+		amount = count
+		
+	if type == "Tool":
+		var target_idx = -1
+		for i in range(ToolPocket.size()):
+			if ToolPocket[i]["Name"] == name:
+				target_idx = i
+				break
+		if target_idx != -1:
+			ToolPocket.remove_at(target_idx)
+	elif type == "Seed":
+		spend_seed(name, amount)
+	else:
+		# Crop/Item
+		for i in range(Harvest.size()):
+			var h_item = Harvest[i]
+			if h_item is Dictionary and h_item.get("Name", "") == name:
+				var h_count = int(h_item.get("Count", 0))
+				if h_count > amount:
+					h_item["Count"] = h_count - amount
+				else:
+					Harvest[i] = null
+				break
+		_trim_empty_harvest_slots()
+	Utils.save_game()
+
+func _trim_empty_harvest_slots() -> void:
+	while Harvest.size() > 0 and Harvest[Harvest.size() - 1] == null:
+		Harvest.pop_back()
+
 func add_harvest_item(item_name: String, amount: int = 1) -> void:
 	if amount <= 0:
 		return

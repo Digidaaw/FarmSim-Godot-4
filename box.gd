@@ -64,6 +64,100 @@ func add_item(item_id: String, amount: int) -> void:
 	save_box()
 
 
+func add_item_unified(item: Dictionary) -> void:
+	add_item_unified_to_slot(item, -1)
+
+
+func add_item_unified_to_slot(item: Dictionary, slot_index: int = -1, max_slots: int = -1) -> bool:
+	var name = item.get("Name", "")
+	var type = item.get("Type", "")
+	var count = int(item.get("Count", 1))
+	var icon = item.get("Icon", "")
+	var frame = int(item.get("Frame", -1))
+
+	if name == "" or count <= 0:
+		return false
+
+	if slot_index >= 0:
+		if max_slots > 0 and slot_index >= max_slots:
+			return false
+		_ensure_slot_size(slot_index + 1)
+		var slot_item = items[slot_index]
+		if slot_item == null:
+			items[slot_index] = _make_unified_item(name, type, count, icon, frame)
+			save_box()
+			return true
+		if _can_stack_items(slot_item, name, type, frame):
+			slot_item["Count"] = int(slot_item.get("Count", 0)) + count
+			save_box()
+			return true
+		return false
+
+	if type != "Tool":
+		for i in range(items.size()):
+			var box_item = items[i]
+			if _can_stack_items(box_item, name, type, frame):
+				box_item["Count"] = int(box_item.get("Count", 0)) + count
+				save_box()
+				return true
+
+	for i in range(items.size()):
+		if items[i] == null:
+			items[i] = _make_unified_item(name, type, count, icon, frame)
+			save_box()
+			return true
+
+	if max_slots > 0 and items.size() >= max_slots:
+		return false
+
+	items.append(_make_unified_item(name, type, count, icon, frame))
+	save_box()
+	return true
+
+
+func _ensure_slot_size(size: int) -> void:
+	while items.size() < size:
+		items.append(null)
+
+
+func _make_unified_item(name: String, type: String, count: int, icon: String, frame: int) -> Dictionary:
+	return {
+		"Name": name,
+		"Type": type,
+		"Count": count,
+		"Icon": icon,
+		"Frame": frame
+	}
+
+
+func _can_stack_items(box_item, name: String, type: String, frame: int) -> bool:
+	if not (box_item is Dictionary):
+		return false
+	if type == "Tool":
+		return false
+	return box_item.get("Name", "") == name and box_item.get("Type", "") == type and int(box_item.get("Frame", -1)) == frame
+
+
+func remove_item_at(index: int) -> void:
+	if index >= 0 and index < items.size():
+		items[index] = null
+		# Compact: hapus semua null (tengah maupun akhir)
+		# agar index UI selalu sesuai dengan index data.
+		_compact_items()
+		save_box()
+
+
+func _compact_items() -> void:
+	## Hapus semua slot null sehingga item selalu berurutan dari index 0.
+	## Tanpa ini, item bisa tersimpan di index 5 sementara 0-4 null,
+	## menyebabkan klik di slot 0 UI tidak menemukan item.
+	var packed: Array = []
+	for itm in items:
+		if itm != null:
+			packed.append(itm)
+	items = packed
+
+
 func save_box() -> void:
 	Game.inventory_boxes[box_id] = items
 

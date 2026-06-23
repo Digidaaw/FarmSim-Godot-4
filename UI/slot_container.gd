@@ -20,12 +20,10 @@ func setInventory():
 	for slot in SlotButtons:
 		slot.clear_item()
 
-	for item in min(Game.Harvest.size(), SlotButtons.size()):
-		var harvest_item = Game.Harvest[item]
-		if not (harvest_item is Dictionary) or not harvest_item.has("Name") or harvest_item.get("Count", 0) <= 0:
+	var items = Game.get_unified_inventory()
+	for i in min(items.size(), SlotButtons.size()):
+		var item = items[i]
+		if item == null:
 			continue
-
-		if "Corn" in harvest_item["Name"]:
-			SlotButtons[item].set_item(harvest_item["Name"], harvest_item["Count"], load("res://Sprout Lands - Sprites - Basic pack/Objects/Corn.png"))
-		if "Tomato" in harvest_item["Name"]:
-			SlotButtons[item].set_item(harvest_item["Name"], harvest_item["Count"], load("res://Sprout Lands - Sprites - Basic pack/Objects/Tomato.png"))
+		var icon = Game.get_item_texture(item)
+		SlotButtons[i].set_item(item["Name"], item["Count"], icon)

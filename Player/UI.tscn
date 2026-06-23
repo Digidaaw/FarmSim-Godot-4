@@ -214,13 +214,13 @@ theme_override_font_sizes/font_size = 10
 text = "Open Bag"
 vertical_alignment = 1
 
-[node name="PauseMenu" parent="Root" unique_id=987654321 instance=ExtResource("4_pausemenu")]
-visible = false
-layout_mode = 1
-
 [node name="InventoryBox" parent="Root" unique_id=2061277572 instance=ExtResource("7_fs3wl")]
 layout_mode = 1
 offset_left = 281.0
 offset_top = 14.0
 offset_right = 281.56
 offset_bottom = 13.800003
+
+[node name="PauseMenu" parent="Root" unique_id=987654321 instance=ExtResource("4_pausemenu")]
+visible = false
+layout_mode = 1

@@ -111,6 +111,18 @@ func _on_slot_gui_input(event: InputEvent, extra_arg_0: int) -> void:
 	if event is InputEventMouseButton and event.button_index == MOUSE_BUTTON_LEFT:
 		if (event.position.length()) < click_radius:
 			if not dragging and event.pressed:
+				var ui_node = get_tree().root.find_child("UI", true, false)
+				if ui_node != null:
+					var box_inventory = ui_node.find_child("InventoryBox", true, false)
+					if box_inventory != null and box_inventory.is_open:
+						var items = Game.get_unified_inventory()
+						if extra_arg_0 < items.size():
+							var item = items[extra_arg_0]
+							if item != null:
+								box_inventory.transfer_to_box(item)
+								_refresh_inventory(true)
+						return
+				
 				if slotContainer.get_child(extra_arg_0).has_item == true:
 					dragging = true
 					posClicked = slotContainer.get_child(extra_arg_0).position.x
@@ -175,7 +187,7 @@ func _trim_empty_harvest_slots() -> void:
 
 
 func _refresh_inventory(force: bool = false) -> void:
-	var current_snapshot = JSON.stringify(Game.Harvest)
+	var current_snapshot = JSON.stringify(Game.get_unified_inventory())
 	if force or current_snapshot != inventory_snapshot:
 		slotContainer.setInventory()
 		inventory_snapshot = current_snapshot

@@ -1,18 +1,24 @@
 [gd_scene format=3 uid="uid://dldqlomplm5wm"]
 
-[ext_resource type="Texture2D" uid="uid://bkpeytqsvd4im" path="res://UI/Free Inventory/Tool_Inventory.png" id="1_hu5i5"]
 [ext_resource type="Script" uid="uid://ci74fqmay1f6y" path="res://UI/inventory_box.gd" id="1_ya4as"]
-[ext_resource type="Texture2D" uid="uid://bkgpnj2xob22h" path="res://UI/Free Inventory/Inventory_select.png" id="3_20h57"]
+[ext_resource type="Texture2D" uid="uid://bkpeytqsvd4im" path="res://UI/Free Inventory/Tool_Inventory.png" id="2_bg"]
+[ext_resource type="Texture2D" uid="uid://bkgpnj2xob22h" path="res://UI/Free Inventory/Inventory_select.png" id="3_sel"]
+[ext_resource type="PackedScene" uid="uid://c2qda77kgsknn" path="res://UI/slot.tscn" id="4_slot"]
 
 [node name="InventoryBox" type="Control" unique_id=2061277572]
 layout_mode = 3
-anchor_right = 0.123
-anchor_bottom = 0.185
-offset_right = 0.55999756
-offset_bottom = -0.19999695
+anchors_preset = 0
+offset_right = 157.0
+offset_bottom = 133.0
 grow_horizontal = 2
 grow_vertical = 2
 script = ExtResource("1_ya4as")
+
+[node name="Box" type="Sprite2D" parent="." unique_id=622609548]
+texture_filter = 1
+position = Vector2(79, 67.00001)
+scale = Vector2(0.3, 0.3)
+texture = ExtResource("2_bg")
 
 [node name="Label" type="Label" parent="." unique_id=342181223]
 layout_mode = 0
@@ -26,14 +32,117 @@ theme_override_constants/shadow_offset_y = 1
 theme_override_font_sizes/font_size = 13
 text = "Inventory Box"
 
-[node name="Box" type="Sprite2D" parent="." unique_id=622609548]
-texture_filter = 1
-position = Vector2(79, 67.00001)
-scale = Vector2(0.3, 0.3)
-texture = ExtResource("1_hu5i5")
-
 [node name="Selection" type="Sprite2D" parent="." unique_id=988948199]
+visible = false
 texture_filter = 1
-position = Vector2(20, 20)
+position = Vector2(19, 20)
 scale = Vector2(1.2, 1.2)
-texture = ExtResource("3_20h57")
+texture = ExtResource("3_sel")
+
+[node name="SlotContainer" type="GridContainer" parent="." unique_id=775500927]
+layout_mode = 0
+offset_left = 7.0
+offset_top = 8.0
+offset_right = 247.0
+offset_bottom = 216.0
+scale = Vector2(0.6, 0.6)
+theme_override_constants/h_separation = 0
+theme_override_constants/v_separation = 5
+columns = 6
+
+[node name="Slot" parent="SlotContainer" unique_id=562726014 instance=ExtResource("4_slot")]
+layout_mode = 2
+
+[node name="Slot2" parent="SlotContainer" unique_id=1279355299 instance=ExtResource("4_slot")]
+layout_mode = 2
+
+[node name="Slot3" parent="SlotContainer" unique_id=2029471375 instance=ExtResource("4_slot")]
+layout_mode = 2
+
+[node name="Slot4" parent="SlotContainer" unique_id=2034392621 instance=ExtResource("4_slot")]
+layout_mode = 2
+
+[node name="Slot5" parent="SlotContainer" unique_id=2001630168 instance=ExtResource("4_slot")]
+layout_mode = 2
+
+[node name="Slot6" parent="SlotContainer" unique_id=559709464 instance=ExtResource("4_slot")]
+layout_mode = 2
+
+[node name="Slot7" parent="SlotContainer" unique_id=374802850 instance=ExtResource("4_slot")]
+layout_mode = 2
+
+[node name="Slot8" parent="SlotContainer" unique_id=2081471127 instance=ExtResource("4_slot")]
+layout_mode = 2
+
+[node name="Slot9" parent="SlotContainer" unique_id=115894677 instance=ExtResource("4_slot")]
+layout_mode = 2
+
+[node name="Slot10" parent="SlotContainer" unique_id=1770948040 instance=ExtResource("4_slot")]
+layout_mode = 2
+
+[node name="Slot11" parent="SlotContainer" unique_id=1582997711 instance=ExtResource("4_slot")]
+layout_mode = 2
+
+[node name="Slot12" parent="SlotContainer" unique_id=163152380 instance=ExtResource("4_slot")]
+layout_mode = 2
+
+[node name="Slot13" parent="SlotContainer" instance=ExtResource("4_slot")]
+layout_mode = 2
+
+[node name="Slot14" parent="SlotContainer" instance=ExtResource("4_slot")]
+layout_mode = 2
+
+[node name="Slot15" parent="SlotContainer" instance=ExtResource("4_slot")]
+layout_mode = 2
+
+[node name="Slot16" parent="SlotContainer" instance=ExtResource("4_slot")]
+layout_mode = 2
+
+[node name="Slot17" parent="SlotContainer" instance=ExtResource("4_slot")]
+layout_mode = 2
+
+[node name="Slot18" parent="SlotContainer" instance=ExtResource("4_slot")]
+layout_mode = 2
+
+[node name="Slot19" parent="SlotContainer" instance=ExtResource("4_slot")]
+layout_mode = 2
+
+[node name="Slot20" parent="SlotContainer" instance=ExtResource("4_slot")]
+layout_mode = 2
+
+[node name="Slot21" parent="SlotContainer" instance=ExtResource("4_slot")]
+layout_mode = 2
+
+[node name="Slot22" parent="SlotContainer" instance=ExtResource("4_slot")]
+layout_mode = 2
+
+[node name="Slot23" parent="SlotContainer" instance=ExtResource("4_slot")]
+layout_mode = 2
+
+[node name="Slot24" parent="SlotContainer" instance=ExtResource("4_slot")]
+layout_mode = 2
+
+[connection signal="gui_input" from="SlotContainer/Slot" to="." method="_on_slot_gui_input" binds= [0]]
+[connection signal="gui_input" from="SlotContainer/Slot2" to="." method="_on_slot_gui_input" binds= [1]]
+[connection signal="gui_input" from="SlotContainer/Slot3" to="." method="_on_slot_gui_input" binds= [2]]
+[connection signal="gui_input" from="SlotContainer/Slot4" to="." method="_on_slot_gui_input" binds= [3]]
+[connection signal="gui_input" from="SlotContainer/Slot5" to="." method="_on_slot_gui_input" binds= [4]]
+[connection signal="gui_input" from="SlotContainer/Slot6" to="." method="_on_slot_gui_input" binds= [5]]
+[connection signal="gui_input" from="SlotContainer/Slot7" to="." method="_on_slot_gui_input" binds= [6]]
+[connection signal="gui_input" from="SlotContainer/Slot8" to="." method="_on_slot_gui_input" binds= [7]]
+[connection signal="gui_input" from="SlotContainer/Slot9" to="." method="_on_slot_gui_input" binds= [8]]
+[connection signal="gui_input" from="SlotContainer/Slot10" to="." method="_on_slot_gui_input" binds= [9]]
+[connection signal="gui_input" from="SlotContainer/Slot11" to="." method="_on_slot_gui_input" binds= [10]]
+[connection signal="gui_input" from="SlotContainer/Slot12" to="." method="_on_slot_gui_input" binds= [11]]
+[connection signal="gui_input" from="SlotContainer/Slot13" to="." method="_on_slot_gui_input" binds= [12]]
+[connection signal="gui_input" from="SlotContainer/Slot14" to="." method="_on_slot_gui_input" binds= [13]]
+[connection signal="gui_input" from="SlotContainer/Slot15" to="." method="_on_slot_gui_input" binds= [14]]
+[connection signal="gui_input" from="SlotContainer/Slot16" to="." method="_on_slot_gui_input" binds= [15]]
+[connection signal="gui_input" from="SlotContainer/Slot17" to="." method="_on_slot_gui_input" binds= [16]]
+[connection signal="gui_input" from="SlotContainer/Slot18" to="." method="_on_slot_gui_input" binds= [17]]
+[connection signal="gui_input" from="SlotContainer/Slot19" to="." method="_on_slot_gui_input" binds= [18]]
+[connection signal="gui_input" from="SlotContainer/Slot20" to="." method="_on_slot_gui_input" binds= [19]]
+[connection signal="gui_input" from="SlotContainer/Slot21" to="." method="_on_slot_gui_input" binds= [20]]
+[connection signal="gui_input" from="SlotContainer/Slot22" to="." method="_on_slot_gui_input" binds= [21]]
+[connection signal="gui_input" from="SlotContainer/Slot23" to="." method="_on_slot_gui_input" binds= [22]]
+[connection signal="gui_input" from="SlotContainer/Slot24" to="." method="_on_slot_gui_input" binds= [23]]

@@ -209,6 +209,8 @@ func save_game() -> void:
 		"SavedScenePath": Game.saved_scene_path,
 		"SavedPlayerPosX": Game.saved_player_position.x,
 		"SavedPlayerPosY": Game.saved_player_position.y,
+		"InventoryBoxes": Game.inventory_boxes,
+		"ToolPocket": Game.ToolPocket,
 	}
 
 	save_game.store_line(JSON.stringify(data))
@@ -250,6 +252,14 @@ func load_game() -> void:
 				Game.ShippingBinItems = loaded_shipping_items
 			else:
 				Game.ShippingBinItems = []
+
+			var loaded_boxes = current_line.get("InventoryBoxes", {})
+			if loaded_boxes is Dictionary:
+				Game.inventory_boxes = loaded_boxes
+
+			var loaded_tools = current_line.get("ToolPocket", [])
+			if loaded_tools is Array:
+				Game.ToolPocket = loaded_tools
 
 			Game.game_day = int(current_line.get("GameDay", Game.game_day))
 			Game.game_hour = int(current_line.get("GameHour", Game.game_hour))
