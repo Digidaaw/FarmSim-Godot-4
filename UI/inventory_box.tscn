@@ -33,12 +33,6 @@ theme_override_constants/shadow_offset_y = 1
 theme_override_font_sizes/font_size = 13
 text = "Inventory Box"
 
-[node name="Selection" type="Sprite2D" parent="." unique_id=988948199]
-texture_filter = 1
-position = Vector2(19, 20)
-scale = Vector2(1.2, 1.2)
-texture = ExtResource("3_sel")
-
 [node name="SlotContainer" type="GridContainer" parent="." unique_id=775500927]
 layout_mode = 0
 offset_left = 7.0
@@ -139,6 +133,12 @@ layout_mode = 2
 
 [node name="Slot30" parent="SlotContainer" unique_id=759059821 instance=ExtResource("4_slot")]
 layout_mode = 2
+
+[node name="Selection" type="Sprite2D" parent="." unique_id=988948199]
+texture_filter = 1
+position = Vector2(19, 20)
+scale = Vector2(1.2, 1.2)
+texture = ExtResource("3_sel")
 
 [node name="PromptLabel" type="Label" parent="." unique_id=1010101011]
 layout_mode = 0
