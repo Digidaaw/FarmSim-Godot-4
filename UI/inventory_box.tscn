@@ -13,11 +13,12 @@ offset_bottom = 133.0
 grow_horizontal = 2
 grow_vertical = 2
 script = ExtResource("1_ya4as")
+selection_scale_multiplier = 2.1
 
 [node name="Box" type="Sprite2D" parent="." unique_id=622609548]
 texture_filter = 1
-position = Vector2(79, 67.00001)
-scale = Vector2(0.3, 0.3)
+position = Vector2(81.775, 63.775)
+scale = Vector2(0.31061187, 0.2854402)
 texture = ExtResource("2_bg")
 
 [node name="Label" type="Label" parent="." unique_id=342181223]
@@ -33,7 +34,6 @@ theme_override_font_sizes/font_size = 13
 text = "Inventory Box"
 
 [node name="Selection" type="Sprite2D" parent="." unique_id=988948199]
-visible = false
 texture_filter = 1
 position = Vector2(19, 20)
 scale = Vector2(1.2, 1.2)
@@ -44,10 +44,10 @@ layout_mode = 0
 offset_left = 7.0
 offset_top = 8.0
 offset_right = 247.0
-offset_bottom = 216.0
+offset_bottom = 219.66667
 scale = Vector2(0.6, 0.6)
-theme_override_constants/h_separation = 0
-theme_override_constants/v_separation = 5
+theme_override_constants/h_separation = 2
+theme_override_constants/v_separation = -3
 columns = 6
 
 [node name="Slot" parent="SlotContainer" unique_id=562726014 instance=ExtResource("4_slot")]
@@ -86,41 +86,73 @@ layout_mode = 2
 [node name="Slot12" parent="SlotContainer" unique_id=163152380 instance=ExtResource("4_slot")]
 layout_mode = 2
 
-[node name="Slot13" parent="SlotContainer" instance=ExtResource("4_slot")]
+[node name="Slot13" parent="SlotContainer" unique_id=367362694 instance=ExtResource("4_slot")]
 layout_mode = 2
 
-[node name="Slot14" parent="SlotContainer" instance=ExtResource("4_slot")]
+[node name="Slot14" parent="SlotContainer" unique_id=811452215 instance=ExtResource("4_slot")]
 layout_mode = 2
 
-[node name="Slot15" parent="SlotContainer" instance=ExtResource("4_slot")]
+[node name="Slot15" parent="SlotContainer" unique_id=1461682082 instance=ExtResource("4_slot")]
 layout_mode = 2
 
-[node name="Slot16" parent="SlotContainer" instance=ExtResource("4_slot")]
+[node name="Slot16" parent="SlotContainer" unique_id=1664438194 instance=ExtResource("4_slot")]
 layout_mode = 2
 
-[node name="Slot17" parent="SlotContainer" instance=ExtResource("4_slot")]
+[node name="Slot17" parent="SlotContainer" unique_id=1293574740 instance=ExtResource("4_slot")]
 layout_mode = 2
 
-[node name="Slot18" parent="SlotContainer" instance=ExtResource("4_slot")]
+[node name="Slot18" parent="SlotContainer" unique_id=1305537431 instance=ExtResource("4_slot")]
 layout_mode = 2
 
-[node name="Slot19" parent="SlotContainer" instance=ExtResource("4_slot")]
+[node name="Slot19" parent="SlotContainer" unique_id=384418075 instance=ExtResource("4_slot")]
 layout_mode = 2
 
-[node name="Slot20" parent="SlotContainer" instance=ExtResource("4_slot")]
+[node name="Slot20" parent="SlotContainer" unique_id=1916496602 instance=ExtResource("4_slot")]
 layout_mode = 2
 
-[node name="Slot21" parent="SlotContainer" instance=ExtResource("4_slot")]
+[node name="Slot21" parent="SlotContainer" unique_id=1605052941 instance=ExtResource("4_slot")]
 layout_mode = 2
 
-[node name="Slot22" parent="SlotContainer" instance=ExtResource("4_slot")]
+[node name="Slot22" parent="SlotContainer" unique_id=1631767526 instance=ExtResource("4_slot")]
 layout_mode = 2
 
-[node name="Slot23" parent="SlotContainer" instance=ExtResource("4_slot")]
+[node name="Slot23" parent="SlotContainer" unique_id=1822882143 instance=ExtResource("4_slot")]
 layout_mode = 2
 
-[node name="Slot24" parent="SlotContainer" instance=ExtResource("4_slot")]
+[node name="Slot24" parent="SlotContainer" unique_id=827178881 instance=ExtResource("4_slot")]
 layout_mode = 2
+
+[node name="Slot25" parent="SlotContainer" unique_id=562726013 instance=ExtResource("4_slot")]
+layout_mode = 2
+
+[node name="Slot26" parent="SlotContainer" unique_id=626969773 instance=ExtResource("4_slot")]
+layout_mode = 2
+
+[node name="Slot27" parent="SlotContainer" unique_id=1234978273 instance=ExtResource("4_slot")]
+layout_mode = 2
+
+[node name="Slot28" parent="SlotContainer" unique_id=1104254654 instance=ExtResource("4_slot")]
+layout_mode = 2
+
+[node name="Slot29" parent="SlotContainer" unique_id=1102564227 instance=ExtResource("4_slot")]
+layout_mode = 2
+
+[node name="Slot30" parent="SlotContainer" unique_id=759059821 instance=ExtResource("4_slot")]
+layout_mode = 2
+
+[node name="PromptLabel" type="Label" parent="." unique_id=1010101011]
+layout_mode = 0
+offset_left = 6.0
+offset_top = 131.0
+offset_right = 153.0
+offset_bottom = 154.0
+theme_override_colors/font_color = Color(0.9, 0.9, 0.9, 1)
+theme_override_colors/font_shadow_color = Color(0, 0, 0, 1)
+theme_override_constants/shadow_offset_x = 1
+theme_override_constants/shadow_offset_y = 1
+theme_override_font_sizes/font_size = 11
+text = "Z: Pindah | F: Tutup"
+horizontal_alignment = 1
 
 [connection signal="gui_input" from="SlotContainer/Slot" to="." method="_on_slot_gui_input" binds= [0]]
 [connection signal="gui_input" from="SlotContainer/Slot2" to="." method="_on_slot_gui_input" binds= [1]]
@@ -146,3 +178,9 @@ layout_mode = 2
 [connection signal="gui_input" from="SlotContainer/Slot22" to="." method="_on_slot_gui_input" binds= [21]]
 [connection signal="gui_input" from="SlotContainer/Slot23" to="." method="_on_slot_gui_input" binds= [22]]
 [connection signal="gui_input" from="SlotContainer/Slot24" to="." method="_on_slot_gui_input" binds= [23]]
+[connection signal="gui_input" from="SlotContainer/Slot25" to="." method="_on_slot_gui_input" binds= [23]]
+[connection signal="gui_input" from="SlotContainer/Slot26" to="." method="_on_slot_gui_input" binds= [23]]
+[connection signal="gui_input" from="SlotContainer/Slot27" to="." method="_on_slot_gui_input" binds= [23]]
+[connection signal="gui_input" from="SlotContainer/Slot28" to="." method="_on_slot_gui_input" binds= [23]]
+[connection signal="gui_input" from="SlotContainer/Slot29" to="." method="_on_slot_gui_input" binds= [23]]
+[connection signal="gui_input" from="SlotContainer/Slot30" to="." method="_on_slot_gui_input" binds= [23]]

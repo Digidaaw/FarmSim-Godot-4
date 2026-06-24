@@ -110,7 +110,8 @@ func add_item_unified_to_slot(item: Dictionary, slot_index: int = -1, max_slots:
 	if max_slots > 0 and items.size() >= max_slots:
 		return false
 
-	items.append(_make_unified_item(name, type, count, icon, frame))
+	var new_item = _make_unified_item(name, type, count, icon, frame)
+	items.append(new_item)
 	save_box()
 	return true
 
@@ -164,7 +165,11 @@ func save_box() -> void:
 
 func load_box() -> void:
 	if Game.inventory_boxes.has(box_id):
-		items = Game.inventory_boxes[box_id]
+		var loaded_items = Game.inventory_boxes[box_id]
+		if loaded_items is Array:
+			items = loaded_items.duplicate(true)
+		else:
+			items = []
 	else:
 		items = []
 

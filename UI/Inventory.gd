@@ -111,18 +111,7 @@ func _on_slot_gui_input(event: InputEvent, extra_arg_0: int) -> void:
 	if event is InputEventMouseButton and event.button_index == MOUSE_BUTTON_LEFT:
 		if (event.position.length()) < click_radius:
 			if not dragging and event.pressed:
-				var ui_node = get_tree().root.find_child("UI", true, false)
-				if ui_node != null:
-					var box_inventory = ui_node.find_child("InventoryBox", true, false)
-					if box_inventory != null and box_inventory.is_open:
-						var items = Game.get_unified_inventory()
-						if extra_arg_0 < items.size():
-							var item = items[extra_arg_0]
-							if item != null:
-								box_inventory.transfer_to_box(item)
-								_refresh_inventory(true)
-						return
-				
+				# START DRAGGING
 				if slotContainer.get_child(extra_arg_0).has_item == true:
 					dragging = true
 					posClicked = slotContainer.get_child(extra_arg_0).position.x
@@ -130,24 +119,53 @@ func _on_slot_gui_input(event: InputEvent, extra_arg_0: int) -> void:
 					ButtonInfo["Count"] = slotContainer.get_child(extra_arg_0).itemCount
 					ButtonInfo["SourceIndex"] = extra_arg_0
 					slotContainer.get_child(extra_arg_0).clear_item()
+					
 		if dragging and not event.pressed:
 			dragging = false
 			slotContainer.get_child(extra_arg_0).get_node("Item").position = Vector2(20,20)
 			get_node("Sprite2D").hide()
 			
 			var dropped = false
-			for i in SlotButtons.size():
-				var slot = slotContainer.get_child(i)
-				var mouse_pos = get_viewport().get_mouse_position()
-				var slot_rect = Rect2(slot.global_position, slot.size)
+			var mouse_pos = get_viewport().get_mouse_position()
 
-				if slot_rect.has_point(mouse_pos):
-					_move_harvest_item(ButtonInfo["SourceIndex"], i)
-					dropped = true
-					break
+			# Cek apakah drop di InventoryBox
+			var ui_node = get_tree().root.find_child("UI", true, false)
+			var box_inventory = null
+			if ui_node != null:
+				box_inventory = ui_node.find_child("InventoryBox", true, false)
+				
+			if box_inventory != null and box_inventory.is_open:
+				var box_slot_container = box_inventory.get_node("SlotContainer")
+				if box_slot_container != null:
+					for i in box_inventory.SlotButtons.size():
+						var box_slot = box_inventory.SlotButtons[i]
+						var box_actual_size = box_slot.size * box_slot.get_global_transform().get_scale()
+						var box_slot_rect = Rect2(box_slot.global_position, box_actual_size)
+						if box_slot_rect.has_point(mouse_pos):
+							var items = Game.get_unified_inventory()
+							if ButtonInfo["SourceIndex"] < items.size():
+								var item = items[ButtonInfo["SourceIndex"]]
+								if item != null:
+									# Pindahkan ke box di slot i
+									box_inventory.transfer_to_box(item, i)
+							dropped = true
+							break
 
+			# Jika tidak drop di box, cek apakah drop di player inventory sendiri
 			if not dropped:
-				_refresh_inventory(true)
+				for i in SlotButtons.size():
+					var slot = slotContainer.get_child(i)
+					var actual_size = slot.size * slot.get_global_transform().get_scale()
+					var slot_rect = Rect2(slot.global_position, actual_size)
+
+					if slot_rect.has_point(mouse_pos):
+						_move_harvest_item(ButtonInfo["SourceIndex"], i)
+						dropped = true
+						break
+
+			_refresh_inventory(true)
+			if box_inventory != null and box_inventory.is_open:
+				box_inventory._refresh_box()
 			
 	if event is InputEventMouseMotion and dragging:
 		get_node("Sprite2D").show()

@@ -258,8 +258,29 @@ func load_game() -> void:
 				Game.inventory_boxes = loaded_boxes
 
 			var loaded_tools = current_line.get("ToolPocket", [])
-			if loaded_tools is Array:
+			if loaded_tools is Array and loaded_tools.size() > 0:
 				Game.ToolPocket = loaded_tools
+			else:
+				Game.ToolPocket = [
+					{
+						"Name": "Watering Can",
+						"Type": "Tool",
+						"Icon": "res://Sprout Lands - Sprites - Basic pack/Objects/Basic tools and meterials.png",
+						"Frame": 0,
+					},
+					{
+						"Name": "Axe",
+						"Type": "Tool",
+						"Icon": "res://Sprout Lands - Sprites - Basic pack/Objects/Basic tools and meterials.png",
+						"Frame": 1,
+					},
+					{
+						"Name": "Hoe",
+						"Type": "Tool",
+						"Icon": "res://Sprout Lands - Sprites - Basic pack/Objects/Basic tools and meterials.png",
+						"Frame": 2,
+					}
+				]
 
 			Game.game_day = int(current_line.get("GameDay", Game.game_day))
 			Game.game_hour = int(current_line.get("GameHour", Game.game_hour))

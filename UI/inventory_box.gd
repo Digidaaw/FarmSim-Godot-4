@@ -2,14 +2,15 @@ extends Control
 
 @export var box_gap := 12.0
 @export var box_y_offset := 40.0
+@export var selection_scale_multiplier := 1.0
 
 var opened_box = null
 var player_inventory = null
 var is_open := false
 var selected_slot_index := -1
+var is_focus_on_box := true
 
-## Jumlah kolom di SlotContainer (harus sama dengan GridContainer.columns di scene)
-const SLOT_COLUMNS := 6
+	
 
 var box_open_position: Vector2
 var box_hidden_position: Vector2
@@ -17,6 +18,10 @@ var box_hidden_position: Vector2
 @onready var slotContainer: GridContainer = get_node("SlotContainer")
 @onready var selection: Sprite2D = get_node("Selection")
 var SlotButtons := []
+
+var dragging := false
+var drag_sprite: Sprite2D
+var drag_source_index := -1
 
 func _ready() -> void:
 	box_open_position = position
@@ -28,8 +33,23 @@ func _ready() -> void:
 	if slotContainer != null:
 		SlotButtons = slotContainer.get_children()
 		for slot in SlotButtons:
+			slot.custom_minimum_size = Vector2(40.0, 40.0)
 			slot.texture_normal = null
+	
+	if selection != null:
+		selection.top_level = true
+		
 	_update_selection()
+
+	drag_sprite = Sprite2D.new()
+	drag_sprite.visible = false
+	drag_sprite.z_index = 100
+	drag_sprite.scale = Vector2(1.5, 1.5)
+	add_child(drag_sprite)
+
+func _process(delta: float) -> void:
+	if dragging and drag_sprite != null:
+		drag_sprite.global_position = get_global_mouse_position()
 
 
 func open_box(box, inventory_ui) -> void:
@@ -67,7 +87,8 @@ func open_box(box, inventory_ui) -> void:
 
 	var target_player_y = player_inventory.default_open_position.y
 
-	var target_box_y = target_player_y + player_size.y - box_size.y - box_y_offset
+	# Sejajarkan bagian atas box dengan bagian atas inventory
+	var target_box_y = target_player_y
 
 	var target_player_pos = Vector2(target_player_x, target_player_y)
 	var target_box_pos = Vector2(target_box_x, target_box_y)
@@ -96,6 +117,9 @@ func close_box() -> void:
 		return
 
 	is_open = false
+
+	if selection != null:
+		selection.hide()
 
 	# Bebaskan pergerakan player kembali
 	_set_player_blocked(false)
@@ -137,37 +161,58 @@ func _unhandled_input(event: InputEvent) -> void:
 	if not is_open:
 		return
 
-	var total_slots = SlotButtons.size()
+	var current_slots = SlotButtons if is_focus_on_box else player_inventory.SlotButtons
+	var total_slots = current_slots.size()
 	if total_slots == 0:
 		return
 
-	# Navigasi dengan tombol arah (panah kiri/kanan/atas/bawah)
+	var columns = slotContainer.columns if is_focus_on_box else 6
+
 	if event.is_action_pressed("ui_right"):
-		selected_slot_index = (selected_slot_index + 1) % total_slots
+		if (selected_slot_index + 1) % columns == 0:
+			if not is_focus_on_box:
+				is_focus_on_box = true
+				selected_slot_index -= (columns - 1)
+				if selected_slot_index >= SlotButtons.size():
+					selected_slot_index = SlotButtons.size() - 1
+			else:
+				selected_slot_index = (selected_slot_index + 1) % total_slots
+		else:
+			selected_slot_index = (selected_slot_index + 1) % total_slots
+			
 		call_deferred("_update_selection")
 		get_viewport().set_input_as_handled()
 
 	elif event.is_action_pressed("ui_left"):
-		selected_slot_index = (selected_slot_index - 1 + total_slots) % total_slots
+		if selected_slot_index % columns == 0:
+			if is_focus_on_box:
+				is_focus_on_box = false
+				selected_slot_index += (columns - 1)
+				if selected_slot_index >= player_inventory.SlotButtons.size():
+					selected_slot_index = player_inventory.SlotButtons.size() - 1
+			else:
+				selected_slot_index = (selected_slot_index - 1 + total_slots) % total_slots
+		else:
+			selected_slot_index = (selected_slot_index - 1 + total_slots) % total_slots
+			
 		call_deferred("_update_selection")
 		get_viewport().set_input_as_handled()
 
 	elif event.is_action_pressed("ui_down"):
-		var next = selected_slot_index + SLOT_COLUMNS
+		var next = selected_slot_index + columns
 		if next < total_slots:
 			selected_slot_index = next
 		call_deferred("_update_selection")
 		get_viewport().set_input_as_handled()
 
 	elif event.is_action_pressed("ui_up"):
-		var prev = selected_slot_index - SLOT_COLUMNS
+		var prev = selected_slot_index - columns
 		if prev >= 0:
 			selected_slot_index = prev
 		call_deferred("_update_selection")
 		get_viewport().set_input_as_handled()
 
-	# Tekan Enter/Space → pindahkan item yang dipilih ke inventory player
-	elif event.is_action_pressed("ui_accept"):
+	elif event.is_action_pressed("ui_accept") or (event is InputEventKey and event.keycode == KEY_Z and event.pressed and not event.echo):
 		_transfer_selected_slot()
 		get_viewport().set_input_as_handled()
 
@@ -175,13 +220,24 @@ func _unhandled_input(event: InputEvent) -> void:
 func _transfer_selected_slot() -> void:
 	if opened_box == null:
 		return
-	var box_items = opened_box.items
-	if selected_slot_index < 0 or selected_slot_index >= box_items.size():
-		return
-	var item = box_items[selected_slot_index]
-	if item == null:
-		return
-	transfer_from_box(item, selected_slot_index)
+	
+	if is_focus_on_box:
+		var box_items = opened_box.items
+		if selected_slot_index < 0 or selected_slot_index >= box_items.size():
+			return
+		var item = box_items[selected_slot_index]
+		if item == null:
+			return
+		transfer_from_box(item, selected_slot_index)
+	else:
+		var items = Game.get_unified_inventory()
+		if selected_slot_index < 0 or selected_slot_index >= items.size():
+			return
+		var item = items[selected_slot_index]
+		if item == null:
+			return
+		transfer_to_box(item)
+		
 	_refresh_box()
 	if player_inventory != null and player_inventory.has_method("_refresh_inventory"):
 		player_inventory._refresh_inventory(true)
@@ -210,7 +266,7 @@ func _refresh_box() -> void:
 
 func _on_slot_gui_input(event: InputEvent, slot_index: int) -> void:
 	if event is InputEventMouseButton and event.button_index == MOUSE_BUTTON_LEFT:
-		if event.pressed:
+		if not dragging and event.pressed:
 			if is_open and opened_box != null:
 				selected_slot_index = slot_index
 				call_deferred("_update_selection")
@@ -219,24 +275,75 @@ func _on_slot_gui_input(event: InputEvent, slot_index: int) -> void:
 				if slot_index < box_items.size():
 					var item = box_items[slot_index]
 					if item != null:
-						transfer_from_box(item, slot_index)
-						selected_slot_index = -1
-						_refresh_box()
-						if player_inventory != null and player_inventory.has_method("_refresh_inventory"):
-							player_inventory._refresh_inventory(true)
+						dragging = true
+						drag_source_index = slot_index
+						
+						var icon = Game.get_item_texture(item)
+						drag_sprite.texture = icon
+						drag_sprite.visible = true
+						
+						SlotButtons[slot_index].clear_item()
+						
+		elif dragging and not event.pressed:
+			dragging = false
+			drag_sprite.visible = false
+			
+			var dropped = false
+			var mouse_pos = get_viewport().get_mouse_position()
+			
+			if player_inventory != null and player_inventory.visible:
+				var p_slot_container = player_inventory.get_node("SlotContainer")
+				if p_slot_container != null:
+					for i in player_inventory.SlotButtons.size():
+						var p_slot = player_inventory.SlotButtons[i]
+						var p_actual_size = p_slot.size * p_slot.get_global_transform().get_scale()
+						var p_slot_rect = Rect2(p_slot.global_position, p_actual_size)
+						if p_slot_rect.has_point(mouse_pos):
+							var box_items = opened_box.items
+							if drag_source_index < box_items.size():
+								var item = box_items[drag_source_index]
+								if item != null:
+									transfer_from_box(item, drag_source_index)
+									dropped = true
+							break
+							
+			if not dropped:
+				for i in SlotButtons.size():
+					var slot = SlotButtons[i]
+					var actual_size = slot.size * slot.get_global_transform().get_scale()
+					var slot_rect = Rect2(slot.global_position, actual_size)
+					if slot_rect.has_point(mouse_pos):
+						if i != drag_source_index:
+							_move_box_item(drag_source_index, i)
+						dropped = true
+						break
+			
+			_refresh_box()
+			if player_inventory != null and player_inventory.has_method("_refresh_inventory"):
+				player_inventory._refresh_inventory(true)
+
+func _move_box_item(from_idx: int, to_idx: int) -> void:
+	if opened_box == null: return
+	var items = opened_box.items
+	if from_idx < 0 or from_idx >= items.size(): return
+	var item = items[from_idx]
+	if item == null: return
+	
+	items.remove_at(from_idx)
+	if to_idx >= items.size():
+		items.append(item)
+	else:
+		items.insert(to_idx, item)
+	opened_box.save_box()
 
 
-func transfer_to_box(item: Dictionary) -> void:
+func transfer_to_box(item: Dictionary, target_slot_index: int = -1) -> void:
 	if opened_box == null:
 		return
 
-	# Selalu append ke slot kosong pertama (target_slot = -1).
-	# Jangan gunakan selected_slot_index — itu bisa menyebabkan item
-	# masuk ke index tengah sehingga slot 0..N-1 jadi null dan
-	# klik pada slot tersebut tidak menemukan item.
 	var added := false
 	if opened_box.has_method("add_item_unified_to_slot"):
-		added = opened_box.add_item_unified_to_slot(item, -1, SlotButtons.size())
+		added = opened_box.add_item_unified_to_slot(item, target_slot_index, SlotButtons.size())
 	else:
 		opened_box.add_item_unified(item)
 		added = true
@@ -248,8 +355,6 @@ func transfer_to_box(item: Dictionary) -> void:
 	# Hapus item dari player hanya setelah box berhasil menerima item.
 	Game.remove_player_item(item)
 
-	# Reset selector agar tidak menunjuk slot yang mungkin sudah berubah.
-	selected_slot_index = -1
 
 	# Refresh UI box
 	_refresh_box()
@@ -269,26 +374,24 @@ func transfer_from_box(item: Dictionary, slot_index: int) -> void:
 func _update_selection() -> void:
 	if selection == null:
 		return
-	if selected_slot_index < 0 or selected_slot_index >= SlotButtons.size():
+
+	if selected_slot_index < 0:
 		selection.hide()
 		return
 
-	# Hitung posisi center slot ke-N secara manual berdasarkan konstanta layout.
-	# Data dari inventory_box.tscn & slot.tscn:
-	#   slot size        = 40 x 40
-	#   h_separation     = 0, v_separation = 5
-	#   columns          = 6
-	#   container offset = (7, 8)
-	#   container scale  = 0.6
-	var col := selected_slot_index % SLOT_COLUMNS
-	var row := selected_slot_index / SLOT_COLUMNS
+	var current_slots = SlotButtons if is_focus_on_box else player_inventory.SlotButtons
+	if selected_slot_index >= current_slots.size():
+		return
 
-	# Posisi pusat slot dalam ruang lokal container (sebelum scale)
-	var local_x := col * 40.0 + 20.0        # (40 + 0) * col + half(40)
-	var local_y := row * 45.0 + 20.0        # (40 + 5) * row + half(40)
-
-	# Konversi ke ruang lokal InventoryBox (tambah offset container lalu kalikan scale)
-	selection.position = Vector2(7.0 + local_x * 0.6, 8.0 + local_y * 0.6)
+	var slot = current_slots[selected_slot_index]
+	
+	# Gunakan ukuran dasar slot (40x40) dikalikan dengan skala globalnya
+	# Ini mengatasi masalah di mana get_global_rect().size bernilai 0 sebelum layout
+	var slot_scale = slot.get_global_transform().get_scale()
+	var actual_size = Vector2(40.0, 40.0) * slot_scale
+	var slot_center = slot.global_position + (actual_size / 2.0)
+	
+	selection.centered = true
+	selection.global_position = slot_center
+	selection.global_scale = slot_scale * selection_scale_multiplier
 	selection.show()
-
-
