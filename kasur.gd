@@ -75,6 +75,8 @@ func sleep() -> void:
 		# Majukan hari global
 		Game.advance_day()
 		
+		Game.Money += 20
+		
 		# Reset waktu global ke jam 6 pagi
 		Game.game_hour = 6
 		Game.game_minute = 0
