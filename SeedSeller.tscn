@@ -1,7 +1,7 @@
-[gd_scene format=3]
+[gd_scene format=3 uid="uid://bas6hfqjjmeea"]
 
-[ext_resource type="Script" path="res://SeedSeller.gd" id="1_seller"]
-[ext_resource type="Texture2D" path="res://Player/Basic Charakter Spritesheet.png" id="2_sprite"]
+[ext_resource type="Script" uid="uid://deqfv4d65a2wu" path="res://SeedSeller.gd" id="1_seller"]
+[ext_resource type="Texture2D" uid="uid://cta0fvxypymue" path="res://Player/Basic Charakter Spritesheet.png" id="2_sprite"]
 
 [sub_resource type="CapsuleShape2D" id="CapsuleShape2D_seller"]
 radius = 5.0
@@ -17,27 +17,27 @@ corner_radius_top_right = 3
 corner_radius_bottom_right = 3
 corner_radius_bottom_left = 3
 
-[node name="SeedSeller" type="Node2D"]
+[node name="SeedSeller" type="Node2D" unique_id=967724668]
 texture_filter = 1
 script = ExtResource("1_seller")
 
-[node name="Sprite2D" type="Sprite2D" parent="."]
+[node name="Sprite2D" type="Sprite2D" parent="." unique_id=1724892149]
 texture = ExtResource("2_sprite")
 hframes = 4
 vframes = 4
 frame = 4
 
-[node name="StaticBody2D" type="StaticBody2D" parent="."]
+[node name="StaticBody2D" type="StaticBody2D" parent="." unique_id=1279262221]
 
-[node name="CollisionShape2D" type="CollisionShape2D" parent="StaticBody2D"]
+[node name="CollisionShape2D" type="CollisionShape2D" parent="StaticBody2D" unique_id=2147244345]
 shape = SubResource("CapsuleShape2D_seller")
 
-[node name="InteractionArea" type="Area2D" parent="."]
+[node name="InteractionArea" type="Area2D" parent="." unique_id=981010734]
 
-[node name="CollisionShape2D" type="CollisionShape2D" parent="InteractionArea"]
+[node name="CollisionShape2D" type="CollisionShape2D" parent="InteractionArea" unique_id=730037472]
 shape = SubResource("RectangleShape2D_interact")
 
-[node name="Prompt" type="Label" parent="."]
+[node name="Prompt" type="Label" parent="." unique_id=1500455209]
 visible = false
 top_level = true
 z_index = 100
@@ -51,7 +51,7 @@ text = "F"
 horizontal_alignment = 1
 vertical_alignment = 1
 
-[node name="PromptPanel" type="Panel" parent="."]
+[node name="PromptPanel" type="Panel" parent="." unique_id=387380789]
 visible = false
 top_level = true
 z_index = 99

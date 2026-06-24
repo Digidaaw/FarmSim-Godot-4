@@ -6,7 +6,7 @@ extends Node2D
 
 var game_hour = 6
 var game_minute = 0
-var time_speed = 288.0
+var time_speed = 60.0
 var time_passed = 0.0
 
 func _ready() -> void:

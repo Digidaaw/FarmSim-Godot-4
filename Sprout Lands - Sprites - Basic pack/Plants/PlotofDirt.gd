@@ -2,6 +2,8 @@ extends Area2D
 
 const Corn = preload("res://Sprout Lands - Sprites - Basic pack/Plants/Corn.tscn")
 const Tomato = preload("res://Sprout Lands - Sprites - Basic pack/Plants/Tomato.tscn")
+const Carrot = preload("res://Sprout Lands - Sprites - Basic pack/Plants/carrot.tscn")
+const Ginger = preload("res://Sprout Lands - Sprites - Basic pack/Plants/ginger.tscn")
 
 @onready var seeds_node = $Seeds
 @onready var prompt: Label = $Prompt
@@ -152,6 +154,10 @@ func _create_plant(seed_name: String) -> Node:
 			return Corn.instantiate()
 		"Tomato":
 			return Tomato.instantiate()
+		"Carrot":
+			return Carrot.instantiate()
+		"Ginger":
+			return Ginger.instantiate()
 	return null
 
 func _on_body_entered(body: Node2D) -> void:

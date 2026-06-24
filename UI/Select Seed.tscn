@@ -3,6 +3,7 @@
 [ext_resource type="Script" uid="uid://f8fumsoi5xay" path="res://UI/Select Seed.gd" id="1_b2y4n"]
 [ext_resource type="Texture2D" uid="uid://dx62oh66pwxye" path="res://UI/Free Inventory/Inventory_Bar.png" id="1_f38dm"]
 [ext_resource type="Texture2D" uid="uid://0tr8mjh7dbr0" path="res://Sprout Lands - Sprites - Basic pack/Objects/Basic Plants.png" id="3_65i6k"]
+[ext_resource type="Texture2D" uid="uid://c6x8en6tpb5b5" path="res://Sprout Lands - Sprites - Basic pack/Objects/Farming Plants items v2.png" id="4_65i6k"]
 [ext_resource type="Texture2D" uid="uid://bkgpnj2xob22h" path="res://UI/Free Inventory/Inventory_select.png" id="4_l3snd"]
 
 [node name="Select Seed" type="Control" unique_id=500944632]
@@ -12,11 +13,11 @@ offset_right = 424.0
 offset_bottom = 64.0
 script = ExtResource("1_b2y4n")
 
-[node name="ModeLabel" type="Label" parent="."]
+[node name="ModeLabel" type="Label" parent="." unique_id=1654705864]
+layout_mode = 0
 offset_left = 8.0
 offset_top = -18.0
 offset_right = 104.0
-offset_bottom = 0.0
 theme_override_colors/font_color = Color(1, 1, 1, 1)
 theme_override_colors/font_shadow_color = Color(0, 0, 0, 1)
 theme_override_constants/shadow_offset_x = 1
@@ -36,7 +37,7 @@ vframes = 2
 texture_filter = 1
 texture = ExtResource("4_l3snd")
 
-[node name="Count" type="Label" parent="Seed1"]
+[node name="Count" type="Label" parent="Seed1" unique_id=1789534672]
 offset_left = -10.0
 offset_top = 8.0
 offset_right = 10.0
@@ -64,7 +65,7 @@ visible = false
 texture_filter = 1
 texture = ExtResource("4_l3snd")
 
-[node name="Count" type="Label" parent="Seed2"]
+[node name="Count" type="Label" parent="Seed2" unique_id=2005067624]
 offset_left = -10.0
 offset_top = 8.0
 offset_right = 10.0
@@ -78,21 +79,21 @@ theme_override_font_sizes/font_size = 14
 text = "0"
 horizontal_alignment = 1
 
-[node name="Seed3" type="Sprite2D" parent="."]
-visible = false
+[node name="Seed3" type="Sprite2D" parent="." unique_id=1519237616]
 texture_filter = 1
-position = Vector2(107, 32)
+position = Vector2(106, 32)
 scale = Vector2(2, 2)
-texture = ExtResource("3_65i6k")
-hframes = 6
-vframes = 2
+texture = ExtResource("4_65i6k")
+hframes = 5
+vframes = 14
+frame = 5
 
-[node name="Select" type="Sprite2D" parent="Seed3"]
+[node name="Select" type="Sprite2D" parent="Seed3" unique_id=2048779678]
 visible = false
 texture_filter = 1
 texture = ExtResource("4_l3snd")
 
-[node name="Count" type="Label" parent="Seed3"]
+[node name="Count" type="Label" parent="Seed3" unique_id=1775258759]
 offset_left = -10.0
 offset_top = 8.0
 offset_right = 10.0
@@ -106,21 +107,21 @@ theme_override_font_sizes/font_size = 14
 text = "0"
 horizontal_alignment = 1
 
-[node name="Seed4" type="Sprite2D" parent="."]
-visible = false
+[node name="Seed4" type="Sprite2D" parent="." unique_id=223451932]
 texture_filter = 1
-position = Vector2(147, 32)
+position = Vector2(144, 33)
 scale = Vector2(2, 2)
-texture = ExtResource("3_65i6k")
-hframes = 6
-vframes = 2
+texture = ExtResource("4_65i6k")
+hframes = 5
+vframes = 14
+frame = 7
 
-[node name="Select" type="Sprite2D" parent="Seed4"]
+[node name="Select" type="Sprite2D" parent="Seed4" unique_id=2067893665]
 visible = false
 texture_filter = 1
 texture = ExtResource("4_l3snd")
 
-[node name="Count" type="Label" parent="Seed4"]
+[node name="Count" type="Label" parent="Seed4" unique_id=1282287570]
 offset_left = -10.0
 offset_top = 8.0
 offset_right = 10.0
@@ -134,7 +135,7 @@ theme_override_font_sizes/font_size = 14
 text = "0"
 horizontal_alignment = 1
 
-[node name="Seed5" type="Sprite2D" parent="."]
+[node name="Seed5" type="Sprite2D" parent="." unique_id=1492502745]
 visible = false
 texture_filter = 1
 position = Vector2(187, 32)
@@ -143,12 +144,12 @@ texture = ExtResource("3_65i6k")
 hframes = 6
 vframes = 2
 
-[node name="Select" type="Sprite2D" parent="Seed5"]
+[node name="Select" type="Sprite2D" parent="Seed5" unique_id=243043883]
 visible = false
 texture_filter = 1
 texture = ExtResource("4_l3snd")
 
-[node name="Count" type="Label" parent="Seed5"]
+[node name="Count" type="Label" parent="Seed5" unique_id=1513010041]
 offset_left = -10.0
 offset_top = 8.0
 offset_right = 10.0
@@ -162,7 +163,7 @@ theme_override_font_sizes/font_size = 14
 text = "0"
 horizontal_alignment = 1
 
-[node name="Seed6" type="Sprite2D" parent="."]
+[node name="Seed6" type="Sprite2D" parent="." unique_id=2003338159]
 visible = false
 texture_filter = 1
 position = Vector2(227, 32)
@@ -171,12 +172,12 @@ texture = ExtResource("3_65i6k")
 hframes = 6
 vframes = 2
 
-[node name="Select" type="Sprite2D" parent="Seed6"]
+[node name="Select" type="Sprite2D" parent="Seed6" unique_id=1910635476]
 visible = false
 texture_filter = 1
 texture = ExtResource("4_l3snd")
 
-[node name="Count" type="Label" parent="Seed6"]
+[node name="Count" type="Label" parent="Seed6" unique_id=1461292450]
 offset_left = -10.0
 offset_top = 8.0
 offset_right = 10.0
@@ -190,7 +191,7 @@ theme_override_font_sizes/font_size = 14
 text = "0"
 horizontal_alignment = 1
 
-[node name="Seed7" type="Sprite2D" parent="."]
+[node name="Seed7" type="Sprite2D" parent="." unique_id=490710645]
 visible = false
 texture_filter = 1
 position = Vector2(267, 32)
@@ -199,12 +200,12 @@ texture = ExtResource("3_65i6k")
 hframes = 6
 vframes = 2
 
-[node name="Select" type="Sprite2D" parent="Seed7"]
+[node name="Select" type="Sprite2D" parent="Seed7" unique_id=985229969]
 visible = false
 texture_filter = 1
 texture = ExtResource("4_l3snd")
 
-[node name="Count" type="Label" parent="Seed7"]
+[node name="Count" type="Label" parent="Seed7" unique_id=628163155]
 offset_left = -10.0
 offset_top = 8.0
 offset_right = 10.0
@@ -218,7 +219,7 @@ theme_override_font_sizes/font_size = 14
 text = "0"
 horizontal_alignment = 1
 
-[node name="Seed8" type="Sprite2D" parent="."]
+[node name="Seed8" type="Sprite2D" parent="." unique_id=521381527]
 visible = false
 texture_filter = 1
 position = Vector2(307, 32)
@@ -227,12 +228,12 @@ texture = ExtResource("3_65i6k")
 hframes = 6
 vframes = 2
 
-[node name="Select" type="Sprite2D" parent="Seed8"]
+[node name="Select" type="Sprite2D" parent="Seed8" unique_id=684885948]
 visible = false
 texture_filter = 1
 texture = ExtResource("4_l3snd")
 
-[node name="Count" type="Label" parent="Seed8"]
+[node name="Count" type="Label" parent="Seed8" unique_id=739837919]
 offset_left = -10.0
 offset_top = 8.0
 offset_right = 10.0
@@ -246,7 +247,7 @@ theme_override_font_sizes/font_size = 14
 text = "0"
 horizontal_alignment = 1
 
-[node name="Seed9" type="Sprite2D" parent="."]
+[node name="Seed9" type="Sprite2D" parent="." unique_id=450159505]
 visible = false
 texture_filter = 1
 position = Vector2(347, 32)
@@ -255,12 +256,12 @@ texture = ExtResource("3_65i6k")
 hframes = 6
 vframes = 2
 
-[node name="Select" type="Sprite2D" parent="Seed9"]
+[node name="Select" type="Sprite2D" parent="Seed9" unique_id=1339355150]
 visible = false
 texture_filter = 1
 texture = ExtResource("4_l3snd")
 
-[node name="Count" type="Label" parent="Seed9"]
+[node name="Count" type="Label" parent="Seed9" unique_id=441883880]
 offset_left = -10.0
 offset_top = 8.0
 offset_right = 10.0
@@ -274,7 +275,7 @@ theme_override_font_sizes/font_size = 14
 text = "0"
 horizontal_alignment = 1
 
-[node name="Seed10" type="Sprite2D" parent="."]
+[node name="Seed10" type="Sprite2D" parent="." unique_id=477852940]
 visible = false
 texture_filter = 1
 position = Vector2(387, 32)
@@ -283,12 +284,12 @@ texture = ExtResource("3_65i6k")
 hframes = 6
 vframes = 2
 
-[node name="Select" type="Sprite2D" parent="Seed10"]
+[node name="Select" type="Sprite2D" parent="Seed10" unique_id=1850004038]
 visible = false
 texture_filter = 1
 texture = ExtResource("4_l3snd")
 
-[node name="Count" type="Label" parent="Seed10"]
+[node name="Count" type="Label" parent="Seed10" unique_id=395966171]
 offset_left = -10.0
 offset_top = 8.0
 offset_right = 10.0

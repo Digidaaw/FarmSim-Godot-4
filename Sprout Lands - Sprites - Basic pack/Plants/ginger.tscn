@@ -1,0 +1,38 @@
+[gd_scene format=3 uid="uid://2inptcx0a32v"]
+
+[ext_resource type="Script" uid="uid://l2rgpafjsisb" path="res://Sprout Lands - Sprites - Basic pack/Plants/ginger.gd" id="1_54u6m"]
+[ext_resource type="Texture2D" uid="uid://c6x8en6tpb5b5" path="res://Sprout Lands - Sprites - Basic pack/Objects/Farming Plants items v2.png" id="2_54u6m"]
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_3xd07"]
+
+[sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_qfdrw"]
+particle_flag_disable_z = true
+gravity = Vector3(0, 98, 0)
+
+[node name="Ginger" type="Area2D" unique_id=1359815316]
+script = ExtResource("1_54u6m")
+
+[node name="Sprite2D" type="Sprite2D" parent="." unique_id=190411852]
+texture = ExtResource("2_54u6m")
+hframes = 5
+vframes = 14
+frame = 8
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=862180862]
+shape = SubResource("CircleShape2D_3xd07")
+
+[node name="GPUParticles2D" type="GPUParticles2D" parent="." unique_id=2139766327]
+texture_filter = 1
+position = Vector2(0, -8)
+emitting = false
+amount = 18
+lifetime = 0.55
+one_shot = true
+explosiveness = 0.9
+randomness = 0.4
+process_material = SubResource("ParticleProcessMaterial_qfdrw")
+
+[node name="Timer" type="Timer" parent="." unique_id=232223265]
+
+[connection signal="body_entered" from="." to="." method="_on_body_entered"]
+[connection signal="timeout" from="Timer" to="." method="_on_timer_timeout"]

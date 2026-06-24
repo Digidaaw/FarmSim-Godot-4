@@ -61,11 +61,15 @@ var Money = 100
 var SeedOrder = [
 	"Corn",
 	"Tomato",
+	"Carrot",
+	"Ginger",
 ]
 
 var Seeds = {
 	"Corn": 3,
 	"Tomato": 3,
+	"Carrot": 3,
+	"Ginger": 3,
 }
 
 var inventory_boxes := {}
@@ -113,11 +117,25 @@ var ShopItems = {
 		"SeedName": "Tomato",
 		"Stock": -1,
 	},
+	"Carrot": {
+		"DisplayName": "Carrot Seed",
+		"Price": 15,       # Tentukan harga beli Carrot di sini
+		"SeedName": "Carrot",
+		"Stock": -1,
+	},
+	"Ginger": {
+		"DisplayName": "Ginger Seed",
+		"Price": 20,       # Tentukan harga beli Ginger di sini
+		"SeedName": "Ginger",
+		"Stock": -1,
+	},
 }
 
 var CropSellPrices = {
 	"Corn": 18,
 	"Tomato": 22,
+	"Carrot": 28,  # Tentukan harga jual Wortel di sini (misal: 28)
+	"Ginger": 35,
 }
 
 var ShippingBinItems = []
@@ -157,7 +175,7 @@ func get_current_pocket_items() -> Array:
 					"Name": seed_name,
 					"Type": "Seed",
 					"Count": get_seed_count(seed_name),
-					"Icon": "res://Sprout Lands - Sprites - Basic pack/Objects/Basic Plants.png",
+					"Icon": _get_seed_icon(seed_name),
 					"Frame": _get_seed_frame(seed_name),
 				})
 			return seed_items
@@ -171,7 +189,7 @@ func get_current_pocket_items() -> Array:
 					"Type": "Item",
 					"Count": int(item.get("Count", 0)),
 					"Icon": _get_item_icon(str(item.get("Name", ""))),
-					"Frame": 0,
+					"Frame": _get_item_frame(str(item.get("Name", ""))), # DIUBAH DI SINI (sebelumnya ditulis 0)
 				})
 			return item_items
 	return []
@@ -186,8 +204,21 @@ func _get_seed_frame(seed_name: String) -> int:
 	match seed_name:
 		"Tomato":
 			return 6
+		"Carrot":
+			return 5
+		"Ginger":
+			return 7
 		_:
 			return 0
+
+func _get_seed_icon(seed_name: String) -> String:
+	match seed_name:
+		"Carrot", "Ginger":
+			# Sesuaikan path di bawah ini dengan lokasi folder tempat menyimpan file tersebut
+			return "res://Sprout Lands - Sprites - Basic pack/Objects/Farming Plants items v2.png"
+		_:
+			# Default untuk Corn & Tomato
+			return "res://Sprout Lands - Sprites - Basic pack/Objects/Basic Plants.png"
 
 func _get_item_icon(item_name: String) -> String:
 	match item_name:
@@ -195,8 +226,20 @@ func _get_item_icon(item_name: String) -> String:
 			return "res://Sprout Lands - Sprites - Basic pack/Objects/Corn.png"
 		"Tomato":
 			return "res://Sprout Lands - Sprites - Basic pack/Objects/Tomato.png"
+		"Carrot", "Ginger":
+			return "res://Sprout Lands - Sprites - Basic pack/Objects/Farming Plants items v2.png" # DIUBAH DI SINI
 		_:
 			return ""
+
+func _get_item_frame(item_name: String) -> int:
+	match item_name:
+		"Carrot":
+			return 6 # Sesuai dengan inspector Carrot matang (Frame 6)
+		"Ginger":
+			return 8 # (Nanti sesuaikan dengan nomor frame Jahe di file items)
+		_:
+			return -1 # Mengembalikan -1 untuk Corn/Tomato agar gambarnya tidak terpotong (single image)
+
 
 func get_seed_count(seed_name: String) -> int:
 	return int(Seeds.get(seed_name, 0))
@@ -259,10 +302,11 @@ func get_unified_inventory() -> Array:
 				"Name": seed_name,
 				"Type": "Seed",
 				"Count": count,
-				"Icon": "res://Sprout Lands - Sprites - Basic pack/Objects/Basic Plants.png",
+				"Icon": _get_seed_icon(seed_name),
 				"Frame": _get_seed_frame(seed_name)
 			})
 			
+	# 3. Crops
 	# 3. Crops
 	for item in Harvest:
 		if item is Dictionary and int(item.get("Count", 0)) > 0:
@@ -271,7 +315,7 @@ func get_unified_inventory() -> Array:
 				"Type": "Item",
 				"Count": item["Count"],
 				"Icon": _get_item_icon(item["Name"]),
-				"Frame": -1
+				"Frame": _get_item_frame(item["Name"]) # DIUBAH DI SINI (sebelumnya ditulis -1)
 			})
 			
 	# Fill rest with null up to 12 slots
@@ -471,6 +515,8 @@ func reset_game() -> void:
 	Seeds = {
 		"Corn": 3,
 		"Tomato": 3,
+		"Carrot": 3,
+		"Ginger": 3,
 	}
 	
 	ShippingBinItems.clear()
