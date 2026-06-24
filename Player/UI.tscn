@@ -221,6 +221,8 @@ offset_top = 14.0
 offset_right = 281.56
 offset_bottom = 13.800003
 
-[node name="PauseMenu" parent="Root" unique_id=987654321 instance=ExtResource("4_pausemenu")]
+[node name="PauseLayer" type="CanvasLayer" parent="Root"]
+layer = 100
+
+[node name="PauseMenu" parent="Root/PauseLayer" unique_id=987654321 instance=ExtResource("4_pausemenu")]
 visible = false
-layout_mode = 1

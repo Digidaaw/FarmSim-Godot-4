@@ -37,7 +37,7 @@ func _ready() -> void:
 			slot.texture_normal = null
 	
 	if selection != null:
-		selection.top_level = true
+		selection.hide()
 		
 	_update_selection()
 

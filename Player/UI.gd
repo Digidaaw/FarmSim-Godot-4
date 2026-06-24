@@ -1,6 +1,6 @@
 extends CanvasLayer
 
-@onready var pause_menu = $Root/PauseMenu
+@onready var pause_menu = $Root/PauseLayer/PauseMenu
 
 func _ready() -> void:
 	process_mode = Node.PROCESS_MODE_ALWAYS # Penting agar input pause bisa diproses saat game berhenti
