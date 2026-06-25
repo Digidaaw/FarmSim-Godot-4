@@ -17,7 +17,7 @@ func _update_position() -> void:
 	var font_size = label.get_theme_font_size("font_size")
 	var text_width = font.get_string_size(label.text, HORIZONTAL_ALIGNMENT_LEFT, -1, font_size).x
 	
-	var max_width = 240.0
+	var max_width = 350.0
 	if text_width > max_width:
 		label.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
 		label.custom_minimum_size.x = max_width
@@ -50,6 +50,9 @@ func _update_position() -> void:
 	# Force the PanelContainer to shrink-to-fit its dynamic content size
 	size = get_combined_minimum_size()
 	
-	# Keep panel centered horizontally relative to its dynamic container size
+	# Scale down the notification so it doesn't look massive
+	scale = Vector2(0.5, 0.5)
+	
+	# Keep panel centered horizontally relative to its dynamic container size and scale
 	pivot_offset = size / 2
-	position.x = (get_viewport_rect().size.x - size.x) / 2
+	position.x = (get_viewport_rect().size.x - (size.x * scale.x)) / 3.8
