@@ -34,7 +34,8 @@ func _ready():
 	_ensure_plot_data()
 	timer.stop()
 	# Saat load, cek apakah sudah disiram hari ini
-	_check_watered_state()
+	Game.time_changed.connect(_update_visuals)
+	_update_visuals()
 
 func _check_watered_state() -> void:
 	if PlantNum < 0 or PlantNum >= Game.Plot.size() or not (Game.Plot[PlantNum] is Dictionary):
@@ -43,7 +44,7 @@ func _check_watered_state() -> void:
 	is_watered_today = (last_watered == Game.game_day)
 	_update_wilt_visual()
 
-func _process(_delta: float):
+func _update_visuals() -> void:
 	if harvested:
 		return
 	if PlantNum >= Game.Plot.size() or Game.Plot[PlantNum] == null:

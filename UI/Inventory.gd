@@ -11,7 +11,6 @@ var ButtonInfo = {
 	"Name": "Corn",
 	"Count": 0,
 }
-var inventory_snapshot = ""
 
 
 @onready var slotContainer = get_node("SlotContainer")
@@ -35,13 +34,7 @@ func _ready() -> void:
 	default_open_position = position
 	position = default_open_position + Vector2(0, size.y + 20)
 	self.hide()
-
-
-func _process(_delta: float) -> void:
-	if visible and not dragging:
-		_refresh_inventory()
-
-
+	Game.inventory_updated.connect(_on_inventory_updated)
 func _input(event):
 	if event.is_action_pressed("Inventory") and not is_sliding:
 		var ui_node = get_tree().root.find_child("UI", true, false)
@@ -204,8 +197,9 @@ func _trim_empty_harvest_slots() -> void:
 		Game.Harvest.pop_back()
 
 
+func _on_inventory_updated() -> void:
+	if visible and not dragging:
+		_refresh_inventory()
+
 func _refresh_inventory(force: bool = false) -> void:
-	var current_snapshot = JSON.stringify(Game.get_unified_inventory())
-	if force or current_snapshot != inventory_snapshot:
-		slotContainer.setInventory()
-		inventory_snapshot = current_snapshot
+	slotContainer.setInventory()

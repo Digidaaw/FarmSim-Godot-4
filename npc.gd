@@ -60,16 +60,17 @@ func _update_prompt_text() -> void:
 	if prompt != null:
 		prompt.text = Utils.get_key_label_for_action("Interact")
 
+func _unhandled_input(event: InputEvent) -> void:
+	if player_in_range and player_node != null and event.is_action_pressed("Interact"):
+		chat()
+		get_viewport().set_input_as_handled()
+
 func _physics_process(delta: float) -> void:
 	# 1. Jika player berada di jangkauan dekat, NPC berhenti & hadap player
 	if player_in_range and player_node != null:
 		velocity = Vector2.ZERO
 		_face_node(player_node)
 		_play_animation("Idle")
-		
-		# Deteksi interaksi tombol F
-		if Input.is_action_just_pressed("Interact"):
-				chat()
 		return
 
 	# 2. Logic AI State Machine

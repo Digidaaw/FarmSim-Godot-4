@@ -21,11 +21,14 @@ var canPlant = false
 var player_in_plot = false
 
 func _ready() -> void:
+	prompt.position = PROMPT_OFFSET
+	prompt_panel.position = PROMPT_OFFSET
 	_update_prompt_text()
-	_update_prompt_position()
 	_set_prompt_visible(false)
+	set_process(false)
 	if Utils.has_signal("keybinds_changed"):
 		Utils.keybinds_changed.connect(_update_prompt_text)
+	Game.time_changed.connect(_update_dirt_visual)
 
 func _update_prompt_text() -> void:
 	prompt.text = Utils.get_key_label_for_action("Interact")
@@ -40,23 +43,17 @@ func setup_plot(new_plot_index: int, new_cell: Vector2i) -> void:
 	if plot_index >= 0 and plot_index < Game.Plot.size() and Game.Plot[plot_index] is Dictionary:
 		has_seed = true
 		_load_plant_from_save()
-	
-	if plot_index >= 0 and plot_index < Game.Plot.size() and Game.Plot[plot_index] is Dictionary:
-		has_seed = true
-		_load_plant_from_save()
 
 	_update_dirt_visual()
 
-func get_input():
-	if Input.is_action_just_pressed("Interact"):
-		if canPlant == true:
-			interact()
+func _unhandled_input(event: InputEvent) -> void:
+	if event.is_action_pressed("Interact") and canPlant:
+		interact()
+		get_viewport().set_input_as_handled()
 
-func _physics_process(_delta):
-	_update_prompt_position()
-	_update_plant_prompt()
-	get_input()
-	_update_dirt_visual()
+func _process(_delta):
+	if player_in_plot:
+		_update_plant_prompt()
 
 func interact() -> void:
 	if not has_seed:
@@ -164,11 +161,13 @@ func _on_body_entered(body: Node2D) -> void:
 	if body.name == "CharacterBody2D" or body.name == "Player":
 		player_in_plot = true
 		player_node = body # <-- Simpan node player
+		set_process(true)
 		_update_plant_prompt()
 func _on_body_exited(body: Node2D) -> void:
 	if body.name == "CharacterBody2D" or body.name == "Player":
 		player_in_plot = false
 		player_node = null # <-- Hapus node player
+		set_process(false)
 		_update_plant_prompt()
 
 func _update_plant_prompt() -> void:

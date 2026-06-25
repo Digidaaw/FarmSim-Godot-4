@@ -13,6 +13,7 @@ var _last_snapshot: String = ""
 
 func _ready() -> void:
 	_build_slots()
+	Game.inventory_updated.connect(_sync)
 	_sync()
 
 func _build_slots() -> void:
@@ -125,23 +126,7 @@ func _input(event: InputEvent) -> void:
 		Game.move_pocket_selection(-1)
 		_sync()
 
-func _process(_delta: float) -> void:
-	# Cukup sync kalau data berubah (pakai snapshot)
-	var snap = "%s|%d|%d" % [
-		Game.get_current_pocket_mode(),
-		Game.PocketSlotIndex,
-		_get_item_count_hash()
-	]
-	if snap != _last_snapshot:
-		_last_snapshot = snap
-		_sync()
 
-func _get_item_count_hash() -> int:
-	var items = Game.get_current_pocket_items()
-	var total = 0
-	for item in items:
-		total += int(item.get("Count", 0))
-	return total
 
 func _sync() -> void:
 	var mode = Game.get_current_pocket_mode()

@@ -1,6 +1,8 @@
 extends Node
 
 signal interactables_changed
+signal time_changed
+signal inventory_updated
 
 var saved_scene_path: String = ""
 var saved_player_position: Vector2 = Vector2.ZERO
@@ -154,15 +156,18 @@ func cycle_pocket_mode() -> void:
 	PocketModeIndex = (PocketModeIndex + 1) % PocketModes.size()
 	PocketSlotIndex = 0
 	Selected = 0
+	inventory_updated.emit()
 
 func move_pocket_selection(direction: int) -> void:
 	var items = get_current_pocket_items()
 	if items.is_empty():
 		PocketSlotIndex = 0
 		Selected = 0
+		inventory_updated.emit()
 		return
 	PocketSlotIndex = clamp(PocketSlotIndex + direction, 0, items.size() - 1)
 	Selected = PocketSlotIndex
+	inventory_updated.emit()
 
 func get_current_pocket_items() -> Array:
 	match get_current_pocket_mode():
@@ -200,45 +205,31 @@ func get_selected_pocket_item() -> Dictionary:
 		return {}
 	return items[clamp(PocketSlotIndex, 0, items.size() - 1)]
 
+const ITEM_DATA = {
+	"Corn": { "Icon": "res://Sprout Lands - Sprites - Basic pack/Objects/Corn.png", "Frame": -1 },
+	"Tomato": { "Icon": "res://Sprout Lands - Sprites - Basic pack/Objects/Tomato.png", "Frame": -1 },
+	"Carrot": { "Icon": "res://Sprout Lands - Sprites - Basic pack/Objects/Farming Plants items v2.png", "Frame": 6 },
+	"Ginger": { "Icon": "res://Sprout Lands - Sprites - Basic pack/Objects/Farming Plants items v2.png", "Frame": 8 }
+}
+
+const SEED_DATA = {
+	"Corn": { "Icon": "res://Sprout Lands - Sprites - Basic pack/Objects/Basic Plants.png", "Frame": 0 },
+	"Tomato": { "Icon": "res://Sprout Lands - Sprites - Basic pack/Objects/Basic Plants.png", "Frame": 6 },
+	"Carrot": { "Icon": "res://Sprout Lands - Sprites - Basic pack/Objects/Farming Plants items v2.png", "Frame": 5 },
+	"Ginger": { "Icon": "res://Sprout Lands - Sprites - Basic pack/Objects/Farming Plants items v2.png", "Frame": 7 }
+}
+
 func _get_seed_frame(seed_name: String) -> int:
-	match seed_name:
-		"Tomato":
-			return 6
-		"Carrot":
-			return 5
-		"Ginger":
-			return 7
-		_:
-			return 0
+	return SEED_DATA.get(seed_name, {}).get("Frame", 0)
 
 func _get_seed_icon(seed_name: String) -> String:
-	match seed_name:
-		"Carrot", "Ginger":
-			# Sesuaikan path di bawah ini dengan lokasi folder tempat menyimpan file tersebut
-			return "res://Sprout Lands - Sprites - Basic pack/Objects/Farming Plants items v2.png"
-		_:
-			# Default untuk Corn & Tomato
-			return "res://Sprout Lands - Sprites - Basic pack/Objects/Basic Plants.png"
+	return SEED_DATA.get(seed_name, {}).get("Icon", "res://Sprout Lands - Sprites - Basic pack/Objects/Basic Plants.png")
 
 func _get_item_icon(item_name: String) -> String:
-	match item_name:
-		"Corn":
-			return "res://Sprout Lands - Sprites - Basic pack/Objects/Corn.png"
-		"Tomato":
-			return "res://Sprout Lands - Sprites - Basic pack/Objects/Tomato.png"
-		"Carrot", "Ginger":
-			return "res://Sprout Lands - Sprites - Basic pack/Objects/Farming Plants items v2.png" # DIUBAH DI SINI
-		_:
-			return ""
+	return ITEM_DATA.get(item_name, {}).get("Icon", "")
 
 func _get_item_frame(item_name: String) -> int:
-	match item_name:
-		"Carrot":
-			return 6 # Sesuai dengan inspector Carrot matang (Frame 6)
-		"Ginger":
-			return 8 # (Nanti sesuaikan dengan nomor frame Jahe di file items)
-		_:
-			return -1 # Mengembalikan -1 untuk Corn/Tomato agar gambarnya tidak terpotong (single image)
+	return ITEM_DATA.get(item_name, {}).get("Frame", -1)
 
 
 func get_seed_count(seed_name: String) -> int:
@@ -248,6 +239,7 @@ func add_seed(seed_name: String, amount: int = 1) -> void:
 	if amount <= 0:
 		return
 	Seeds[seed_name] = get_seed_count(seed_name) + amount
+	inventory_updated.emit()
 
 func spend_seed(seed_name: String, amount: int = 1) -> bool:
 	if amount <= 0:
@@ -255,6 +247,7 @@ func spend_seed(seed_name: String, amount: int = 1) -> bool:
 	if get_seed_count(seed_name) < amount:
 		return false
 	Seeds[seed_name] = get_seed_count(seed_name) - amount
+	inventory_updated.emit()
 	return true
 
 func buy_shop_item(item_name: String, amount: int = 1) -> Dictionary:
@@ -367,6 +360,7 @@ func add_player_item(item: Dictionary) -> void:
 		add_seed(name, count)
 	else:
 		add_harvest_item(name, count)
+	inventory_updated.emit()
 	Utils.save_game()
 
 func remove_player_item(item: Dictionary, amount: int = -1) -> void:
@@ -398,6 +392,7 @@ func remove_player_item(item: Dictionary, amount: int = -1) -> void:
 					Harvest[i] = null
 				break
 		_trim_empty_harvest_slots()
+	inventory_updated.emit()
 	Utils.save_game()
 
 func _trim_empty_harvest_slots() -> void:
@@ -425,6 +420,7 @@ func add_harvest_item(item_name: String, amount: int = 1) -> void:
 		Harvest.append(new_item)
 	else:
 		Harvest[empty_index] = new_item
+	inventory_updated.emit()
 
 func ship_all_harvest() -> Dictionary:
 	var shipped_count = 0
@@ -441,6 +437,7 @@ func ship_all_harvest() -> Dictionary:
 		return {"Success": false, "Message": "Tidak ada hasil panen."}
 
 	Harvest.clear()
+	inventory_updated.emit()
 	return {"Success": true, "Message": "Masuk shipping bin: %d item" % shipped_count}
 
 func _add_shipping_item(item_name: String, amount: int) -> void:
@@ -493,6 +490,7 @@ func advance_day() -> void:
 			data["Stage"] = min(int(data.get("Stage", 1)) + 1, int(data.get("MaxStage", 5)))
 		data["AgeDays"] = int(data.get("AgeDays", 0)) + 1
 		Plot[i] = data
+	time_changed.emit()
 
 func water_plot(plot_index: int) -> void:
 	if plot_index < 0 or plot_index >= Plot.size():
@@ -500,6 +498,7 @@ func water_plot(plot_index: int) -> void:
 	if not (Plot[plot_index] is Dictionary):
 		return
 	Plot[plot_index]["LastWateredDay"] = game_day
+	time_changed.emit()
 	
 func reset_game() -> void:
 	# 1. Kembalikan semua data ke nilai default awal game

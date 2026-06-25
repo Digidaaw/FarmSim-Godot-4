@@ -61,9 +61,14 @@ func _update_hoe_prompt_text() -> void:
 	if hoe_prompt != null:
 		hoe_prompt.text = Utils.get_key_label_for_action("Hoe")
 
+func _unhandled_input(event: InputEvent) -> void:
+	if event.is_action_pressed("Hoe"):
+		var is_holding_hoe = Game.get_current_pocket_mode() == "Tool" and Game.get_selected_pocket_item().get("Name", "") == "Hoe"
+		if is_holding_hoe:
+			hoe_tile()
+			get_viewport().set_input_as_handled()
+
 func _physics_process(_delta: float) -> void:
-	if Input.is_action_just_pressed("Hoe"):
-		hoe_tile()
 	_update_hoe_prompt_visibility()
 
 func _update_hoe_prompt_visibility() -> void:
